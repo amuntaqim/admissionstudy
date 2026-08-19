@@ -43,8 +43,9 @@ const DEFAULT_STATE = {
     countdownDaysHours: 'আর {days} দিন {hours} ঘন্টা বাকি',
     dashboardCards: DEFAULT_DASHBOARD_CARDS
   },
-  tagColors: {},
-  customQuotes: []
+    tagColors: {},
+  customQuotes: [],
+  quoteIndex: 0
 };
 
 const CORS_HEADERS = {
@@ -115,7 +116,8 @@ export default async function handler(req) {
       vuls: Array.isArray(body.vuls) ? body.vuls : [],
       siteText: safeSiteText,
       tagColors: (body.tagColors && typeof body.tagColors === 'object') ? body.tagColors : {},
-      customQuotes: Array.isArray(body.customQuotes) ? body.customQuotes : []
+            customQuotes: Array.isArray(body.customQuotes) ? body.customQuotes : [],
+      quoteIndex: typeof body.quoteIndex === 'number' ? body.quoteIndex : 0
     };
 
     // Debug log so this is traceable in Vercel function logs (Project -> Deployments -> Functions -> /api/data -> logs)
