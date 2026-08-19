@@ -1926,8 +1926,7 @@ async function persistState(successMsg){
       method: 'POST',
       cache: 'no-store',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminPassword },
-      body: JSON.stringify({ events, gaps, vuls, siteText, tagColors, customQuotes })
-    });
+      body: JSON.stringify({ events, gaps, vuls, siteText, tagColors, customQuotes, quoteIndex: currentQuoteIdx })    });
     if(res.status === 401){
       adminPassword = null;
       try { sessionStorage.removeItem(ADMIN_PW_KEY); } catch(e){ }
@@ -1968,7 +1967,7 @@ async function fetchRemoteState(){
     siteText = Object.assign({}, DEFAULT_TEXT, data.siteText || {});
     tagColors = (data.tagColors && typeof data.tagColors === 'object') ? data.tagColors : {};
     customQuotes = Array.isArray(data.customQuotes) ? data.customQuotes : [];
-    safeStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+    currentQuoteIdx = typeof data.quoteIndex === 'number' ? data.quoteIndex : 0;    safeStorage.setItem(STORAGE_KEY, JSON.stringify(events));
     safeStorage.setItem(GAPS_KEY, JSON.stringify(gaps));
     safeStorage.setItem(VULS_KEY, JSON.stringify(vuls));
     safeStorage.setItem(SETTINGS_KEY, JSON.stringify(siteText));
@@ -2804,6 +2803,7 @@ function prevQuote(){
   if(all.length === 0) return;
   currentQuoteIdx = (currentQuoteIdx - 1 + all.length) % all.length;
   renderQuote();
+  persistState('✅ উক্তি পাবলিশ হয়েছে');
 }
 
 function nextQuote(){
@@ -2811,6 +2811,7 @@ function nextQuote(){
   if(all.length === 0) return;
   currentQuoteIdx = (currentQuoteIdx + 1) % all.length;
   renderQuote();
+  persistState('✅ উক্তি পাবলিশ হয়েছে');
 }
 /* ---- custom quote manager ---- */
 function openQuoteModal(){
