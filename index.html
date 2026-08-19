@@ -2274,13 +2274,12 @@ function closeSidebar(){
 }
 
 /* ================= VIEW SWITCHING ================= */
-function switchView(view){
+function switchView(view, fromHistory){
   closeSidebar();
   currentView = view;
-  document.body.dataset.view = view;
-  document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.viewBtn === view);
-  });
+  if(!fromHistory){
+    history.pushState({ view: view }, '', '#' + view);
+  }
 
   const eventsCard = document.getElementById('eventsCard');
   const gapPanel = document.getElementById('gapPanel');
@@ -3587,6 +3586,12 @@ fetchRemoteState();
 
 setInterval(() => { renderEvents(); renderNearest(); }, 60000);
 setInterval(fetchRemoteState, 45000);
+
+history.replaceState({ view: 'dashboard' }, '', '#dashboard');
+window.addEventListener('popstate', function(e){
+  const view = (e.state && e.state.view) ? e.state.view : 'dashboard';
+  switchView(view, true);
+});
 </script>
 </body>
 </html>
