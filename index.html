@@ -2012,7 +2012,8 @@ const DEFAULT_TEXT = {
     totalAdmission: { label: 'মোট এডমিশন পরীক্ষা', visible: true },
     pastExams: { label: 'সমাপ্ত পরীক্ষা', visible: true },
     avgPercent: { label: 'গড় প্রাপ্ত নম্বর (%)', visible: true },
-    bestRank: { label: 'সর্বোচ্চ কেন্দ্রীয় র‍্যাঙ্ক', visible: true }
+    bestRank: { label: 'সর্বোচ্চ কেন্দ্রীয় র‍্যাঙ্ক', visible: true }, 
+    totalGaps: { label: 'মোট ঘাটতি (গ্যাপ)', visible: true }
   }
 };
 
@@ -3003,7 +3004,8 @@ function renderStatusRow(){
     { id: 'totalAdmission', label: 'মোট এডমিশন পরীক্ষা', value: toBn(admissionExams.length), icon: ICON_GRAD, color: 'teal', onclick: "switchView('admission')" },
     { id: 'pastExams', label: 'সমাপ্ত পরীক্ষা', value: toBn(past), icon: ICON_TROPHY, color: 'green', onclick: "switchView('all')" },
     { id: 'avgPercent', label: 'গড় প্রাপ্ত নম্বর (%)', value: avgPct, icon: ICON_TARGET, color: 'blue', onclick: "switchView('all')" },
-    { id: 'bestRank', label: 'সর্বোচ্চ কেন্দ্রীয় র‍্যাঙ্ক', value: maxRankDisplay, icon: ICON_TROPHY, color: 'purple', onclick: "switchView('all')" }
+    { id: 'bestRank', label: 'সর্বোচ্চ কেন্দ্রীয় র‍্যাঙ্ক', value: maxRankDisplay, icon: ICON_TROPHY, color: 'purple', onclick: "switchView('all')" },
+    { id: 'totalGaps', label: 'মোট ঘাটতি (গ্যাপ)', value: toBn(gaps.length), icon: ICON_TRASH, color: 'orange', onclick: "switchView('gap')" }
   ];
 
   // Loop through cards and check visibility / rename from siteText.dashboardCards
