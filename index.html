@@ -2992,7 +2992,7 @@ function renderStatusRow(){
   const totalMarksObtained = regularExams.reduce((sum, e) => sum + (e.marksObtained || 0), 0);
   const totalMarksTotal = regularExams.reduce((sum, e) => sum + (e.marksTotal || 0), 0);
   const avgCentralRank = (() => {
-    const ranks = regularExams.map(e => e.meritCentral).filter(r => Number.isFinite(Number(r)));
+    const ranks = regularExams.map(e => e.meritCentral).filter(r => r !== '' && r !== null && r !== undefined && Number.isFinite(Number(r)));
     if(ranks.length === 0) return '—';
     const avg = ranks.reduce((a,b) => a + Number(b), 0) / ranks.length;
     return toBn(Math.round(avg));
