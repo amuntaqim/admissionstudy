@@ -1138,6 +1138,8 @@
   }
   @media (max-width: 640px){
     .main{ padding: 76px 16px 50px; }
+        body[data-view="calendar"] .day-cell .exam-mark.exam-mark-count{ display:flex; position:absolute; top:4px; right:4px; font-size:10px; font-weight:700; }
+    body[data-view="calendar"] .day-cell .day-preview{ display:none; }
     .stats{ grid-template-columns: 1fr 1fr; }
     .topbar{ flex-direction:column; }
     .add-btn{ width:100%; justify-content:center; }
@@ -2412,6 +2414,7 @@ function renderCalendar(){
     html += `<div class="${cls}" onclick="selectDate('${key}')" title="${hasEvent && !isFullCalendar ? 'এই তারিখে পরীক্ষা আছে' : ''}">
       <span class="daynum">${toBn(d)}</span>
       ${hasEvent && !isFullCalendar ? examMarkIcon(hasAdmission) : ''}
+            ${hasEvent && isFullCalendar ? `<span class="exam-mark ${hasAdmission ? 'exam-mark-admission' : 'exam-mark-regular'} exam-mark-count">${toBn(dayEvents.length)}</span>` : ''}
       ${dayPreviewHTML(dayEvents)}
     </div>`;
   }
