@@ -1964,7 +1964,7 @@ async function fetchRemoteState(){
     events = Array.isArray(data.events) ? data.events : [];
     gaps = Array.isArray(data.gaps) ? data.gaps : [];
     vuls = Array.isArray(data.vuls) ? data.vuls : [];
-    siteText = Object.assign({}, DEFAULT_TEXT, data.siteText || {});     siteText.dashboardCards = Object.assign({}, DEFAULT_TEXT.dashboardCards, siteText.dashboardCards || {});
+    siteText = Object.assign({}, DEFAULT_TEXT, data.siteText || {});     siteText.dashboardCards = Object.assign({}, siteText.dashboardCards || {}); for(const dcKey in DEFAULT_TEXT.dashboardCards){ if(!(dcKey in siteText.dashboardCards)) siteText.dashboardCards[dcKey] = DEFAULT_TEXT.dashboardCards[dcKey]; }
     tagColors = (data.tagColors && typeof data.tagColors === 'object') ? data.tagColors : {};
     customQuotes = Array.isArray(data.customQuotes) ? data.customQuotes : [];
     currentQuoteIdx = typeof data.quoteIndex === 'number' ? data.quoteIndex : 0;    safeStorage.setItem(STORAGE_KEY, JSON.stringify(events));
@@ -2022,7 +2022,7 @@ function loadTexts(){
     const raw = safeStorage.getItem(SETTINGS_KEY);
     if(raw) {
       const parsed = JSON.parse(raw);
-            parsed.dashboardCards = Object.assign({}, DEFAULT_TEXT.dashboardCards, parsed.dashboardCards || {});
+            parsed.dashboardCards = Object.assign({}, parsed.dashboardCards || {}); for(const dcKey in DEFAULT_TEXT.dashboardCards){ if(!(dcKey in parsed.dashboardCards)) parsed.dashboardCards[dcKey] = DEFAULT_TEXT.dashboardCards[dcKey]; }
       return Object.assign({}, DEFAULT_TEXT, parsed);
     }
   } catch(e){ }
