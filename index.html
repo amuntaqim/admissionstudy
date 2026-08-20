@@ -1964,7 +1964,7 @@ async function fetchRemoteState(){
     events = Array.isArray(data.events) ? data.events : [];
     gaps = Array.isArray(data.gaps) ? data.gaps : [];
     vuls = Array.isArray(data.vuls) ? data.vuls : [];
-    siteText = Object.assign({}, DEFAULT_TEXT, data.siteText || {});
+    siteText = Object.assign({}, DEFAULT_TEXT, data.siteText || {});     siteText.dashboardCards = Object.assign({}, DEFAULT_TEXT.dashboardCards, siteText.dashboardCards || {});
     tagColors = (data.tagColors && typeof data.tagColors === 'object') ? data.tagColors : {};
     customQuotes = Array.isArray(data.customQuotes) ? data.customQuotes : [];
     currentQuoteIdx = typeof data.quoteIndex === 'number' ? data.quoteIndex : 0;    safeStorage.setItem(STORAGE_KEY, JSON.stringify(events));
@@ -2022,7 +2022,7 @@ function loadTexts(){
     const raw = safeStorage.getItem(SETTINGS_KEY);
     if(raw) {
       const parsed = JSON.parse(raw);
-      if(!parsed.dashboardCards) parsed.dashboardCards = DEFAULT_TEXT.dashboardCards;
+            parsed.dashboardCards = Object.assign({}, DEFAULT_TEXT.dashboardCards, parsed.dashboardCards || {});
       return Object.assign({}, DEFAULT_TEXT, parsed);
     }
   } catch(e){ }
@@ -2135,8 +2135,10 @@ function openSettingsModal(){
   const container = document.getElementById('dashboardCardsSettings');
   container.innerHTML = '';
   if(!siteText.dashboardCards) siteText.dashboardCards = DEFAULT_TEXT.dashboardCards;
-  for(const [key, config] of Object.entries(siteText.dashboardCards)){
+   for(const [key, config] of Object.entries(siteText.dashboardCards)){
     const div = document.createElement('div');
+    div.className = 'dc-row';
+    div.dataset.key = key;
     div.style.display = 'flex';
     div.style.alignItems = 'center';
     div.style.gap = '12px';
@@ -2144,6 +2146,10 @@ function openSettingsModal(){
     div.style.background = 'var(--bg)';
     div.style.borderRadius = 'var(--radius-sm)';
     div.innerHTML = `
+      <div style="display:flex; flex-direction:column; gap:2px;">
+        <button type="button" onclick="moveCardRow(this, -1)" style="border:1px solid var(--border); background:#fff; border-radius:6px; cursor:pointer; width:26px; height:22px; font-size:12px; line-height:1;">▲</button>
+        <button type="button" onclick="moveCardRow(this, 1)" style="border:1px solid var(--border); background:#fff; border-radius:6px; cursor:pointer; width:26px; height:22px; font-size:12px; line-height:1;">▼</button>
+      </div>
       <label style="flex:1; font-size:14px; font-weight:600; color:var(--text);">শিরোনাম</label>
       <input type="text" class="dc-label" data-key="${key}" value="${escapeHtml(config.label)}" style="flex:2; padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:#fff; font-size:14px;">
       <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:14px; font-weight:600; color:var(--text-muted);">
@@ -2163,8 +2169,16 @@ document.getElementById('settingsOverlay').addEventListener('click', function(e)
   if(e.target === this) closeSettingsModal();
 });
 
-function saveSettings(e){
-  e.preventDefault();
+function moveCardRow(btn, direction){
+  const row = btn.closest('.dc-row');
+  if(!row) return;
+  if(direction === -1 && row.previousElementSibling){
+    row.parentNode.insertBefore(row, row.previousElementSibling);
+  } else if(direction === 1 && row.nextElementSibling){
+    row.parentNode.insertBefore(row.nextElementSibling, row);
+  }
+}
+function saveSettings(e){  e.preventDefault();
   siteText.primaryColor = document.getElementById('setPrimaryColor').value || DEFAULT_TEXT.primaryColor;
   siteText.brandTitle = document.getElementById('setBrandTitle').value.trim() || DEFAULT_TEXT.brandTitle;
   siteText.brandSubtitle = document.getElementById('setBrandSubtitle').value.trim() || DEFAULT_TEXT.brandSubtitle;
@@ -3010,6 +3024,11 @@ function renderStatusRow(){
 
   // Loop through cards and check visibility / rename from siteText.dashboardCards
   let html = '';
+if(siteText.dashboardCards){
+    const order = Object.keys(siteText.dashboardCards);
+    cardData.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+  }
+
   cardData.forEach(c => {
     const config = siteText.dashboardCards && siteText.dashboardCards[c.id] ? siteText.dashboardCards[c.id] : { label: c.label, visible: true };
     if(!config.visible) return; // Hide if user unchecked it
