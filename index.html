@@ -2135,9 +2135,12 @@ async function fetchRemoteState(){
     safeStorage.setItem(SETTINGS_KEY, JSON.stringify(siteText));
     safeStorage.setItem(TAG_COLORS_KEY, JSON.stringify(tagColors));
         safeStorage.setItem(QUOTES_KEY, JSON.stringify(customQuotes));
-    if(data.timerBgUrl && typeof data.timerBgUrl === 'string' && data.timerBgUrl.trim()){
-      timerBgDataUrl = data.timerBgUrl.trim();
-      try{ localStorage.setItem('timerBgImage', timerBgDataUrl); } catch(ex){}
+        if(typeof data.timerBgUrl === 'string'){
+      timerBgDataUrl = data.timerBgUrl.trim() || null;
+      try{
+        if(timerBgDataUrl){ localStorage.setItem('timerBgImage', timerBgDataUrl); }
+        else{ localStorage.removeItem('timerBgImage'); }
+      } catch(ex){}
       applyTimerBg();
     }
     applyTexts();
@@ -2645,8 +2648,8 @@ function removeTimerBg(){
   timerBgDataUrl = null;
   try{ localStorage.removeItem('timerBgImage'); } catch(ex){}
   applyTimerBg();
+  persistState('✅ ব্যাকগ্রাউন্ড মুছে ফেলা হয়েছে');
 }
-
 applyTimerBg();
 function changeMonth(delta){
   currentCal.setMonth(currentCal.getMonth() + delta);
