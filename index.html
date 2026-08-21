@@ -953,19 +953,20 @@
     background:#fff; color:var(--text); font-family: inherit; font-size:15px; font-weight:600; cursor:pointer;
   }
   .timer-btn-primary{ background: var(--primary); color:#fff; border-color: var(--primary); }
-  .timer-fullscreen-btn{
+    .timer-fullscreen-btn{
     position:absolute; top:16px; right:16px; width:40px; height:40px; border-radius:10px;
     border:1px solid var(--border); background:#fff; display:flex; align-items:center; justify-content:center;
-    cursor:pointer; color:var(--text);
+    cursor:pointer; color:var(--text); z-index:10;
   }
-  .timer-wrap.timer-fs-active{
+    .timer-wrap.timer-fs-active{
     position: fixed; inset:0; z-index: 5000; background:#0a0a0a;
     display:flex; align-items:center; justify-content:center; padding:0; min-height:100vh; width:100vw;
   }
-  .timer-wrap.timer-fs-active .timer-display{ color:#fff; font-size: 96px; }
+  .timer-wrap.timer-fs-active .timer-display{ color:#fff; font-size: clamp(56px, 12vw, 96px); }
   .timer-wrap.timer-fs-active .timer-inputs,
   .timer-wrap.timer-fs-active .timer-fullscreen-btn{ display:none; }
-  .timer-wrap.timer-fs-active .timer-controls{ position:absolute; bottom:60px; }
+  .timer-wrap.timer-fs-active .timer-controls{ position:absolute; bottom:clamp(24px, 6vh, 60px); gap:16px; }
+  .timer-wrap.timer-fs-active .timer-img-controls{ top:clamp(12px,2vh,20px); left:clamp(12px,2vw,20px); }
   .timer-wrap.timer-fs-active .timer-btn{ background: rgba(255,255,255,0.12); color:#fff; border-color: rgba(255,255,255,0.35); }
   .timer-wrap.timer-fs-active .timer-btn-primary{ background: var(--primary); border-color: var(--primary); }
     /* --- TIMER BG IMAGE --- */
@@ -984,8 +985,8 @@
   .timer-wrap.has-bg-img .timer-fullscreen-btn{
     background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color:#fff; backdrop-filter:blur(4px);
   }
-  .timer-img-controls{
-    position:absolute; top:16px; left:16px; display:flex; gap:8px; z-index:10;
+    .timer-img-controls{
+    position:absolute; top:16px; left:16px; display:flex; gap:8px; z-index:10; align-items:center;
   }
   .timer-img-btn{
     height:34px; border-radius:9px; border:1px solid var(--border);
@@ -1525,8 +1526,8 @@
         <img class="timer-bg-img" id="timerBgImg" src="" alt="" style="display:none;">
         <div class="timer-bg-overlay" id="timerBgOverlay"></div>
         <!-- Image controls (top-left) -->
-        <div class="timer-img-controls" id="timerImgControls">
-          <button class="timer-img-btn" id="timerImgUploadBtn" onclick="document.getElementById('timerImgInput').click()" title="ছবি যোগ করুন">
+                <div class="timer-img-controls" id="timerImgControls">
+          <button class="timer-img-btn" id="timerImgUploadBtn" onclick="timerImgPickMethod()" title="ছবি যোগ করুন">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
             ছবি
           </button>
@@ -2587,7 +2588,19 @@ function applyTimerBg(){
     if(delBtn) delBtn.style.display = 'none';
   }
 }
-
+function timerImgPickMethod(){
+  const choice = confirm('পাবলিক URL দিয়ে ছবি সেট করতে OK চাপুন।\nনিজের ডিভাইস থেকে আপলোড করতে Cancel চাপুন।\n\n(URL দিলে ছবি সবার কাছে দেখাবে। নিজের ডিভাইস থেকে আপলোড করলে শুধু এই ব্রাউজারে দেখাবে।)');
+  if(choice){
+    const url = prompt('ছবির পাবলিক URL দিন (যেমন: https://i.imgur.com/xxxx.jpg):');
+    if(url && url.trim()){
+      timerBgDataUrl = url.trim();
+      try{ localStorage.setItem('timerBgImage', timerBgDataUrl); } catch(ex){}
+      applyTimerBg();
+    }
+  } else {
+    document.getElementById('timerImgInput').click();
+  }
+}
 function setTimerBg(input){
   const file = input.files && input.files[0];
   if(!file) return;
