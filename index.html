@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>স্টাডি ট্র্যাকার</title>
+<title>StudyOS - স্টাডি ট্র্যাকার</title>
 <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
@@ -1199,7 +1199,7 @@
     <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()" aria-label="Open menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
-    <span class="mobile-topbar-title" id="mobileTopbarTitle" onclick="switchView('dashboard')" style="cursor:pointer;">NextGate</span>
+    <span class="mobile-topbar-title" id="mobileTopbarTitle" onclick="switchView('dashboard')" style="cursor:pointer;">StudyOS</span>
   </div>
   <button class="mobile-settings-btn" onclick="openSettingsModal()" title="Settings" aria-label="Settings">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -1214,8 +1214,8 @@
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
     </div>
     <div class="brand-text" onclick="switchView('dashboard')" style="cursor:pointer;">
-      <h1 id="brandTitleEl">NextGate</h1>
-      <p id="brandSubtitleEl">পরীক্ষা ট্র্যাকার</p>
+      <h1 id="brandTitleEl">StudyOS</h1>
+      <p id="brandSubtitleEl">স্টাডি ট্র্যাকার</p>
     </div>
     <button class="settings-btn" onclick="openSettingsModal()" title="টেক্সট সেটিংস">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -1994,9 +1994,9 @@ async function fetchRemoteState(){
 
 /* ================= EDITABLE UI TEXT ================= */
 const DEFAULT_TEXT = {
-  brandTitle: 'NextGate',
-  brandSubtitle: 'পরীক্ষা ট্র্যাকার',
-  pageTitle: 'NextGate — পরীক্ষা ট্র্যাকার',
+  brandTitle: 'StudyOS',
+  brandSubtitle: 'স্টাডি ট্র্যাকার',
+  pageTitle: 'StudyOS - স্টাডি ট্র্যাকার',
   addBtnLabel: 'নতুন পরীক্ষা যোগ করুন',
   calHeading: 'ক্যালেন্ডার',
   eventsHeadingDashboard: 'আসন্ন পরীক্ষাসমূহ',
