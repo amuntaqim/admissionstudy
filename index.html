@@ -2062,7 +2062,7 @@ let adminPassword = null;
 try { adminPassword = sessionStorage.getItem(ADMIN_PW_KEY); } catch(e){ }
 
 /* ================= SERVER SYNC ================= */
-const API_URL = '/.netlify/functions/data';
+const API_URL = '/api/data';
 
 async function persistState(successMsg){
   safeStorage.setItem(STORAGE_KEY, JSON.stringify(events));
