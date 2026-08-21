@@ -2614,19 +2614,7 @@ function applyTimerBg(){
     if(delBtn) delBtn.style.display = 'none';
   }
 }
-function timerImgPickMethod(){
-  const choice = confirm('পাবলিক URL দিয়ে ছবি সেট করতে OK চাপুন।\nনিজের ডিভাইস থেকে আপলোড করতে Cancel চাপুন।\n\n(URL দিলে ছবি সবার কাছে দেখাবে। নিজের ডিভাইস থেকে আপলোড করলে শুধু এই ব্রাউজারে দেখাবে।)');
-  if(choice){
-    const url = prompt('ছবির পাবলিক URL দিন (যেমন: https://i.imgur.com/xxxx.jpg):');
-    if(url && url.trim()){
-      timerBgDataUrl = url.trim();
-      try{ localStorage.setItem('timerBgImage', timerBgDataUrl); } catch(ex){}
-      applyTimerBg();
-    }
-  } else {
-    document.getElementById('timerImgInput').click();
-  }
-}
+
 function setTimerBg(input){
   const file = input.files && input.files[0];
   if(!file) return;
@@ -2640,14 +2628,12 @@ function setTimerBg(input){
   input.value = '';
 }
 function timerImgPickMethod(){
-  const url = prompt('ছবির সরাসরি URL দিন (যেমন: https://i.postimg.cc/xxx/image.jpg)\nঅথবা Cancel দিয়ে ফাইল থেকে বেছে নিন:');
-  if(url === null){
-    document.getElementById('timerImgInput').click();
-  } else if(url.trim()){
-    timerBgDataUrl = url.trim();
-    try{ localStorage.setItem('timerBgImage', timerBgDataUrl); } catch(ex){}
-    applyTimerBg();
-  }
+  const url = prompt('ছবির সরাসরি URL দিন (যেমন: https://i.postimg.cc/xxx/image.jpg):');
+  if(url === null || !url.trim()) return;
+  timerBgDataUrl = url.trim();
+  try{ localStorage.setItem('timerBgImage', timerBgDataUrl); } catch(ex){}
+  applyTimerBg();
+  persistState('✅ ব্যাকগ্রাউন্ড সেট ও পাবলিশ হয়েছে');
 }
   
 function removeTimerBg(){
