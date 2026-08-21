@@ -908,10 +908,12 @@
   .exam-type-badge svg{ width:12px; height:12px; }
 
   /* ---------- GAP / VUL SCREENS ---------- */
-  .gv-panel{
+    .gv-panel{
     background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
     padding: 22px; min-height: 400px; display:flex; flex-direction:column; overflow:hidden;
   }
+  #timerPanel{ padding: 12px; display:flex; flex-direction:column; }
+  #timerPanel .gv-head{ padding: 0 4px; margin-bottom: 10px; }
   .gv-head{
     display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
     margin-bottom: 18px; flex-shrink:0;
@@ -932,10 +934,10 @@
   .gv-body{ flex:1; min-height:0; overflow-y:auto; padding-right:6px; margin-right:-6px; padding-top:6px; margin-top:-6px; }
   
   /* ---------- TIMER ---------- */
-     .timer-wrap{
+      .timer-wrap{
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     gap: 28px; padding: 60px 20px; position: relative; flex:1; min-height: 420px;
-    overflow: hidden;
+    overflow: hidden; border-radius: 10px;
   }
   .timer-display{
     font-size: clamp(40px, 6vw, 64px); font-weight:700; letter-spacing: 2px; color: var(--text);
@@ -986,10 +988,10 @@
   }
 
   /* --- bg image --- */
-  .timer-bg-img{
+   .timer-bg-img{
     position:absolute; inset:0; width:100%; height:100%;
     object-fit:cover; object-position:center; z-index:0; display:block;
-    overflow: hidden; border-radius: 18px;
+    border-radius: inherit;
   }
   .timer-bg-overlay{
     position:absolute; inset:0; background: rgba(0,0,0,0.45); z-index:1;
