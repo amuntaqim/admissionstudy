@@ -932,9 +932,10 @@
   .gv-body{ flex:1; min-height:0; overflow-y:auto; padding-right:6px; margin-right:-6px; padding-top:6px; margin-top:-6px; }
   
   /* ---------- TIMER ---------- */
-  .timer-wrap{
+    .timer-wrap{
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     gap: 28px; padding: 60px 20px; position: relative; flex:1; min-height: 420px;
+    overflow: hidden;
   }
   .timer-display{
     font-size: 64px; font-weight:700; letter-spacing: 2px; color: var(--text);
@@ -953,10 +954,10 @@
     background:#fff; color:var(--text); font-family: inherit; font-size:15px; font-weight:600; cursor:pointer;
   }
   .timer-btn-primary{ background: var(--primary); color:#fff; border-color: var(--primary); }
-    .timer-fullscreen-btn{
+      .timer-fullscreen-btn{
     position:absolute; top:16px; right:16px; width:40px; height:40px; border-radius:10px;
     border:1px solid var(--border); background:#fff; display:flex; align-items:center; justify-content:center;
-    cursor:pointer; color:var(--text); z-index:10;
+    cursor:pointer; color:var(--text); z-index:10; flex-shrink:0;
   }
     .timer-wrap.timer-fs-active{
     position: fixed; inset:0; z-index: 5000; background:#0a0a0a;
@@ -965,8 +966,7 @@
   .timer-wrap.timer-fs-active .timer-display{ color:#fff; font-size: clamp(56px, 12vw, 96px); }
   .timer-wrap.timer-fs-active .timer-inputs,
   .timer-wrap.timer-fs-active .timer-fullscreen-btn{ display:none; }
-  .timer-wrap.timer-fs-active .timer-controls{ position:absolute; bottom:clamp(24px, 6vh, 60px); gap:16px; }
-  .timer-wrap.timer-fs-active .timer-img-controls{ top:clamp(12px,2vh,20px); left:clamp(12px,2vw,20px); }
+  .timer-wrap.timer-fs-active .timer-controls{ position:absolute; bottom:clamp(24px, 6vh, 60px); left:50%; transform:translateX(-50%); white-space:nowrap; }  .timer-wrap.timer-fs-active .timer-img-controls{ top:clamp(12px,2vh,20px); left:clamp(12px,2vw,20px); }
   .timer-wrap.timer-fs-active .timer-btn{ background: rgba(255,255,255,0.12); color:#fff; border-color: rgba(255,255,255,0.35); }
   .timer-wrap.timer-fs-active .timer-btn-primary{ background: var(--primary); border-color: var(--primary); }
     /* --- TIMER BG IMAGE --- */
@@ -985,8 +985,9 @@
   .timer-wrap.has-bg-img .timer-fullscreen-btn{
     background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color:#fff; backdrop-filter:blur(4px);
   }
-    .timer-img-controls{
-    position:absolute; top:16px; left:16px; display:flex; gap:8px; z-index:10; align-items:center;
+      .timer-img-controls{
+    position:absolute; top:16px; left:16px; display:flex; gap:8px; z-index:10;
+    align-items:center; flex-shrink:0;
   }
   .timer-img-btn{
     height:34px; border-radius:9px; border:1px solid var(--border);
@@ -1002,7 +1003,8 @@
     background: rgba(255,255,255,0.15); color:#fff; border-color: rgba(255,255,255,0.3); backdrop-filter:blur(4px);
   }
   .timer-wrap.has-bg-img .timer-img-btn.del{ color: #ffb3b3; }
-  .timer-wrap.timer-fs-active .timer-img-controls{ top:20px; left:20px; }
+    .timer-wrap.timer-fs-active .timer-img-controls{ top:20px; left:20px; right:auto; }
+    .timer-wrap.timer-fs-active .timer-fullscreen-btn{ display:flex !important; top:20px; right:20px; background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.25); color:#fff; }
   .timer-wrap.timer-fs-active .timer-img-btn{
     background: rgba(255,255,255,0.12); color:#fff; border-color: rgba(255,255,255,0.25); backdrop-filter:blur(6px);
   }
@@ -1527,7 +1529,7 @@
         <div class="timer-bg-overlay" id="timerBgOverlay"></div>
         <!-- Image controls (top-left) -->
                 <div class="timer-img-controls" id="timerImgControls">
-          <button class="timer-img-btn" id="timerImgUploadBtn" onclick="timerImgPickMethod()" title="ছবি যোগ করুন">
+                    <button class="timer-img-btn" id="timerImgUploadBtn" onclick="timerImgPickMethod()" title="ছবি যোগ করুন">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
             ছবি
           </button>
@@ -2613,7 +2615,17 @@ function setTimerBg(input){
   reader.readAsDataURL(file);
   input.value = '';
 }
-
+function timerImgPickMethod(){
+  const url = prompt('ছবির সরাসরি URL দিন (যেমন: https://i.postimg.cc/xxx/image.jpg)\nঅথবা Cancel দিয়ে ফাইল থেকে বেছে নিন:');
+  if(url === null){
+    document.getElementById('timerImgInput').click();
+  } else if(url.trim()){
+    timerBgDataUrl = url.trim();
+    try{ localStorage.setItem('timerBgImage', timerBgDataUrl); } catch(ex){}
+    applyTimerBg();
+  }
+}
+  
 function removeTimerBg(){
   timerBgDataUrl = null;
   try{ localStorage.removeItem('timerBgImage'); } catch(ex){}
