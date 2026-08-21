@@ -974,9 +974,9 @@
   .timer-wrap.timer-fs-active .timer-display{ color:#fff; font-size: clamp(48px, 10vw, 96px); }
   .timer-wrap.timer-fs-active .timer-inputs{ display:none; }
   .timer-wrap.timer-fs-active .timer-fullscreen-btn{ display:none; }
-  .timer-wrap.timer-fs-active .timer-controls{
-    position:absolute; bottom: clamp(24px, 5vh, 60px);
-    left:50%; transform:translateX(-50%);
+    .timer-wrap.timer-fs-active .timer-controls{
+    position:absolute; bottom:40px;
+    left:0; right:0; justify-content:center;
   }
   .timer-wrap.timer-fs-active .timer-btn{ background: rgba(255,255,255,0.12); color:#fff; border-color: rgba(255,255,255,0.35); }
   .timer-wrap.timer-fs-active .timer-btn-primary{ background: var(--primary); border-color: var(--primary); }
@@ -2086,7 +2086,7 @@ async function persistState(successMsg){
       method: 'POST',
       cache: 'no-store',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminPassword },
-      body: JSON.stringify({ events, gaps, vuls, siteText, tagColors, customQuotes, quoteIndex: currentQuoteIdx })    });
+            body: JSON.stringify({ events, gaps, vuls, siteText, tagColors, customQuotes, quoteIndex: currentQuoteIdx, timerBgUrl: timerBgDataUrl || '' })    });
     if(res.status === 401){
       adminPassword = null;
       try { sessionStorage.removeItem(ADMIN_PW_KEY); } catch(e){ }
@@ -2132,7 +2132,12 @@ async function fetchRemoteState(){
     safeStorage.setItem(VULS_KEY, JSON.stringify(vuls));
     safeStorage.setItem(SETTINGS_KEY, JSON.stringify(siteText));
     safeStorage.setItem(TAG_COLORS_KEY, JSON.stringify(tagColors));
-    safeStorage.setItem(QUOTES_KEY, JSON.stringify(customQuotes));
+        safeStorage.setItem(QUOTES_KEY, JSON.stringify(customQuotes));
+    if(data.timerBgUrl && typeof data.timerBgUrl === 'string' && data.timerBgUrl.trim()){
+      timerBgDataUrl = data.timerBgUrl.trim();
+      try{ localStorage.setItem('timerBgImage', timerBgDataUrl); } catch(ex){}
+      applyTimerBg();
+    }
     applyTexts();
     renderQuote();
     renderAll();
