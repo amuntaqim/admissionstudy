@@ -3221,9 +3221,10 @@ function renderDashboard(){
         if(aPast !== bPast) return aPast ? 1 : -1;
         return (a.date + (a.time||'99:99')).localeCompare(b.date + (b.time||'99:99'));
       });
-  const dashRegular = document.getElementById('dashRegularCards');
-  dashRegular.innerHTML = regularExams.slice(0, 4).map(eventCardHTML).join('') ||
-    emptyStateHTML(false, 'কোনো রেগুলার পরীক্ষা নেই', '"নতুন পরীক্ষা যোগ করুন" বাটনে ক্লিক করে শুরু করুন');
+   const dashRegular = document.getElementById('dashRegularCards');
+  const upcomingRegular = regularExams.filter(e => new Date(e.date + 'T' + (e.time||'23:59') + ':00') >= now);
+  dashRegular.innerHTML = upcomingRegular.slice(0, 4).map(eventCardHTML).join('') ||
+    emptyStateHTML(false, 'কোনো আসন্ন পরীক্ষা নেই', 'সব রেগুলার পরীক্ষা সম্পন্ন হয়েছে');
 
   const recentGaps = [...gaps].sort((a,b) => (b.createdAt||0) - (a.createdAt||0)).slice(0, 4);
   const dashGap = document.getElementById('dashGapCards');
@@ -3236,9 +3237,10 @@ function renderDashboard(){
     emptyStateHTML(false, 'কোনো ভুল নেই', '"ভুলের খাতা" পেজে গিয়ে নতুন ভুল যোগ করুন');
 
   
-  const dashAdmission = document.getElementById('dashAdmissionCards');
-  dashAdmission.innerHTML = admissionExams.slice(0, 4).map(eventCardHTML).join('') ||
-    emptyStateHTML(false, 'কোনো ভর্তি পরীক্ষা নেই', 'ভর্তি পরীক্ষা যোগ করতে "নতুন পরীক্ষা" বাটনে ক্লিক করুন');
+    const dashAdmission = document.getElementById('dashAdmissionCards');
+  const upcomingAdmission = admissionExams.filter(e => new Date(e.date + 'T' + (e.time||'23:59') + ':00') >= now);
+  dashAdmission.innerHTML = upcomingAdmission.slice(0, 4).map(eventCardHTML).join('') ||
+    emptyStateHTML(false, 'কোনো আসন্ন ভর্তি পরীক্ষা নেই', 'সব ভর্তি পরীক্ষা সম্পন্ন হয়েছে');
 
   document.getElementById('dashScrollArea').style.display = 'block';
 }
@@ -3274,11 +3276,11 @@ function renderStatusRow(){
   if(totalMarksTotal > 0){
     avgPct = toBn(Math.round((totalMarksObtained / totalMarksTotal) * 100)) + '%';
   }
-  const maxRank = regularExams.reduce((max, e) => {
+    const bestRank = regularExams.reduce((min, e) => {
     const r = Number(e.meritCentral);
-    return (Number.isFinite(r) && r > max) ? r : max;
+    return (Number.isFinite(r) && r > 0 && (min === 0 || r < min)) ? r : min;
   }, 0);
-  const maxRankDisplay = maxRank > 0 ? toBn(maxRank) : '—';
+  const maxRankDisplay = bestRank > 0 ? toBn(bestRank) : '—';
 
   // Card data mapped exactly to your 11 keys in siteText.dashboardCards
   const cardData = [
