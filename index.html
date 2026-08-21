@@ -908,12 +908,10 @@
   .exam-type-badge svg{ width:12px; height:12px; }
 
   /* ---------- GAP / VUL SCREENS ---------- */
-    .gv-panel{
+  .gv-panel{
     background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
     padding: 22px; min-height: 400px; display:flex; flex-direction:column; overflow:hidden;
   }
-  #timerPanel{ padding: 0; }
-  #timerPanel .gv-head{ padding: 18px 22px 0 22px; margin-bottom: 0; }
   .gv-head{
     display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
     margin-bottom: 18px; flex-shrink:0;
@@ -934,10 +932,10 @@
   .gv-body{ flex:1; min-height:0; overflow-y:auto; padding-right:6px; margin-right:-6px; padding-top:6px; margin-top:-6px; }
   
   /* ---------- TIMER ---------- */
-    .timer-wrap{
+     .timer-wrap{
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     gap: 28px; padding: 60px 20px; position: relative; flex:1; min-height: 420px;
-    overflow: hidden; border-radius: var(--radius);
+    overflow: hidden;
   }
   .timer-display{
     font-size: clamp(40px, 6vw, 64px); font-weight:700; letter-spacing: 2px; color: var(--text);
@@ -976,8 +974,8 @@
   .timer-wrap.timer-fs-active .timer-display{ color:#fff; font-size: clamp(48px, 10vw, 96px); }
   .timer-wrap.timer-fs-active .timer-inputs{ display:none; }
   .timer-wrap.timer-fs-active .timer-fullscreen-btn{ display:none; }
-      .timer-wrap.timer-fs-active .timer-controls{
-    position:absolute; bottom: clamp(40px, 8vh, 80px);
+    .timer-wrap.timer-fs-active .timer-controls{
+    position:absolute; bottom:40px;
     left:0; right:0; justify-content:center;
   }
   .timer-wrap.timer-fs-active .timer-btn{ background: rgba(255,255,255,0.12); color:#fff; border-color: rgba(255,255,255,0.35); }
@@ -2606,14 +2604,16 @@ function applyTimerBg(){
   }
 }
 function timerImgPickMethod(){
-  const url = prompt('ছবির সরাসরি URL দিন (যেমন: https://i.imgur.com/xxxx.jpg)\nCancel দিলে ফাইল থেকে বেছে নিতে পারবেন:');
-  if(url === null){
+  const choice = confirm('পাবলিক URL দিয়ে ছবি সেট করতে OK চাপুন।\nনিজের ডিভাইস থেকে আপলোড করতে Cancel চাপুন।\n\n(URL দিলে ছবি সবার কাছে দেখাবে। নিজের ডিভাইস থেকে আপলোড করলে শুধু এই ব্রাউজারে দেখাবে।)');
+  if(choice){
+    const url = prompt('ছবির পাবলিক URL দিন (যেমন: https://i.imgur.com/xxxx.jpg):');
+    if(url && url.trim()){
+      timerBgDataUrl = url.trim();
+      try{ localStorage.setItem('timerBgImage', timerBgDataUrl); } catch(ex){}
+      applyTimerBg();
+    }
+  } else {
     document.getElementById('timerImgInput').click();
-  } else if(url.trim()){
-    timerBgDataUrl = url.trim();
-    try{ localStorage.setItem('timerBgImage', timerBgDataUrl); } catch(ex){}
-    applyTimerBg();
-    persistState('✅ টাইমার ব্যাকগ্রাউন্ড সবার জন্য পাবলিশ হয়েছে');
   }
 }
 function setTimerBg(input){
@@ -2628,11 +2628,21 @@ function setTimerBg(input){
   reader.readAsDataURL(file);
   input.value = '';
 }
+function timerImgPickMethod(){
+  const url = prompt('ছবির সরাসরি URL দিন (যেমন: https://i.postimg.cc/xxx/image.jpg)\nঅথবা Cancel দিয়ে ফাইল থেকে বেছে নিন:');
+  if(url === null){
+    document.getElementById('timerImgInput').click();
+  } else if(url.trim()){
+    timerBgDataUrl = url.trim();
+    try{ localStorage.setItem('timerBgImage', timerBgDataUrl); } catch(ex){}
+    applyTimerBg();
+  }
+}
+  
 function removeTimerBg(){
   timerBgDataUrl = null;
   try{ localStorage.removeItem('timerBgImage'); } catch(ex){}
   applyTimerBg();
-  persistState('✅ ব্যাকগ্রাউন্ড মুছে ফেলা হয়েছে');
 }
 
 applyTimerBg();
