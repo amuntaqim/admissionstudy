@@ -2135,7 +2135,7 @@ async function fetchRemoteState(){
     safeStorage.setItem(SETTINGS_KEY, JSON.stringify(siteText));
     safeStorage.setItem(TAG_COLORS_KEY, JSON.stringify(tagColors));
         safeStorage.setItem(QUOTES_KEY, JSON.stringify(customQuotes));
-        if(typeof data.timerBgUrl === 'string'){
+            if(typeof data.timerBgUrl === 'string' && !isSaving){
       timerBgDataUrl = data.timerBgUrl.trim() || null;
       try{
         if(timerBgDataUrl){ localStorage.setItem('timerBgImage', timerBgDataUrl); }
