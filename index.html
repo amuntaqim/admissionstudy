@@ -396,11 +396,12 @@
     flex-shrink: 0;
     padding: 8px 4px; /* আপডেট করা লাইন */
   }
-  body[data-view="calendar"] .stats-row,
+   body[data-view="calendar"] .stats-row,
   body[data-view="all"] .stats-row,
   body[data-view="admission"] .stats-row,
   body[data-view="gap"] .stats-row,
-  body[data-view="vul"] .stats-row {
+  body[data-view="vul"] .stats-row,
+  body[data-view="timer"] .stats-row {
     display: none;
   }
   .stat-mini{
@@ -562,13 +563,15 @@
   body[data-view="all"] .content-grid,
   body[data-view="admission"] .content-grid,
   body[data-view="gap"] .content-grid,
-  body[data-view="vul"] .content-grid{
+  body[data-view="vul"] .content-grid,
+  body[data-view="timer"] .content-grid{
     grid-template-columns: 1fr;
   }
-  body[data-view="all"] .calendar-card,
+    body[data-view="all"] .calendar-card,
   body[data-view="admission"] .calendar-card,
   body[data-view="gap"] .calendar-card,
-  body[data-view="vul"] .calendar-card{ display: none; }
+  body[data-view="vul"] .calendar-card,
+  body[data-view="timer"] .calendar-card{ display: none; }
   body[data-view="dashboard"] .calendar-card,
   body[data-view="dashboard"] .events-panel,
   body[data-view="dashboard"] .gv-panel{ display: none; }
