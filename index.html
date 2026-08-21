@@ -2135,14 +2135,20 @@ async function fetchRemoteState(){
     safeStorage.setItem(SETTINGS_KEY, JSON.stringify(siteText));
     safeStorage.setItem(TAG_COLORS_KEY, JSON.stringify(tagColors));
         safeStorage.setItem(QUOTES_KEY, JSON.stringify(customQuotes));
-            if(typeof data.timerBgUrl === 'string' && !isSaving){
-      timerBgDataUrl = data.timerBgUrl.trim() || null;
-      try{
-        if(timerBgDataUrl){ localStorage.setItem('timerBgImage', timerBgDataUrl); }
-        else{ localStorage.removeItem('timerBgImage'); }
-      } catch(ex){}
-      applyTimerBg();
-    }
+    if(typeof data.timerBgUrl === 'string' && !isSaving){
+  const remoteBg = data.timerBgUrl.trim() || null;
+  // Only overwrite local image if remote has one, or if local is also empty
+  if(remoteBg){
+    timerBgDataUrl = remoteBg;
+    try{ localStorage.setItem('timerBgImage', timerBgDataUrl); } catch(ex){}
+    applyTimerBg();
+  } else if(!timerBgDataUrl){
+    // Remote is empty AND local is also empty — clear it
+    try{ localStorage.removeItem('timerBgImage'); } catch(ex){}
+    applyTimerBg();
+  }
+  // If remote is empty but local has an image — keep local, do nothing
+}
     applyTexts();
     renderQuote();
     renderAll();
