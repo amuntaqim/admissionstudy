@@ -968,6 +968,44 @@
   .timer-wrap.timer-fs-active .timer-controls{ position:absolute; bottom:60px; }
   .timer-wrap.timer-fs-active .timer-btn{ background: rgba(255,255,255,0.12); color:#fff; border-color: rgba(255,255,255,0.35); }
   .timer-wrap.timer-fs-active .timer-btn-primary{ background: var(--primary); border-color: var(--primary); }
+    /* --- TIMER BG IMAGE --- */
+  .timer-bg-img{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; object-position:center; z-index:0; display:block;
+    border-radius: inherit;
+  }
+  .timer-bg-overlay{
+    position:absolute; inset:0; background: rgba(0,0,0,0.45); z-index:1;
+    border-radius: inherit; display:none;
+  }
+  .timer-wrap.has-bg-img .timer-bg-overlay{ display:block; }
+  .timer-wrap.has-bg-img > *:not(.timer-bg-img):not(.timer-bg-overlay){ position:relative; z-index:2; }
+  .timer-wrap.has-bg-img .timer-display{ color:#fff; }
+  .timer-wrap.has-bg-img .timer-fullscreen-btn{
+    background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color:#fff; backdrop-filter:blur(4px);
+  }
+  .timer-img-controls{
+    position:absolute; top:16px; left:16px; display:flex; gap:8px; z-index:10;
+  }
+  .timer-img-btn{
+    height:34px; border-radius:9px; border:1px solid var(--border);
+    background:#fff; color:var(--text-muted); font-family:inherit;
+    font-size:13px; font-weight:600; cursor:pointer; display:flex;
+    align-items:center; gap:5px; padding:0 10px; transition: all .15s ease;
+  }
+  .timer-img-btn:hover{ background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+  .timer-img-btn svg{ width:14px; height:14px; flex-shrink:0; }
+  .timer-img-btn.del{ color: var(--accent-red); }
+  .timer-img-btn.del:hover{ background: var(--accent-red-bg); border-color: var(--accent-red); }
+  .timer-wrap.has-bg-img .timer-img-btn{
+    background: rgba(255,255,255,0.15); color:#fff; border-color: rgba(255,255,255,0.3); backdrop-filter:blur(4px);
+  }
+  .timer-wrap.has-bg-img .timer-img-btn.del{ color: #ffb3b3; }
+  .timer-wrap.timer-fs-active .timer-img-controls{ top:20px; left:20px; }
+  .timer-wrap.timer-fs-active .timer-img-btn{
+    background: rgba(255,255,255,0.12); color:#fff; border-color: rgba(255,255,255,0.25); backdrop-filter:blur(6px);
+  }
+  #timerImgInput{ display:none; }
   .gv-body::-webkit-scrollbar{ width:8px; }
   .gv-body::-webkit-scrollbar-track{ background:transparent; }
   .gv-body::-webkit-scrollbar-thumb{ background:var(--border); border-radius:8px; }
@@ -1482,7 +1520,22 @@
           টাইমার
         </h2>
       </div>
-      <div class="timer-wrap" id="timerWrap">
+            <div class="timer-wrap" id="timerWrap">
+        <!-- BG image + overlay (shown when image is set) -->
+        <img class="timer-bg-img" id="timerBgImg" src="" alt="" style="display:none;">
+        <div class="timer-bg-overlay" id="timerBgOverlay"></div>
+        <!-- Image controls (top-left) -->
+        <div class="timer-img-controls" id="timerImgControls">
+          <button class="timer-img-btn" id="timerImgUploadBtn" onclick="document.getElementById('timerImgInput').click()" title="ছবি যোগ করুন">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            ছবি
+          </button>
+          <button class="timer-img-btn del" id="timerImgDelBtn" onclick="removeTimerBg()" title="ছবি মুছুন" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+          </button>
+          <input type="file" id="timerImgInput" accept="image/*" onchange="setTimerBg(this)">
+        </div>
+        <!-- Fullscreen btn (top-right) -->
         <button class="timer-fullscreen-btn" id="timerFsBtn" onclick="toggleTimerFullscreen()" title="ফুলস্ক্রিন">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
         </button>
@@ -2515,6 +2568,46 @@ document.addEventListener('webkitfullscreenchange', function(){
   const wrap = document.getElementById('timerWrap');
   if(wrap) wrap.classList.toggle('timer-fs-active', document.webkitFullscreenElement === wrap);
 });
+  /* ---- TIMER BACKGROUND IMAGE ---- */
+let timerBgDataUrl = localStorage.getItem('timerBgImage') || null;
+
+function applyTimerBg(){
+  const wrap = document.getElementById('timerWrap');
+  const img = document.getElementById('timerBgImg');
+  const delBtn = document.getElementById('timerImgDelBtn');
+  if(timerBgDataUrl){
+    img.src = timerBgDataUrl;
+    img.style.display = 'block';
+    wrap.classList.add('has-bg-img');
+    if(delBtn) delBtn.style.display = '';
+  } else {
+    img.src = '';
+    img.style.display = 'none';
+    wrap.classList.remove('has-bg-img');
+    if(delBtn) delBtn.style.display = 'none';
+  }
+}
+
+function setTimerBg(input){
+  const file = input.files && input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    timerBgDataUrl = e.target.result;
+    try{ localStorage.setItem('timerBgImage', timerBgDataUrl); } catch(ex){}
+    applyTimerBg();
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+
+function removeTimerBg(){
+  timerBgDataUrl = null;
+  try{ localStorage.removeItem('timerBgImage'); } catch(ex){}
+  applyTimerBg();
+}
+
+applyTimerBg();
 function changeMonth(delta){
   currentCal.setMonth(currentCal.getMonth() + delta);
   renderCalendar();
