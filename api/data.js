@@ -117,7 +117,8 @@ export default async function handler(req) {
       siteText: safeSiteText,
       tagColors: (body.tagColors && typeof body.tagColors === 'object') ? body.tagColors : {},
             customQuotes: Array.isArray(body.customQuotes) ? body.customQuotes : [],
-      quoteIndex: typeof body.quoteIndex === 'number' ? body.quoteIndex : 0
+            quoteIndex: typeof body.quoteIndex === 'number' ? body.quoteIndex : 0,
+      timerBgUrl: typeof body.timerBgUrl === 'string' ? body.timerBgUrl : ''
     };
 
     // Debug log so this is traceable in Vercel function logs (Project -> Deployments -> Functions -> /api/data -> logs)
