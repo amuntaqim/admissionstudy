@@ -926,6 +926,44 @@
   .gv-view-btn.active{ background: var(--primary); color:#fff; box-shadow: 0 4px 10px rgba(var(--primary-rgb),0.28); }
 
   .gv-body{ flex:1; min-height:0; overflow-y:auto; padding-right:6px; margin-right:-6px; padding-top:6px; margin-top:-6px; }
+  
+  /* ---------- TIMER ---------- */
+  .timer-wrap{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap: 28px; padding: 60px 20px; position: relative; flex:1; min-height: 420px;
+  }
+  .timer-display{
+    font-size: 64px; font-weight:700; letter-spacing: 2px; color: var(--text);
+    font-variant-numeric: tabular-nums; text-align:center;
+  }
+  .timer-inputs{ display:flex; gap:14px; align-items:flex-end; flex-wrap:wrap; justify-content:center; }
+  .timer-input-group{ display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .timer-input-group input{
+    width: 70px; padding: 10px; text-align:center; font-size:18px; font-weight:600;
+    border:1px solid var(--border); border-radius: var(--radius-sm); color:var(--text); background:#fff;
+  }
+  .timer-input-group label{ font-size:12px; color: var(--text-muted); }
+  .timer-controls{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+  .timer-btn{
+    padding: 12px 28px; border-radius: var(--radius-sm); border:1px solid var(--border);
+    background:#fff; color:var(--text); font-size:15px; font-weight:600; cursor:pointer;
+  }
+  .timer-btn-primary{ background: var(--primary); color:#fff; border-color: var(--primary); }
+  .timer-fullscreen-btn{
+    position:absolute; top:16px; right:16px; width:40px; height:40px; border-radius:10px;
+    border:1px solid var(--border); background:#fff; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; color:var(--text);
+  }
+  .timer-wrap.timer-fs-active{
+    position: fixed; inset:0; z-index: 5000; background:#0a0a0a;
+    display:flex; align-items:center; justify-content:center; padding:0; min-height:100vh; width:100vw;
+  }
+  .timer-wrap.timer-fs-active .timer-display{ color:#fff; font-size: 96px; }
+  .timer-wrap.timer-fs-active .timer-inputs,
+  .timer-wrap.timer-fs-active .timer-fullscreen-btn{ display:none; }
+  .timer-wrap.timer-fs-active .timer-controls{ position:absolute; bottom:60px; }
+  .timer-wrap.timer-fs-active .timer-btn{ background: rgba(255,255,255,0.12); color:#fff; border-color: rgba(255,255,255,0.35); }
+  .timer-wrap.timer-fs-active .timer-btn-primary{ background: var(--primary); border-color: var(--primary); }
   .gv-body::-webkit-scrollbar{ width:8px; }
   .gv-body::-webkit-scrollbar-track{ background:transparent; }
   .gv-body::-webkit-scrollbar-thumb{ background:var(--border); border-radius:8px; }
@@ -1255,6 +1293,13 @@
       <span class="nav-badge" id="vulBadge">০</span>
     </button>
   </nav>
+    <div class="nav-section-label">টুলস</div>
+  <nav class="sidebar-nav">
+    <button class="nav-btn" data-view-btn="timer" onclick="switchView('timer')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
+      <span class="label">টাইমার</span>
+    </button>
+  </nav>
 
   <div class="nav-section-label" style="display:none;">ফিল্টার</div>
   <div class="filter-section" style="display:none;">
@@ -1425,6 +1470,40 @@
     </div>
 
     <!-- DASHBOARD SCROLL AREA (only visible in dashboard view) -->
+        <!-- TIMER PANEL -->
+    <div class="gv-panel" id="timerPanel" style="display:none;">
+      <div class="gv-head">
+        <h2>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          টাইমার
+        </h2>
+      </div>
+      <div class="timer-wrap" id="timerWrap">
+        <button class="timer-fullscreen-btn" id="timerFsBtn" onclick="toggleTimerFullscreen()" title="ফুলস্ক্রিন">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+        </button>
+        <div class="timer-display" id="timerDisplay">০০:০৫:০০</div>
+        <div class="timer-inputs" id="timerInputs">
+          <div class="timer-input-group">
+            <input type="number" id="timerHrsInput" min="0" max="23" value="0">
+            <label>ঘন্টা</label>
+          </div>
+          <div class="timer-input-group">
+            <input type="number" id="timerMinInput" min="0" max="59" value="5">
+            <label>মিনিট</label>
+          </div>
+          <div class="timer-input-group">
+            <input type="number" id="timerSecInput" min="0" max="59" value="0">
+            <label>সেকেন্ড</label>
+          </div>
+        </div>
+        <div class="timer-controls" id="timerControls">
+          <button class="timer-btn timer-btn-primary" id="timerStartBtn" onclick="startTimer()">শুরু করুন</button>
+          <button class="timer-btn" id="timerPauseBtn" onclick="pauseTimer()" style="display:none;">থামুন</button>
+          <button class="timer-btn" id="timerResetBtn" onclick="resetTimer()">রিসেট</button>
+        </div>
+      </div>
+    </div>
     <div class="dash-scroll-area" id="dashScrollArea" style="display:none;">
       <!-- ROW 1: STATUS CARDS (New style from version1) -->
       <div class="stats-row" id="dashStatusRow"></div>
@@ -2314,6 +2393,7 @@ function switchView(view, pushHistory = true){   if(pushHistory){     history.pu
   const gapPanel = document.getElementById('gapPanel');
   const vulPanel = document.getElementById('vulPanel');
   const dashScrollArea = document.getElementById('dashScrollArea');
+  const timerPanel = document.getElementById('timerPanel');
   const addBtn = document.getElementById('addBtn');
   const greetingWrap = document.getElementById('greetingText')?.parentElement;
 
@@ -2321,6 +2401,7 @@ function switchView(view, pushHistory = true){   if(pushHistory){     history.pu
   gapPanel.style.display = 'none';
   vulPanel.style.display = 'none';
   dashScrollArea.style.display = 'none';
+    timerPanel.style.display = 'none';
 
   const showGreeting = view === 'dashboard';
   if(greetingWrap) greetingWrap.style.display = showGreeting ? '' : 'none';
@@ -2333,6 +2414,10 @@ function switchView(view, pushHistory = true){   if(pushHistory){     history.pu
     vulPanel.style.display = 'flex';
     addBtn.style.display = 'none';
     renderVuls();
+    } else if(view === 'timer'){
+    timerPanel.style.display = 'flex';
+    addBtn.style.display = 'none';
+    updateTimerDisplayUI();
   } else if(view === 'dashboard'){
     addBtn.style.display = 'flex';
     dashScrollArea.style.display = 'block';
@@ -2348,6 +2433,84 @@ function switchView(view, pushHistory = true){   if(pushHistory){     history.pu
 }
 
 /* ================= CALENDAR RENDER ================= */
+let timerRemainingSeconds = 0;
+let timerIntervalId = null;
+let timerIsRunning = false;
+
+function formatTimerDisplay(totalSec){
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  const pad = n => String(n).padStart(2,'0');
+  return toBn(pad(h) + ':' + pad(m) + ':' + pad(s));
+}
+
+function updateTimerDisplayUI(){
+  const el = document.getElementById('timerDisplay');
+  if(el) el.textContent = formatTimerDisplay(timerRemainingSeconds);
+}
+
+function startTimer(){
+  if(timerIsRunning) return;
+  if(timerRemainingSeconds <= 0){
+    const h = Number(document.getElementById('timerHrsInput').value) || 0;
+    const m = Number(document.getElementById('timerMinInput').value) || 0;
+    const s = Number(document.getElementById('timerSecInput').value) || 0;
+    timerRemainingSeconds = h*3600 + m*60 + s;
+  }
+  if(timerRemainingSeconds <= 0) return;
+  timerIsRunning = true;
+  document.getElementById('timerStartBtn').style.display = 'none';
+  document.getElementById('timerPauseBtn').style.display = '';
+  document.getElementById('timerInputs').style.opacity = '0.4';
+  document.getElementById('timerInputs').style.pointerEvents = 'none';
+  timerIntervalId = setInterval(() => {
+    timerRemainingSeconds--;
+    updateTimerDisplayUI();
+    if(timerRemainingSeconds <= 0){
+      pauseTimer();
+    }
+  }, 1000);
+}
+
+function pauseTimer(){
+  timerIsRunning = false;
+  clearInterval(timerIntervalId);
+  document.getElementById('timerStartBtn').style.display = '';
+  document.getElementById('timerStartBtn').textContent = 'চালিয়ে যান';
+  document.getElementById('timerPauseBtn').style.display = 'none';
+}
+
+function resetTimer(){
+  timerIsRunning = false;
+  clearInterval(timerIntervalId);
+  timerRemainingSeconds = 0;
+  document.getElementById('timerStartBtn').style.display = '';
+  document.getElementById('timerStartBtn').textContent = 'শুরু করুন';
+  document.getElementById('timerPauseBtn').style.display = 'none';
+  document.getElementById('timerInputs').style.opacity = '1';
+  document.getElementById('timerInputs').style.pointerEvents = 'auto';
+  updateTimerDisplayUI();
+}
+
+function toggleTimerFullscreen(){
+  const wrap = document.getElementById('timerWrap');
+  if(!document.fullscreenElement && !document.webkitFullscreenElement){
+    if(wrap.requestFullscreen) wrap.requestFullscreen();
+    else if(wrap.webkitRequestFullscreen) wrap.webkitRequestFullscreen();
+  } else {
+    if(document.exitFullscreen) document.exitFullscreen();
+    else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+  }
+}
+document.addEventListener('fullscreenchange', function(){
+  const wrap = document.getElementById('timerWrap');
+  if(wrap) wrap.classList.toggle('timer-fs-active', document.fullscreenElement === wrap);
+});
+document.addEventListener('webkitfullscreenchange', function(){
+  const wrap = document.getElementById('timerWrap');
+  if(wrap) wrap.classList.toggle('timer-fs-active', document.webkitFullscreenElement === wrap);
+});
 function changeMonth(delta){
   currentCal.setMonth(currentCal.getMonth() + delta);
   renderCalendar();
