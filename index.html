@@ -223,9 +223,17 @@
 
 /* Calendar cells */
 [data-theme="dark"] .day-cell {
-  background: #1C1B24 !important;
+  background: #1C1B24;
   color: var(--text) !important;
   border-color: var(--border) !important;
+}
+[data-theme="dark"] .day-cell.has-regular:not(.today):not(.selected) {
+  background: var(--accent-teal-bg) !important;
+  color: var(--accent-teal) !important;
+}
+[data-theme="dark"] .day-cell.has-admission:not(.today):not(.selected) {
+  background: var(--accent-green-bg) !important;
+  color: var(--accent-green) !important;
 }
 [data-theme="dark"] .day-cell:hover {
   background: #2A2836 !important;
