@@ -1583,10 +1583,22 @@
             <label>সেকেন্ড</label>
           </div>
         </div>
-        <div class="timer-controls" id="timerControls">
+               <div class="timer-controls" id="timerControls">
           <button class="timer-btn timer-btn-primary" id="timerStartBtn" onclick="startTimer()">শুরু করুন</button>
           <button class="timer-btn" id="timerPauseBtn" onclick="pauseTimer()" style="display:none;">থামুন</button>
           <button class="timer-btn" id="timerResetBtn" onclick="resetTimer()">রিসেট</button>
+        </div>
+        <!-- Timer End Popup — inside timerWrap so it works in fullscreen too -->
+        <div id="timerEndOverlay" style="display:none; position:absolute; inset:0; background:rgba(0,0,0,0.55); z-index:9999; align-items:center; justify-content:center; border-radius:inherit;">
+          <div style="background:#fff; border-radius:20px; padding:36px 32px; text-align:center; box-shadow:0 20px 48px rgba(0,0,0,0.25); max-width:320px; width:90%;">
+            <div style="font-size:48px; margin-bottom:12px;">⏰</div>
+            <div style="font-size:22px; font-weight:700; color:#221F3D; margin-bottom:8px;">সময় শেষ!</div>
+            <div style="font-size:15px; color:#8C8AA3; margin-bottom:28px;">টাইমার সম্পন্ন হয়েছে।</div>
+            <div style="display:flex; gap:12px; justify-content:center;">
+              <button onclick="timerEndReset()" style="background:#D9333F; color:#fff; border:none; padding:12px 24px; border-radius:12px; font-family:inherit; font-size:15px; font-weight:600; cursor:pointer;">আবার সেট করুন</button>
+              <button onclick="timerEndDismiss()" style="background:#F5F5F7; color:#221F3D; border:none; padding:12px 24px; border-radius:12px; font-family:inherit; font-size:15px; font-weight:600; cursor:pointer;">বাতিল</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1766,9 +1778,16 @@
         <input type="url" id="fLink" placeholder="https://example.com/circular.pdf">
         <div class="field-hint">ভর্তি বিজ্ঞপ্তি বা বিস্তারিত লিংক দিলে কার্ডে একটি বাটন দেখাবে</div>
       </div>
+            <div class="settings-section-label">টাইমার সাউন্ড</div>
+      <div class="field">
+        <label>টাইমার শেষের সাউন্ড URL (mp3/wav)</label>
+        <input type="url" id="setTimerSoundUrl" placeholder="যেমন: https://example.com/sound.mp3">
+        <div class="field-hint">খালি রাখলে ডিফল্ট beep বাজবে। Postimg বা যেকোনো direct mp3 link দিন।</div>
+      </div>
+
       <div class="modal-actions">
-        <button type="button" class="btn-cancel" onclick="closeModal()">বাতিল</button>
-        <button type="submit" class="btn-save" id="saveBtnLabel">সংরক্ষণ করুন</button>
+        <button type="button" class="btn-cancel" onclick="resetSettings()">ডিফল্টে ফিরুন</button>
+        <button type="submit" class="btn-save">সংরক্ষণ করুন</button>
       </div>
     </form>
   </div>
@@ -2350,7 +2369,7 @@ function openSettingsModal(){
     `;
     container.appendChild(div);
   }
-
+  document.getElementById('setTimerSoundUrl').value = siteText.timerSoundUrl || '';
   document.getElementById('settingsOverlay').classList.add('open');
 }
 function closeSettingsModal(){
@@ -2387,6 +2406,7 @@ function saveSettings(e){  e.preventDefault();
   siteText.countdownTomorrow = document.getElementById('setCountdownTomorrow').value.trim() || DEFAULT_TEXT.countdownTomorrow;
   siteText.countdownDays = document.getElementById('setCountdownDays').value.trim() || DEFAULT_TEXT.countdownDays;
   siteText.countdownDaysHours = document.getElementById('setCountdownDaysHours').value.trim() || DEFAULT_TEXT.countdownDaysHours;
+  siteText.timerSoundUrl = document.getElementById('setTimerSoundUrl').value.trim();
 
   // Save Dashboard Cards
   const dcLabels = document.querySelectorAll('.dc-label');
@@ -2595,6 +2615,14 @@ function resetTimer(){
   updateTimerDisplayUI();
 }
 function playTimerEndSound(){
+  const customUrl = siteText.timerSoundUrl || '';
+  if(customUrl){
+    try{
+      const audio = new Audio(customUrl);
+      audio.play();
+    } catch(e){}
+    return;
+  }
   try{
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     [0, 0.3, 0.6].forEach(delay => {
@@ -3963,17 +3991,5 @@ fetchRemoteState();
 setInterval(() => { renderEvents(); renderNearest(); }, 60000);
 setInterval(fetchRemoteState, 45000);
 </script>
-  <!-- Timer End Popup -->
-<div id="timerEndOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; align-items:center; justify-content:center;">
-  <div style="background:#fff; border-radius:20px; padding:36px 32px; text-align:center; box-shadow:0 20px 48px rgba(0,0,0,0.25); max-width:320px; width:90%;">
-    <div style="font-size:48px; margin-bottom:12px;">⏰</div>
-    <div style="font-size:22px; font-weight:700; color:#221F3D; margin-bottom:8px;">সময় শেষ!</div>
-    <div style="font-size:15px; color:#8C8AA3; margin-bottom:28px;">টাইমার সম্পন্ন হয়েছে।</div>
-    <div style="display:flex; gap:12px; justify-content:center;">
-      <button onclick="timerEndReset()" style="background:#D9333F; color:#fff; border:none; padding:12px 24px; border-radius:12px; font-family:inherit; font-size:15px; font-weight:600; cursor:pointer;">আবার সেট করুন</button>
-      <button onclick="timerEndDismiss()" style="background:#F5F5F7; color:#221F3D; border:none; padding:12px 24px; border-radius:12px; font-family:inherit; font-size:15px; font-weight:600; cursor:pointer;">বাতিল</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
