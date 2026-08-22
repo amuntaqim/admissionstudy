@@ -2573,9 +2573,10 @@ function shadeColor(hex, percent){
 function applyPrimaryColor(hex){
   if(!/^#[0-9a-fA-F]{6}$/.test(hex || '')) hex = DEFAULT_TEXT.primaryColor;
   const root = document.documentElement.style;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   root.setProperty('--primary', hex);
   root.setProperty('--primary-dark', shadeColor(hex, 22));
-  root.setProperty('--primary-light', tintColor(hex, 88));
+  root.setProperty('--primary-light', isDark ? shadeColor(hex, 74) : tintColor(hex, 88));
   root.setProperty('--primary-rgb', hexToRgbStr(hex));
 }
 const THEME_PRESETS = ['#D9333F','#4CAF7D','#221F3D'];
@@ -4291,6 +4292,7 @@ function applyDarkMode(isDark) {
   const mobileIcon  = document.getElementById('mobileDarkToggleIcon');
   if (desktopIcon) desktopIcon.innerHTML = icon;
   if (mobileIcon)  mobileIcon.innerHTML  = icon;
+  if (typeof siteText !== 'undefined' && siteText) applyPrimaryColor(siteText.primaryColor);
 }
 
 function toggleDarkMode() {
