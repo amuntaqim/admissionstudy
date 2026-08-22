@@ -2574,6 +2574,17 @@ function applyPrimaryColor(hex){
   if(!/^#[0-9a-fA-F]{6}$/.test(hex || '')) hex = DEFAULT_TEXT.primaryColor;
   const root = document.documentElement.style;
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const isDefaultColor = hex.toLowerCase() === DEFAULT_TEXT.primaryColor.toLowerCase();
+
+  if (isDark && isDefaultColor) {
+    // Use your original hand-tuned dark palette exactly — no computed guess
+    root.setProperty('--primary', '#E8454F');
+    root.setProperty('--primary-dark', '#C03039');
+    root.setProperty('--primary-light', '#3A1A1E');
+    root.setProperty('--primary-rgb', '232,69,79');
+    return;
+  }
+
   root.setProperty('--primary', hex);
   root.setProperty('--primary-dark', shadeColor(hex, 22));
   root.setProperty('--primary-light', isDark ? shadeColor(hex, 74) : tintColor(hex, 88));
