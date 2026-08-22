@@ -107,7 +107,72 @@
     --radius: 18px;
     --radius-sm: 12px;
   }
+  /* ===== DARK MODE ===== */
+  [data-theme="dark"] {
+    --bg: #0F0F13;
+    --bg-soft: #16151C;
+    --card: #1C1B24;
+    --sidebar-bg: #16151C;
+    --primary: #E8454F;
+    --primary-dark: #C03039;
+    --primary-light: #3A1A1E;
+    --primary-rgb: 232,69,79;
+    --accent-orange: #F2994A;
+    --accent-orange-bg: #2A1F12;
+    --accent-teal: #5B9FD8;
+    --accent-teal-bg: #12202E;
+    --accent-red: #E05060;
+    --accent-red-bg: #2A1215;
+    --accent-pink: #FF7AB4;
+    --accent-blue: #9B82E0;
+    --accent-green: #5DC98D;
+    --accent-green-bg: #0F2218;
+    --text: #E8E6F4;
+    --text-muted: #9895AE;
+    --text-faint: #5E5C74;
+    --border: #2A2836;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.55);
+  }
 
+  /* Dark mode: timer end popup */
+  [data-theme="dark"] #timerEndOverlay > div {
+    background: #1C1B24;
+    color: var(--text);
+  }
+  [data-theme="dark"] #timerEndOverlay > div > div:first-of-type + div {
+    color: var(--text);
+  }
+  [data-theme="dark"] #timerEndOverlay button:last-child {
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  /* Dark mode toggle button style */
+  .dark-toggle-btn {
+    width: 34px; height: 34px; border-radius: 10px; border: none;
+    background: var(--bg); color: var(--text-muted);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; transition: all .15s ease;
+  }
+  .dark-toggle-btn:hover { background: var(--primary-light); color: var(--primary); }
+  .dark-toggle-btn svg { width: 17px; height: 17px; }
+
+  /* Mobile topbar dark toggle */
+  .mobile-dark-toggle {
+    width: 38px; height: 38px; border-radius: 11px; border: none;
+    background: var(--bg); color: var(--text-muted);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; transition: all .15s ease;
+  }
+  .mobile-dark-toggle:hover { background: var(--primary-light); color: var(--primary); }
+  .mobile-dark-toggle svg { width: 17px; height: 17px; }
+
+  /* Smooth theme transition */
+  *, *::before, *::after {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.1s ease;
+  }
+  
   *{box-sizing:border-box; margin:0; padding:0;}
 
   body{
@@ -1310,8 +1375,10 @@
     </button>
     <span class="mobile-topbar-title" id="mobileTopbarTitle" onclick="switchView('dashboard')" style="cursor:pointer;">StudyOS</span>
   </div>
-  <button class="mobile-settings-btn" onclick="openSettingsModal()" title="Settings" aria-label="Settings">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <button class="mobile-dark-toggle" id="mobileDarkToggleBtn" onclick="toggleDarkMode()" title="ডার্ক মোড" aria-label="Dark mode">
+    <svg id="mobileDarkToggleIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
   </button>
 </header>
 <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
@@ -1328,6 +1395,11 @@
     </div>
     <button class="settings-btn" onclick="openSettingsModal()" title="টেক্সট সেটিংস">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+        <button class="dark-toggle-btn" id="darkToggleBtn" onclick="toggleDarkMode()" title="ডার্ক মোড">
+      <svg id="darkToggleIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
     </button>
   </div>
 
@@ -3981,7 +4053,32 @@ function renderAll(){
   if(currentView === 'vul') renderVuls();
   if(currentView === 'dashboard') renderDashboard();
 }
+/* ================= DARK MODE ================= */
+const DARK_KEY = 'studyos_dark_mode';
+const MOON_ICON = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+const SUN_ICON  = `<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>`;
 
+function applyDarkMode(isDark) {
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  const icon = isDark ? SUN_ICON : MOON_ICON;
+  const desktopIcon = document.getElementById('darkToggleIcon');
+  const mobileIcon  = document.getElementById('mobileDarkToggleIcon');
+  if (desktopIcon) desktopIcon.innerHTML = icon;
+  if (mobileIcon)  mobileIcon.innerHTML  = icon;
+}
+
+function toggleDarkMode() {
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'dark';
+  safeStorage.setItem(DARK_KEY, isDark ? '1' : '0');
+  applyDarkMode(isDark);
+}
+
+// Apply saved preference on load
+(function() {
+  const saved = safeStorage.getItem(DARK_KEY);
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyDarkMode(saved !== null ? saved === '1' : prefersDark);
+})();
 applyTexts();
 renderAll();
 fetchRemoteState();
