@@ -2567,8 +2567,10 @@ function startTimer(){
   timerIntervalId = setInterval(() => {
     timerRemainingSeconds--;
     updateTimerDisplayUI();
-    if(timerRemainingSeconds <= 0){
+        if(timerRemainingSeconds <= 0){
       pauseTimer();
+      playTimerEndSound();
+      document.getElementById('timerEndOverlay').style.display = 'flex';
     }
   }, 1000);
 }
@@ -2592,7 +2594,32 @@ function resetTimer(){
   document.getElementById('timerInputs').style.pointerEvents = 'auto';
   updateTimerDisplayUI();
 }
+function playTimerEndSound(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [0, 0.3, 0.6].forEach(delay => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = 880;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.6, ctx.currentTime + delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.4);
+      osc.start(ctx.currentTime + delay);
+      osc.stop(ctx.currentTime + delay + 0.4);
+    });
+  } catch(e){}
+}
 
+function timerEndReset(){
+  document.getElementById('timerEndOverlay').style.display = 'none';
+  resetTimer();
+}
+
+function timerEndDismiss(){
+  document.getElementById('timerEndOverlay').style.display = 'none';
+}
+  
 function toggleTimerFullscreen(){
   const wrap = document.getElementById('timerWrap');
   if(!document.fullscreenElement && !document.webkitFullscreenElement){
@@ -3936,5 +3963,17 @@ fetchRemoteState();
 setInterval(() => { renderEvents(); renderNearest(); }, 60000);
 setInterval(fetchRemoteState, 45000);
 </script>
+  <!-- Timer End Popup -->
+<div id="timerEndOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:20px; padding:36px 32px; text-align:center; box-shadow:0 20px 48px rgba(0,0,0,0.25); max-width:320px; width:90%;">
+    <div style="font-size:48px; margin-bottom:12px;">⏰</div>
+    <div style="font-size:22px; font-weight:700; color:#221F3D; margin-bottom:8px;">সময় শেষ!</div>
+    <div style="font-size:15px; color:#8C8AA3; margin-bottom:28px;">টাইমার সম্পন্ন হয়েছে।</div>
+    <div style="display:flex; gap:12px; justify-content:center;">
+      <button onclick="timerEndReset()" style="background:#D9333F; color:#fff; border:none; padding:12px 24px; border-radius:12px; font-family:inherit; font-size:15px; font-weight:600; cursor:pointer;">আবার সেট করুন</button>
+      <button onclick="timerEndDismiss()" style="background:#F5F5F7; color:#221F3D; border:none; padding:12px 24px; border-radius:12px; font-family:inherit; font-size:15px; font-weight:600; cursor:pointer;">বাতিল</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
