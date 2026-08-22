@@ -172,6 +172,233 @@
   *, *::before, *::after {
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.1s ease;
   }
+
+/* ===== DARK MODE FIXES ===== */
+
+/* Modal / Settings */
+[data-theme="dark"] .modal {
+  background: #1C1B24;
+  color: var(--text);
+}
+[data-theme="dark"] .modal-overlay {
+  background: rgba(0,0,0,0.65);
+}
+[data-theme="dark"] .modal-head h3 {
+  color: var(--text);
+}
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="number"],
+[data-theme="dark"] input[type="url"],
+[data-theme="dark"] input[type="date"],
+[data-theme="dark"] input[type="time"],
+[data-theme="dark"] input[type="color"],
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background: #0F0F13 !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: var(--text-faint) !important;
+}
+[data-theme="dark"] .field label {
+  color: var(--text-muted);
+}
+[data-theme="dark"] .field-hint {
+  color: var(--text-faint);
+}
+[data-theme="dark"] .btn-cancel {
+  background: #0F0F13;
+  color: var(--text);
+  border-color: var(--border);
+}
+[data-theme="dark"] .settings-section-label {
+  color: var(--primary);
+}
+
+/* Calendar cells */
+[data-theme="dark"] .day-cell {
+  background: #1C1B24 !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+[data-theme="dark"] .day-cell:hover {
+  background: #2A2836 !important;
+}
+[data-theme="dark"] .day-cell.today {
+  background: #2A2836 !important;
+  border-color: var(--primary) !important;
+}
+[data-theme="dark"] .day-cell.other-month {
+  background: #16151C !important;
+  color: var(--text-faint) !important;
+}
+[data-theme="dark"] .day-cell.selected {
+  background: var(--primary) !important;
+  color: #fff !important;
+}
+[data-theme="dark"] .weekdays span {
+  color: var(--text-muted);
+}
+[data-theme="dark"] .cal-head,
+[data-theme="dark"] .cal-month-label {
+  color: var(--text);
+}
+[data-theme="dark"] .cal-legend {
+  color: var(--text-muted);
+}
+[data-theme="dark"] .calendar-card,
+[data-theme="dark"] .cal-head {
+  background: var(--card);
+}
+
+/* Stat cards */
+[data-theme="dark"] .stat-card {
+  background: var(--card) !important;
+  border-color: var(--border) !important;
+}
+[data-theme="dark"] .stat-value {
+  color: var(--text) !important;
+}
+[data-theme="dark"] .stat-label {
+  color: var(--text-muted) !important;
+}
+
+/* Folder cards (note-card, folder-card) */
+[data-theme="dark"] .folder-card {
+  background: var(--card) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+[data-theme="dark"] .folder-name {
+  color: var(--text) !important;
+}
+[data-theme="dark"] .folder-count {
+  color: var(--text-muted) !important;
+}
+[data-theme="dark"] .note-card {
+  background: var(--card) !important;
+  border-color: var(--border) !important;
+}
+[data-theme="dark"] .note-title {
+  color: var(--text) !important;
+}
+[data-theme="dark"] .note-sub {
+  color: var(--text-muted) !important;
+}
+
+/* Event / exam cards */
+[data-theme="dark"] .event-card {
+  background: var(--card) !important;
+  border-color: var(--border) !important;
+}
+[data-theme="dark"] .event-name {
+  color: var(--text) !important;
+}
+[data-theme="dark"] .event-detail,
+[data-theme="dark"] .event-meta {
+  color: var(--text-muted) !important;
+}
+
+/* Dashboard sections */
+[data-theme="dark"] .dash-section {
+  background: var(--card) !important;
+  border-color: var(--border) !important;
+}
+[data-theme="dark"] .dash-section-head h2 {
+  color: var(--text) !important;
+}
+
+/* Type toggle buttons (রেগুলার / ভর্তি) */
+[data-theme="dark"] .type-toggle button {
+  background: #0F0F13;
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+[data-theme="dark"] .type-toggle button.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* Nav badges */
+[data-theme="dark"] .nav-btn .nav-badge {
+  background: #0F0F13;
+  color: var(--text-muted);
+}
+
+/* Tag filter rows */
+[data-theme="dark"] .filter-row:hover {
+  background: #2A2836;
+}
+[data-theme="dark"] .filter-row.active {
+  background: var(--primary-light);
+}
+
+/* Search input */
+[data-theme="dark"] .search-box input,
+[data-theme="dark"] .search-wrap input {
+  background: #0F0F13 !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+/* Dropdowns / select inside panels */
+[data-theme="dark"] .filter-dropdown,
+[data-theme="dark"] .view-select {
+  background: #0F0F13 !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+/* GV view buttons */
+[data-theme="dark"] .gv-view-btn {
+  background: #0F0F13;
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+[data-theme="dark"] .gv-view-btn.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* Section headings */
+[data-theme="dark"] .section-heading {
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+/* Timer end popup */
+[data-theme="dark"] #timerEndOverlay > div {
+  background: #1C1B24 !important;
+}
+[data-theme="dark"] #timerEndOverlay > div div {
+  color: var(--text) !important;
+}
+[data-theme="dark"] #timerEndOverlay button:last-child {
+  background: #0F0F13 !important;
+  color: var(--text) !important;
+}
+
+/* Quote card */
+[data-theme="dark"] .quote-card {
+  background: var(--card) !important;
+  border-color: var(--border) !important;
+}
+[data-theme="dark"] .quote-text {
+  color: var(--text) !important;
+}
+[data-theme="dark"] .quote-source {
+  color: var(--text-muted) !important;
+}
+
+/* Scrollbar */
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #2A2836;
+}
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #0F0F13;
+}
   
   *{box-sizing:border-box; margin:0; padding:0;}
 
