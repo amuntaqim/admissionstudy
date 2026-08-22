@@ -2883,6 +2883,15 @@ function switchView(view, pushHistory = true){   if(pushHistory){     history.pu
 let timerRemainingSeconds = 0;
 let timerIntervalId = null;
 let timerIsRunning = false;
+  let wakeLock = null;
+async function requestWakeLock(){
+  if('wakeLock' in navigator){
+    try{ wakeLock = await navigator.wakeLock.request('screen'); } catch(e){}
+  }
+}
+function releaseWakeLock(){
+  if(wakeLock){ wakeLock.release(); wakeLock = null; }
+}
 
 function formatTimerDisplay(totalSec){
   const h = Math.floor(totalSec / 3600);
@@ -2907,6 +2916,7 @@ function startTimer(){
   }
   if(timerRemainingSeconds <= 0) return;
   timerIsRunning = true;
+  requestWakeLock();
   document.getElementById('timerStartBtn').style.display = 'none';
   document.getElementById('timerPauseBtn').style.display = '';
   document.getElementById('timerInputs').style.opacity = '0.4';
@@ -2925,6 +2935,7 @@ function startTimer(){
 function pauseTimer(){
   timerIsRunning = false;
   clearInterval(timerIntervalId);
+    releaseWakeLock();
   document.getElementById('timerStartBtn').style.display = '';
   document.getElementById('timerStartBtn').textContent = 'চালিয়ে যান';
   document.getElementById('timerPauseBtn').style.display = 'none';
@@ -2933,6 +2944,7 @@ function pauseTimer(){
 function resetTimer(){
   timerIsRunning = false;
   clearInterval(timerIntervalId);
+    releaseWakeLock();
   timerRemainingSeconds = 0;
   document.getElementById('timerStartBtn').style.display = '';
   document.getElementById('timerStartBtn').textContent = 'শুরু করুন';
