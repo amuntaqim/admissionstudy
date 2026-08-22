@@ -1778,13 +1778,6 @@
         <input type="url" id="fLink" placeholder="https://example.com/circular.pdf">
         <div class="field-hint">ভর্তি বিজ্ঞপ্তি বা বিস্তারিত লিংক দিলে কার্ডে একটি বাটন দেখাবে</div>
       </div>
-            <div class="settings-section-label">টাইমার সাউন্ড</div>
-      <div class="field">
-        <label>টাইমার শেষের সাউন্ড URL (mp3/wav)</label>
-        <input type="url" id="setTimerSoundUrl" placeholder="যেমন: https://example.com/sound.mp3">
-        <div class="field-hint">খালি রাখলে ডিফল্ট beep বাজবে। Postimg বা যেকোনো direct mp3 link দিন।</div>
-      </div>
-
       <div class="modal-actions">
         <button type="button" class="btn-cancel" onclick="resetSettings()">ডিফল্টে ফিরুন</button>
         <button type="submit" class="btn-save">সংরক্ষণ করুন</button>
@@ -1986,7 +1979,12 @@
       <!-- NEW SECTION: DASHBOARD CARDS CUSTOMIZATION (Kept exactly as you had) -->
       <div class="settings-section-label">ড্যাশবোর্ড কার্ড কাস্টমাইজেশন</div>
       <div class="field" id="dashboardCardsSettings" style="display:flex; flex-direction:column; gap:12px;"></div>
-
+      <div class="settings-section-label">টাইমার সাউন্ড</div>
+      <div class="field">
+        <label>টাইমার শেষের সাউন্ড URL (mp3/wav)</label>
+        <input type="url" id="setTimerSoundUrl" placeholder="যেমন: https://example.com/sound.mp3">
+        <div class="field-hint">খালি রাখলে ডিফল্ট beep বাজবে। যেকোনো direct mp3 link দিন।</div>
+      </div>
       <div class="modal-actions">
         <button type="button" class="btn-cancel" onclick="resetSettings()">ডিফল্টে ফিরুন</button>
         <button type="submit" class="btn-save">সংরক্ষণ করুন</button>
