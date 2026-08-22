@@ -13,7 +13,7 @@ const DEFAULT_DASHBOARD_CARDS = {
   totalAdmission: { label: 'মোট এডমিশন পরীক্ষা', visible: true },
   pastExams: { label: 'সমাপ্ত পরীক্ষা', visible: true },
   avgPercent: { label: 'গড় প্রাপ্ত নম্বর (%)', visible: true },
-  bestRank: { label: 'সর্বোচ্চ কেন্দ্রীয় র‍্যাঙ্ক', visible: true }
+  bestRank: { label: 'সর্বোচ্চ কেন্দ্রীয় র‍্যাঙ্ক', visible: true },
   avgRankUdbhasBranch: { label: 'উদ্ভাস (Branch) গড় কেন্দ্রীয় র‍্যাঙ্ক', visible: true },
   avgRankUdbhasWeekly: { label: 'উদ্ভাস Weekly (Branch) গড় কেন্দ্রীয় র‍্যাঙ্ক', visible: true },
 };
