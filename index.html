@@ -2557,7 +2557,9 @@ const DEFAULT_TEXT = {
     bestRank: { label: 'সর্বোচ্চ কেন্দ্রীয় র‍্যাঙ্ক', visible: true }, 
     avgRankUdbhasBranch: { label: 'উদ্ভাস (Branch) গড় কেন্দ্রীয় র‍্যাঙ্ক', visible: true },
 avgRankUdbhasWeekly: { label: 'উদ্ভাস Weekly (Branch) গড় কেন্দ্রীয় র‍্যাঙ্ক', visible: true },
-    totalGaps: { label: 'মোট ঘাটতি (গ্যাপ)', visible: true }
+    totalGaps: { label: 'মোট ঘাটতি (গ্যাপ)', visible: true },
+    totalAbsent: { label: 'মোট অনুপস্থিত পরীক্ষা', visible: true }
+
   }
 };
 
@@ -3197,6 +3199,12 @@ function setDashboardFilter(f){
   }
 }
 
+  function showAbsentExams(){
+  switchView('all');
+  setDashboardFilter('absent');
+}
+
+  
 /* ================= TAG FILTER SIDEBAR ================= */
 function renderTagFilters(){
   const counts = {};
@@ -3302,6 +3310,7 @@ const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 const ICON_BOOK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>';
 const ICON_TARGET = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>';
 const ICON_TROPHY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>';
+const ICON_ABSENT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>';
 
 /* ================= EXAM TYPE BADGE ================= */
 function examTypeBadge(type){
@@ -3733,6 +3742,7 @@ function renderStatusRow(){
   const past = events.filter(e => new Date(e.date + 'T' + (e.time||'23:59') + ':00') < now).length;
   const regularExams = events.filter(e => e.examType !== 'admission');
   const attendedExams = regularExams.filter(e => !e.isAbsent);
+  const totalAbsent = regularExams.filter(e => e.isAbsent).length;
   const admissionExams = events.filter(e => e.examType === 'admission');
   const totalMarksObtained = attendedExams.reduce((sum, e) => sum + (e.marksObtained || 0), 0);
   const totalMarksTotal = attendedExams.reduce((sum, e) => sum + (e.marksTotal || 0), 0);
@@ -3783,7 +3793,8 @@ function renderStatusRow(){
     { id: 'bestRank', label: 'সর্বোচ্চ কেন্দ্রীয় র‍্যাঙ্ক', value: maxRankDisplay, icon: ICON_TROPHY, color: 'orange', onclick: "switchView('all')" },
     { id: 'avgRankUdbhasBranch', label: 'উদ্ভাস (Branch) গড় কেন্দ্রীয় র‍্যাঙ্ক', value: avgRankUdbhasBranch, icon: ICON_TROPHY, color: 'green', onclick: "switchView('all')" },
     { id: 'avgRankUdbhasWeekly', label: 'উদ্ভাস Weekly (Branch) গড় কেন্দ্রীয় র‍্যাঙ্ক', value: avgRankUdbhasWeekly, icon: ICON_TROPHY, color: 'red', onclick: "switchView('all')" },
-    { id: 'totalGaps', label: 'মোট ঘাটতি (গ্যাপ)', value: toBn(gaps.length), icon: ICON_TRASH, color: 'orange', onclick: "switchView('gap')" }
+    { id: 'totalGaps', label: 'মোট ঘাটতি (গ্যাপ)', value: toBn(gaps.length), icon: ICON_TRASH, color: 'orange', onclick: "switchView('gap')" },
+    { id: 'totalAbsent', label: 'মোট অনুপস্থিত পরীক্ষা', value: toBn(totalAbsent), icon: ICON_ABSENT, color: 'red', onclick: "showAbsentExams()" }
   ];
 
   // Loop through cards and check visibility / rename from siteText.dashboardCards
