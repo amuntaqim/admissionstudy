@@ -1814,10 +1814,11 @@
         </h2>
         <span class="filter-chip" id="filterChip">📅 ফিল্টার করা হয়েছে</span>
         <div class="ev-tabs" id="evTabs">
-          <button type="button" class="ev-tab active" data-filter="upcoming" onclick="setDashboardFilter('upcoming')">আসন্ন</button>
-          <button type="button" class="ev-tab" data-filter="past" onclick="setDashboardFilter('past')">সমাপ্ত</button>
-          <button type="button" class="ev-tab" data-filter="all" onclick="setDashboardFilter('all')">সব</button>
-        </div>
+  <button type="button" class="ev-tab active" data-filter="upcoming" onclick="setDashboardFilter('upcoming')">আসন্ন</button>
+  <button type="button" class="ev-tab" data-filter="past" onclick="setDashboardFilter('past')">সমাপ্ত</button>
+  <button type="button" class="ev-tab" data-filter="absent" onclick="setDashboardFilter('absent')">অনুপস্থিত</button>
+  <button type="button" class="ev-tab" data-filter="all" onclick="setDashboardFilter('all')">সব</button>
+</div>
         <div class="search-wrap">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
           <input type="text" id="searchInput" placeholder="পরীক্ষার নাম খুঁজুন..." oninput="renderEvents()">
@@ -3324,8 +3325,8 @@ function eventCardHTML(ev){
  if(ev.examType === 'regular'){
   const metaParts = [];
   if(ev.isAbsent){
-    metaParts.push(`<span class="meta-marks" style="color:var(--accent-red, #D9333F);">অনুপস্থিত</span>`);
-  }
+  metaParts.push(`<span class="meta-marks" style="background:var(--accent-red-bg); color:var(--accent-red);">অনুপস্থিত</span>`);
+}
   if(!ev.isAbsent && ev.marksObtained != null && ev.marksTotal != null){
       const pct = ev.marksTotal > 0 ? Math.round((ev.marksObtained / ev.marksTotal) * 100) : 0;
       metaParts.push(`<span class="meta-marks">${ICON_TARGET} ${toBn(ev.marksObtained)}/${toBn(ev.marksTotal)} (${toBn(pct)}%)</span>`);
@@ -3423,31 +3424,36 @@ function renderEvents(){
     return;
   }
 
-  if(currentView === 'all' || currentView === 'admission'){
-    list.sort((a,b) => (a.date + (a.time||'99:99')).localeCompare(b.date + (b.time||'99:99')));
-    const now = new Date();
-    const upcoming = list.filter(e => new Date(e.date + 'T' + (e.time||'23:59') + ':00') >= now);
-    const past = list.filter(e => new Date(e.date + 'T' + (e.time||'23:59') + ':00') < now);
+ if(currentView === 'all' || currentView === 'admission'){
+  list.sort((a,b) => (a.date + (a.time||'99:99')).localeCompare(b.date + (b.time||'99:99')));
+  const now = new Date();
+  const upcoming = list.filter(e => new Date(e.date + 'T' + (e.time||'23:59') + ':00') >= now);
+  const past = list.filter(e => new Date(e.date + 'T' + (e.time||'23:59') + ':00') < now)
+    .sort((a,b) => (b.date + (b.time||'99:99')).localeCompare(a.date + (a.time||'99:99')));
+  const absent = list.filter(e => e.isAbsent)
+    .sort((a,b) => (b.date + (b.time||'99:99')).localeCompare(a.date + (a.time||'99:99')));
 
-    if(list.length === 0){
-      const title = currentView === 'admission' ? 'এখনো কোনো ভর্তি পরীক্ষা নেই' : 'এখনো কোনো রেগুলার পরীক্ষা নেই';
-      const msg = currentView === 'admission' ? '"নতুন পরীক্ষা যোগ করুন" বাটনে ক্লিক করে ভর্তি পরীক্ষা যোগ করুন' : '"নতুন পরীক্ষা যোগ করুন" বাটনে ক্লিক করে শুরু করুন';
-      body.innerHTML = `<div class="event-cards">${emptyStateHTML(events.length>0, title, msg)}</div>`;
-      return;
-    }
+  if(list.length === 0){
+    const title = currentView === 'admission' ? 'এখনো কোনো ভর্তি পরীক্ষা নেই' : 'এখনো কোনো রেগুলার পরীক্ষা নেই';
+    const msg = currentView === 'admission' ? '"নতুন পরীক্ষা যোগ করুন" বাটনে ক্লিক করে ভর্তি পরীক্ষা যোগ করুন' : '"নতুন পরীক্ষা যোগ করুন" বাটনে ক্লিক করে শুরু করুন';
+    body.innerHTML = `<div class="event-cards">${emptyStateHTML(events.length>0, title, msg)}</div>`;
+    return;
+  }
 
-    let filtered = list;
-    if(dashboardFilter === 'upcoming') filtered = upcoming;
-    else if(dashboardFilter === 'past') filtered = past;
+  let filtered = list;
+  if(dashboardFilter === 'upcoming') filtered = upcoming;
+  else if(dashboardFilter === 'past') filtered = past;
+  else if(dashboardFilter === 'absent') filtered = absent;
 
-    if(filtered.length === 0){
-      const emptyTitleByFilter = {
-        upcoming: currentView === 'admission' ? 'কোনো আসন্ন ভর্তি পরীক্ষা নেই' : 'কোনো আসন্ন পরীক্ষা নেই',
-        past: currentView === 'admission' ? 'কোনো সমাপ্ত ভর্তি পরীক্ষা নেই' : 'কোনো সমাপ্ত পরীক্ষা নেই'
-      };
-      body.innerHTML = `<div class="event-cards">${emptyStateHTML(true, emptyTitleByFilter[dashboardFilter] || 'কোনো পরীক্ষা পাওয়া যায়নি', 'অন্য ফিল্টার, ট্যাগ বা নাম দিয়ে খুঁজে দেখুন')}</div>`;
-      return;
-    }
+  if(filtered.length === 0){
+    const emptyTitleByFilter = {
+      upcoming: currentView === 'admission' ? 'কোনো আসন্ন ভর্তি পরীক্ষা নেই' : 'কোনো আসন্ন পরীক্ষা নেই',
+      past: currentView === 'admission' ? 'কোনো সমাপ্ত ভর্তি পরীক্ষা নেই' : 'কোনো সমাপ্ত পরীক্ষা নেই',
+      absent: 'কোনো অনুপস্থিত পরীক্ষা নেই'
+    };
+    body.innerHTML = `<div class="event-cards">${emptyStateHTML(true, emptyTitleByFilter[dashboardFilter] || 'কোনো পরীক্ষা পাওয়া যায়নি', 'অন্য ফিল্টার, ট্যাগ বা নাম দিয়ে খুঁজে দেখুন')}</div>`;
+    return;
+  }
 
     if(dashboardFilter === 'all'){
       let html = '';
