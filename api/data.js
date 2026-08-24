@@ -16,6 +16,7 @@ const DEFAULT_DASHBOARD_CARDS = {
   bestRank: { label: 'সর্বোচ্চ কেন্দ্রীয় র‍্যাঙ্ক', visible: true },
   avgRankUdbhasBranch: { label: 'উদ্ভাস (Branch) গড় কেন্দ্রীয় র‍্যাঙ্ক', visible: true },
   avgRankUdbhasWeekly: { label: 'উদ্ভাস Weekly (Branch) গড় কেন্দ্রীয় র‍্যাঙ্ক', visible: true },
+  totalAbsent: { label: 'মোট অনুপস্থিত পরীক্ষা', visible: true },
 };
 
 const DEFAULT_STATE = {
