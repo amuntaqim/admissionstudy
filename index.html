@@ -2102,6 +2102,10 @@
           </div>
         </div>
       </div>
+      <div class="field" style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+  <input type="checkbox" id="fAbsent" onchange="toggleAbsentFields()" style="width:auto; height:auto;">
+  <label for="fAbsent" style="margin:0; cursor:pointer;">আমি এই পরীক্ষায় অনুপস্থিত ছিলাম</label>
+</div>
       <div class="field">
         <label> বিস্তারিত লিংক (ঐচ্ছিক)</label>
         <input type="url" id="fLink" placeholder="https://example.com/circular.pdf">
@@ -3317,9 +3321,12 @@ function eventCardHTML(ev){
     : '';
 
   let marksHtml = '';
-  if(ev.examType === 'regular'){
-    const metaParts = [];
-    if(ev.marksObtained != null && ev.marksTotal != null){
+ if(ev.examType === 'regular'){
+  const metaParts = [];
+  if(ev.isAbsent){
+    metaParts.push(`<span class="meta-marks" style="color:var(--accent-red, #D9333F);">অনুপস্থিত</span>`);
+  }
+  if(!ev.isAbsent && ev.marksObtained != null && ev.marksTotal != null){
       const pct = ev.marksTotal > 0 ? Math.round((ev.marksObtained / ev.marksTotal) * 100) : 0;
       metaParts.push(`<span class="meta-marks">${ICON_TARGET} ${toBn(ev.marksObtained)}/${toBn(ev.marksTotal)} (${toBn(pct)}%)</span>`);
     }
@@ -3719,15 +3726,16 @@ function renderStatusRow(){
   }).length;
   const past = events.filter(e => new Date(e.date + 'T' + (e.time||'23:59') + ':00') < now).length;
   const regularExams = events.filter(e => e.examType !== 'admission');
+  const attendedExams = regularExams.filter(e => !e.isAbsent);
   const admissionExams = events.filter(e => e.examType === 'admission');
-  const totalMarksObtained = regularExams.reduce((sum, e) => sum + (e.marksObtained || 0), 0);
-  const totalMarksTotal = regularExams.reduce((sum, e) => sum + (e.marksTotal || 0), 0);
-    const avgCentralRank = (() => {
-    const exams = regularExams.filter(e => (e.tag || '') === 'উদ্ভাস (Live)');
-    const ranks = exams.map(e => e.meritCentral).filter(r => r !== '' && r !== null && r !== undefined && Number.isFinite(Number(r)));
-    if(ranks.length === 0) return '—';
-    const avg = ranks.reduce((a,b) => a + Number(b), 0) / ranks.length;
-    return toBn(Math.round(avg));
+  const totalMarksObtained = attendedExams.reduce((sum, e) => sum + (e.marksObtained || 0), 0);
+  const totalMarksTotal = attendedExams.reduce((sum, e) => sum + (e.marksTotal || 0), 0);
+  const avgCentralRank = (() => {
+  const exams = attendedExams.filter(e => (e.tag || '') === 'উদ্ভাস (Live)');
+  const ranks = exams.map(e => e.meritCentral).filter(r => r !== '' && r !== null && r !== undefined && Number.isFinite(Number(r)));
+  if(ranks.length === 0) return '—';
+  const avg = ranks.reduce((a,b) => a + Number(b), 0) / ranks.length;
+  return toBn(Math.round(avg));
   })();
   const totalGaps = gaps.length;
   const totalVuls = vuls.length;
@@ -3735,20 +3743,20 @@ function renderStatusRow(){
   if(totalMarksTotal > 0){
     avgPct = toBn(Math.round((totalMarksObtained / totalMarksTotal) * 100)) + '%';
   }
-    const bestRank = regularExams.reduce((min, e) => {
+    const bestRank = attendedExams.reduce((min, e) => {
     const r = Number(e.meritCentral);
     return (Number.isFinite(r) && r > 0 && (min === 0 || r < min)) ? r : min;
   }, 0);
   const maxRankDisplay = bestRank > 0 ? toBn(bestRank) : '—';
     const avgRankUdbhasBranch = (() => {
-    const exams = regularExams.filter(e => (e.tag || '') === 'উদ্ভাস (Branch)');
+    const exams = attendedExams.filter(e => (e.tag || '') === 'উদ্ভাস (Branch)');
     const ranks = exams.map(e => e.meritCentral).filter(r => r !== '' && r !== null && r !== undefined && Number.isFinite(Number(r)));
     if(ranks.length === 0) return '—';
     return toBn(Math.round(ranks.reduce((a,b) => a + Number(b), 0) / ranks.length));
   })();
 
   const avgRankUdbhasWeekly = (() => {
-    const exams = regularExams.filter(e => (e.tag || '') === 'উদ্ভাস Weekly (Branch)');
+    const exams = attendedExams.filter(e => (e.tag || '') === 'উদ্ভাস Weekly (Branch)');
     const ranks = exams.map(e => e.meritCentral).filter(r => r !== '' && r !== null && r !== undefined && Number.isFinite(Number(r)));
     if(ranks.length === 0) return '—';
     return toBn(Math.round(ranks.reduce((a,b) => a + Number(b), 0) / ranks.length));
@@ -3874,7 +3882,14 @@ function onTagInputChange(){
   const tag = document.getElementById('fTag').value.trim();
   document.getElementById('fTagColor').value = tagColor(tag);
 }
-
+function toggleAbsentFields(){
+  const absent = document.getElementById('fAbsent').checked;
+  ['fMarksObtained','fMarksTotal','fMeritBranch','fMeritCentral'].forEach(id => {
+    const el = document.getElementById(id);
+    el.disabled = absent;
+    if(absent) el.value = '';
+  });
+}
 function setExamType(type){
   currentExamType = type;
   document.querySelectorAll('#examTypeToggle button').forEach(btn => {
@@ -3922,6 +3937,8 @@ function editEvent(id){
   document.getElementById('fMarksTotal').value = ev.marksTotal != null ? ev.marksTotal : '';
   document.getElementById('fMeritBranch').value = ev.meritBranch || '';
   document.getElementById('fMeritCentral').value = ev.meritCentral || '';
+  document.getElementById('fAbsent').checked = !!ev.isAbsent;
+toggleAbsentFields();
   document.getElementById('modalOverlay').classList.add('open');
 }
 
@@ -3947,6 +3964,7 @@ function saveEvent(e){
   const tagColorVal = document.getElementById('fTagColor').value;
   const marksObtained = document.getElementById('fMarksObtained').value;
   const marksTotal = document.getElementById('fMarksTotal').value;
+  const isAbsent = document.getElementById('fAbsent').checked;
   const meritBranch = document.getElementById('fMeritBranch').value;
   const meritCentral = document.getElementById('fMeritCentral').value;
 
@@ -3964,12 +3982,19 @@ function saveEvent(e){
     examType: currentExamType
   };
 
-  if(currentExamType === 'regular'){
-    examData.marksObtained = marksObtained !== '' ? parseFloat(marksObtained) : null;
-    examData.marksTotal = marksTotal !== '' ? parseFloat(marksTotal) : null;
-    examData.meritBranch = meritBranch !== '' ? parseInt(meritBranch) : null;
-    examData.meritCentral = meritCentral !== '' ? parseInt(meritCentral) : null;
+if(currentExamType === 'regular'){
+  examData.marksObtained = marksObtained !== '' ? parseFloat(marksObtained) : null;
+  examData.marksTotal = marksTotal !== '' ? parseFloat(marksTotal) : null;
+  examData.meritBranch = meritBranch !== '' ? parseInt(meritBranch) : null;
+  examData.meritCentral = meritCentral !== '' ? parseInt(meritCentral) : null;
+  examData.isAbsent = isAbsent;
+  if(isAbsent){
+    examData.marksObtained = null;
+    examData.marksTotal = null;
+    examData.meritBranch = null;
+    examData.meritCentral = null;
   }
+}
 
   if(editingId){
     const idx = events.findIndex(ev => ev.id === editingId);
