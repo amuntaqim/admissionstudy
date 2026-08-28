@@ -13,6 +13,38 @@
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 
+  /* 🐾 সাইট বিড়াল (cat pet) */
+  #cat-pet{
+    position:fixed; left:0; top:0; z-index:999999;
+    cursor:grab; touch-action:none; -webkit-user-select:none; user-select:none;
+    will-change:transform;
+    filter:drop-shadow(0 6px 6px rgba(0,0,0,.22));
+    transition:filter .15s ease;
+  }
+  #cat-pet.dragging{ cursor:grabbing; filter:drop-shadow(0 12px 10px rgba(0,0,0,.28)); }
+  #cat-pet-inner{ display:block; line-height:0; }
+  #cat-pet.walking #cat-pet-inner{ animation:cat-pet-bob .45s ease-in-out infinite; }
+  @keyframes cat-pet-bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-6px); } }
+  #cat-pet img{ display:block; width:100%; height:auto; pointer-events:none; -webkit-user-drag:none; }
+  #cat-pet-bubble{
+    position:fixed; z-index:1000000; max-width:200px;
+    background:#fffaf0; color:#3a2a18;
+    font:600 13px/1.45 'Hind Siliguri', sans-serif;
+    padding:8px 12px; border-radius:14px;
+    border:2px solid var(--primary, #3a2a18);
+    box-shadow:0 4px 10px rgba(0,0,0,.18);
+    opacity:0; transform:translateY(6px) scale(.92); transform-origin:20px 100%;
+    transition:opacity .16s ease, transform .16s ease;
+    pointer-events:none;
+  }
+  #cat-pet-bubble::after{ content:""; position:absolute; left:20px; bottom:-8px; border:8px solid transparent; border-top-color:var(--primary,#3a2a18); }
+  #cat-pet-bubble::before{ content:""; position:absolute; left:21.5px; bottom:-5.5px; border:6.5px solid transparent; border-top-color:#fffaf0; }
+  #cat-pet-bubble.show{ opacity:1; transform:translateY(0) scale(1); }
+  @media (prefers-reduced-motion:reduce){
+    #cat-pet.walking #cat-pet-inner{ animation:none; }
+    #cat-pet, #cat-pet-bubble{ transition:none; }
+  }
+
   /* ড্যাশবোর্ড ক্যালেন্ডারে সিলেক্ট করা তারিখের জন্য স্পেসিফিক স্টাইল */
   #dashCalBody .day-cell.selected {
     background: var(--primary) !important;
@@ -2312,6 +2344,16 @@
       <!-- NEW SECTION: DASHBOARD CARDS CUSTOMIZATION (Kept exactly as you had) -->
       <div class="settings-section-label">ড্যাশবোর্ড কার্ড কাস্টমাইজেশন</div>
       <div class="field" id="dashboardCardsSettings" style="display:flex; flex-direction:column; gap:12px;"></div>
+      <div class="settings-section-label">সাইট বিড়াল (Cat Pet)</div>
+      <div class="field" style="flex-direction:row; align-items:center; gap:10px;">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:600; color:var(--text);">
+          <input type="checkbox" id="setCatPetEnabled"> বিড়ালটি চালু রাখুন (সবার জন্য দেখা যাবে)
+        </label>
+      </div>
+      <div class="field">
+        <label>বিড়ালে ক্লিক করলে যে মেসেজ দেখাবে</label>
+        <input type="text" id="setCatPetMessage" maxlength="120" placeholder="হাই! 🐾">
+      </div>
       <div class="settings-section-label">টাইমার সাউন্ড</div>
       <div class="field">
         <label>টাইমার শেষের সাউন্ড URL (mp3/wav)</label>
@@ -2560,7 +2602,8 @@ avgRankUdbhasWeekly: { label: 'উদ্ভাস Weekly (Branch) গড় ক�
     totalGaps: { label: 'মোট ঘাটতি (গ্যাপ)', visible: true },
     totalAbsent: { label: 'মোট অনুপস্থিত পরীক্ষা', visible: true }
 
-  }
+  },
+  catPet: { enabled: true, message: 'হাই! ধন্যবাদ ভিজিট করার জন্য 🐾' }
 };
 
 function loadTexts(){
@@ -2656,6 +2699,7 @@ function applyTexts(){
   document.getElementById('calHeadingEl').textContent = siteText.calHeading;
   document.getElementById('statTotalLabelEl').textContent = siteText.statTotalLabel;
   updateEventsHeading();
+  if(typeof updateCatPet === 'function') updateCatPet();
 }
 
 function renderColorSwatches(){
@@ -2717,6 +2761,9 @@ function openSettingsModal(){
     container.appendChild(div);
   }
   document.getElementById('setTimerSoundUrl').value = siteText.timerSoundUrl || '';
+  if(!siteText.catPet) siteText.catPet = { enabled: true, message: 'হাই! ধন্যবাদ ভিজিট করার জন্য 🐾' };
+  document.getElementById('setCatPetEnabled').checked = siteText.catPet.enabled !== false;
+  document.getElementById('setCatPetMessage').value = siteText.catPet.message || '';
   document.getElementById('settingsOverlay').classList.add('open');
 }
 function closeSettingsModal(){
@@ -2754,6 +2801,10 @@ function saveSettings(e){  e.preventDefault();
   siteText.countdownDays = document.getElementById('setCountdownDays').value.trim() || DEFAULT_TEXT.countdownDays;
   siteText.countdownDaysHours = document.getElementById('setCountdownDaysHours').value.trim() || DEFAULT_TEXT.countdownDaysHours;
   siteText.timerSoundUrl = document.getElementById('setTimerSoundUrl').value.trim();
+  siteText.catPet = {
+    enabled: document.getElementById('setCatPetEnabled').checked,
+    message: document.getElementById('setCatPetMessage').value.trim() || 'হাই! ধন্যবাদ ভিজিট করার জন্য 🐾'
+  };
 
   // Save Dashboard Cards
   const dcLabels = document.querySelectorAll('.dc-label');
@@ -4426,6 +4477,176 @@ fetchRemoteState();
 
 setInterval(() => { renderEvents(); renderNearest(); }, 60000);
 setInterval(fetchRemoteState, 45000);
+
+/* ================= 🐾 SITE CAT PET ================= */
+(function(){
+  var ASSETS = '/pet-assets/';
+  var POSES = {
+    crouch:  ASSETS+'pet-crouch.png',
+    sleep:   ASSETS+'pet-sleep.png',
+    cry:     ASSETS+'pet-cry.png',
+    talk:    ASSETS+'pet-talk.png',
+    coffee:  ASSETS+'pet-coffee.png',
+    reading: ASSETS+'pet-reading.png',
+    laptop:  ASSETS+'pet-laptop.png',
+    writing: ASSETS+'pet-writing.png',
+    peeking: ASSETS+'pet-peeking.png',
+    stretch: ASSETS+'pet-stretch.png',
+    phone:   ASSETS+'pet-phone.png',
+    love:    ASSETS+'pet-love.png'
+  };
+  var IDLE_POSES = ['coffee','reading','laptop','writing','peeking','stretch','phone','love'];
+  Object.keys(POSES).forEach(function(k){ var im = new Image(); im.src = POSES[k]; });
+
+  var root=null, img=null, bubble=null;
+  var x=40, y=40, facing=1;
+  var roamTimer=null, moveFrame=null, messageOpen=false, dragging=false, idleStreak=0;
+  var built=false, running=false;
+
+  function bounds(){ return { maxX: Math.max(0, window.innerWidth - root.offsetWidth), maxY: Math.max(0, window.innerHeight - root.offsetHeight) }; }
+  function render(){ root.style.transform = 'translate3d('+x+'px,'+y+'px,0) scaleX('+facing+')'; }
+  function clampToViewport(){ var b=bounds(); x=Math.min(Math.max(x,0),b.maxX); y=Math.min(Math.max(y,0),b.maxY); render(); }
+  function setPose(name){ img.src = POSES[name] || POSES.coffee; }
+
+  function savePosition(){
+    var b=bounds();
+    var xPct = b.maxX ? x/b.maxX : 0, yPct = b.maxY ? y/b.maxY : 0;
+    try{ localStorage.setItem('catPetPos', JSON.stringify({xPct:xPct,yPct:yPct})); }catch(e){}
+  }
+  function loadPosition(){
+    try{
+      var raw = localStorage.getItem('catPetPos');
+      if(raw){ var p=JSON.parse(raw); var b=bounds(); return {x:p.xPct*b.maxX, y:p.yPct*b.maxY}; }
+    }catch(e){}
+    var b2=bounds(); return {x:b2.maxX*0.8, y:b2.maxY*0.7};
+  }
+
+  function scheduleNextMove(delay){ clearTimeout(roamTimer); roamTimer=setTimeout(pickNewTarget, delay); }
+  function pickNewTarget(){
+    if(dragging || messageOpen) return;
+    var b=bounds();
+    walkTo(Math.random()*b.maxX, Math.random()*b.maxY);
+  }
+  function walkTo(targetX, targetY){
+    root.classList.add('walking');
+    setPose('crouch');
+    facing = targetX >= x ? 1 : -1;
+    render();
+    var startX=x, startY=y;
+    var dist = Math.hypot(targetX-startX, targetY-startY);
+    var duration = Math.max(600, Math.min(4200, dist*6));
+    var startTime = performance.now();
+    function step(now){
+      if(dragging || messageOpen){ cancelAnimationFrame(moveFrame); return; }
+      var t = Math.min(1, (now-startTime)/duration);
+      var eased = t<0.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
+      x = startX + (targetX-startX)*eased;
+      y = startY + (targetY-startY)*eased;
+      render();
+      if(t<1){ moveFrame = requestAnimationFrame(step); }
+      else{ root.classList.remove('walking'); savePosition(); settleAndRest(); }
+    }
+    moveFrame = requestAnimationFrame(step);
+  }
+  function settleAndRest(){
+    idleStreak++;
+    if(idleStreak % 4 === 0){ setPose('sleep'); scheduleNextMove(6000+Math.random()*6000); }
+    else{ setPose(IDLE_POSES[Math.floor(Math.random()*IDLE_POSES.length)]); scheduleNextMove(1800+Math.random()*3200); }
+  }
+  function positionBubble(){
+    var rect = root.getBoundingClientRect();
+    bubble.style.left = Math.max(8, rect.left-20)+'px';
+    bubble.style.top = Math.max(8, rect.top - bubble.offsetHeight - 14)+'px';
+  }
+  function toggleMessage(){
+    messageOpen = !messageOpen;
+    if(messageOpen){
+      clearTimeout(roamTimer); cancelAnimationFrame(moveFrame);
+      root.classList.remove('walking');
+      setPose('talk');
+      bubble.textContent = (siteText.catPet && siteText.catPet.message) || 'হাই! 🐾';
+      positionBubble();
+      bubble.classList.add('show');
+    } else {
+      bubble.classList.remove('show');
+      setPose(IDLE_POSES[Math.floor(Math.random()*IDLE_POSES.length)]);
+      scheduleNextMove(500);
+    }
+  }
+
+  var pointerDown=false, dragStartX=0, dragStartY=0, pStartX=0, pStartY=0, movedFar=false;
+  function onPointerDown(e){
+    pointerDown=true; movedFar=false; dragging=false;
+    pStartX=e.clientX; pStartY=e.clientY; dragStartX=x; dragStartY=y;
+    root.setPointerCapture(e.pointerId);
+  }
+  function onPointerMove(e){
+    if(!pointerDown) return;
+    var dx=e.clientX-pStartX, dy=e.clientY-pStartY;
+    if(!movedFar && Math.hypot(dx,dy) > 6){
+      movedFar=true; dragging=true;
+      clearTimeout(roamTimer); cancelAnimationFrame(moveFrame);
+      root.classList.remove('walking'); root.classList.add('dragging');
+      setPose('cry');
+      if(messageOpen){ messageOpen=false; bubble.classList.remove('show'); }
+    }
+    if(dragging){ x=dragStartX+dx; y=dragStartY+dy; clampToViewport(); }
+  }
+  function onPointerUp(){
+    if(!pointerDown) return;
+    pointerDown=false;
+    if(dragging){ dragging=false; root.classList.remove('dragging'); savePosition(); settleAndRest(); }
+    else{ toggleMessage(); }
+  }
+
+  function buildDom(){
+    if(built) return;
+    built = true;
+    root = document.createElement('div');
+    root.id = 'cat-pet';
+    root.style.width = '100px';
+    root.setAttribute('role','button');
+    root.setAttribute('tabindex','0');
+    root.setAttribute('aria-label','সাইট বিড়াল, ক্লিক করলে মেসেজ দেখাবে');
+
+    var inner = document.createElement('div'); inner.id='cat-pet-inner';
+    img = document.createElement('img'); img.alt=''; img.draggable=false;
+    inner.appendChild(img); root.appendChild(inner);
+
+    bubble = document.createElement('div'); bubble.id='cat-pet-bubble';
+
+    document.body.appendChild(root);
+    document.body.appendChild(bubble);
+
+    var start = loadPosition();
+    x=start.x; y=start.y; clampToViewport();
+
+    root.addEventListener('pointerdown', onPointerDown);
+    root.addEventListener('pointermove', onPointerMove);
+    root.addEventListener('pointerup', onPointerUp);
+    root.addEventListener('pointercancel', onPointerUp);
+    root.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggleMessage(); } });
+    window.addEventListener('resize', function(){ clampToViewport(); if(messageOpen) positionBubble(); });
+
+    scheduleNextMove(300);
+  }
+  function startRoaming(){ buildDom(); running=true; root.style.display=''; bubble.style.display=''; if(!moveFrame) scheduleNextMove(300); }
+  function stopRoaming(){
+    running=false;
+    clearTimeout(roamTimer); cancelAnimationFrame(moveFrame);
+    if(root) root.style.display='none';
+    if(bubble) bubble.style.display='none';
+    messageOpen=false;
+  }
+
+  // Called from applyTexts() every time siteText refreshes:
+  // on first load, after every 45s poll, and right after an admin save.
+  window.updateCatPet = function(){
+    var cfg = (typeof siteText !== 'undefined' && siteText && siteText.catPet) || { enabled:true };
+    if(cfg.enabled === false){ stopRoaming(); }
+    else if(!running){ startRoaming(); }
+  };
+})();
 </script>
 </body>
 </html>
