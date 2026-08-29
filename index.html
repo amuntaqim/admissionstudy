@@ -9008,8 +9008,7 @@ setInterval(fetchRemoteState, 45000);
 
   var roamTimer=null, moveFrame=null, bubbleHideTimer=null, messageOpen=false, dragging=false, idleStreak=0;
 
-  var built=false, running=false, roamingEnabled=true, lastPose='coffee';
-
+  var built=false, running=false, roamingEnabled=true, lastPose='coffee', msgIndex=0;
 
 
   function bounds(){ return { maxX: Math.max(0, window.innerWidth - root.offsetWidth), maxY: Math.max(0, window.innerHeight - root.offsetHeight) }; }
@@ -9134,7 +9133,8 @@ setInterval(fetchRemoteState, 45000);
 
       : ['হাই! 🐾'];
 
-    bubble.textContent = msgs[Math.floor(Math.random()*msgs.length)];
+    bubble.textContent = msgs[msgIndex % msgs.length];
+    msgIndex++;
 
     positionBubble();
 
