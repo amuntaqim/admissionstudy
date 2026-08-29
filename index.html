@@ -5121,8 +5121,9 @@ async function fetchRemoteState(){
 
     renderAll();
 
-  } catch(e){ }
-
+  } catch(e){
+if (typeof window.updateCatPet === 'function') window.updateCatPet();
+  }
 }
 
 
@@ -9287,7 +9288,7 @@ setInterval(fetchRemoteState, 45000);
     }
   };
 })();
-
+if (typeof window.updateCatPet === 'function') window.updateCatPet();
 </script>
 
 </body>
