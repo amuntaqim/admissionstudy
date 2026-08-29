@@ -19,7 +19,7 @@ const DEFAULT_DASHBOARD_CARDS = {
   totalAbsent: { label: 'মোট অনুপস্থিত পরীক্ষা', visible: true },
 };
 
-const DEFAULT_CAT_PET = { enabled: true, message: 'হাই! ধন্যবাদ ভিজিট করার জন্য 🐾' };
+const DEFAULT_CAT_PET = { enabled: true, messages: ['হাই! ধন্যবাদ ভিজিট করার জন্য 🐾'] };
 
 const DEFAULT_STATE = {
   events: [],
@@ -115,7 +115,7 @@ export default async function handler(req) {
     if (!safeSiteText.dashboardCards || typeof safeSiteText.dashboardCards !== 'object') {
       safeSiteText.dashboardCards = DEFAULT_STATE.siteText.dashboardCards;
     }
-    if (!safeSiteText.catPet || typeof safeSiteText.catPet !== 'object') {
+    if (!safeSiteText.catPet || typeof safeSiteText.catPet !== 'object' || !Array.isArray(safeSiteText.catPet.messages)) {
       safeSiteText.catPet = DEFAULT_STATE.siteText.catPet;
     }
 
