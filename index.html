@@ -8996,8 +8996,7 @@ setInterval(fetchRemoteState, 45000);
 
   var IDLE_POSES = ['coffee','reading','laptop','writing','peeking','phone','love'];
 
-  function randomIdlePose(){ return IDLE_POSES[Math.floor(Math.random()*IDLE_POSES.length)]; }
-
+    function randomIdlePose(){ var p = IDLE_POSES[poseIndex % IDLE_POSES.length]; poseIndex++; return p; }
   Object.keys(POSES).forEach(function(k){ var im = new Image(); im.src = POSES[k]; });
 
 
@@ -9008,7 +9007,7 @@ setInterval(fetchRemoteState, 45000);
 
   var roamTimer=null, moveFrame=null, bubbleHideTimer=null, messageOpen=false, dragging=false, idleStreak=0;
 
-  var built=false, running=false, roamingEnabled=true, lastPose='coffee', msgIndex=0;
+    var built=false, running=false, roamingEnabled=true, lastPose='coffee', msgIndex=0, poseIndex=0;
 
 
   function bounds(){ return { maxX: Math.max(0, window.innerWidth - root.offsetWidth), maxY: Math.max(0, window.innerHeight - root.offsetHeight) }; }
