@@ -9262,8 +9262,7 @@ setInterval(fetchRemoteState, 45000);
 
     window.addEventListener('resize', function(){ clampToViewport(); if(messageOpen) positionBubble(); });
 
-
-
+   setPose(randomIdlePose());
    if(roamingEnabled) scheduleNextMove(300);
   }
   function startRoaming(){ buildDom(); running=true; root.style.display=''; bubble.style.display=''; if(roamingEnabled && !moveFrame) scheduleNextMove(300); }
