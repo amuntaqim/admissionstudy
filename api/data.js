@@ -19,10 +19,15 @@ const DEFAULT_DASHBOARD_CARDS = {
   totalAbsent: { label: 'মোট অনুপস্থিত পরীক্ষা', visible: true },
 };
 
+const DEFAULT_CAT_PET = { enabled: true, messages: ['হাই! ধন্যবাদ ভিজিট করার জন্য 🐾'] };
+
+const DEFAULT_DIARY = { entries: {} };
+
 const DEFAULT_STATE = {
   events: [],
   gaps: [],
   vuls: [],
+  diary: DEFAULT_DIARY,
   siteText: {
     brandTitle: 'NextGate',
     brandSubtitle: 'পরীক্ষা ট্র্যাকার',
@@ -44,7 +49,8 @@ const DEFAULT_STATE = {
     countdownTomorrow: 'আগামীকাল',
     countdownDays: 'আর {days} দিন বাকি',
     countdownDaysHours: 'আর {days} দিন {hours} ঘন্টা বাকি',
-    dashboardCards: DEFAULT_DASHBOARD_CARDS
+    dashboardCards: DEFAULT_DASHBOARD_CARDS,
+    catPet: DEFAULT_CAT_PET
   },
     tagColors: {},
   customQuotes: [],
@@ -112,11 +118,15 @@ export default async function handler(req) {
     if (!safeSiteText.dashboardCards || typeof safeSiteText.dashboardCards !== 'object') {
       safeSiteText.dashboardCards = DEFAULT_STATE.siteText.dashboardCards;
     }
+    if (!safeSiteText.catPet || typeof safeSiteText.catPet !== 'object' || !Array.isArray(safeSiteText.catPet.messages)) {
+      safeSiteText.catPet = DEFAULT_STATE.siteText.catPet;
+    }
 
     const safeState = {
       events: Array.isArray(body.events) ? body.events : [],
       gaps: Array.isArray(body.gaps) ? body.gaps : [],
       vuls: Array.isArray(body.vuls) ? body.vuls : [],
+      diary: (body.diary && typeof body.diary === 'object' && body.diary.entries && typeof body.diary.entries === 'object') ? body.diary : DEFAULT_DIARY,
       siteText: safeSiteText,
       tagColors: (body.tagColors && typeof body.tagColors === 'object') ? body.tagColors : {},
             customQuotes: Array.isArray(body.customQuotes) ? body.customQuotes : [],

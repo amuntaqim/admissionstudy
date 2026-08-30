@@ -2744,6 +2744,125 @@
 
   #timerImgInput{ display:none; }
 
+  /* ---------- DIARY ---------- */
+  .diary-section{
+    margin-top: 22px; background: var(--card); border: 1px solid var(--border);
+    border-radius: 18px; padding: 20px;
+  }
+  .diary-head{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:16px; }
+  .diary-head h3{ display:flex; align-items:center; gap:8px; font-size:17px; font-weight:700; color:var(--text); }
+  .diary-head h3 svg{ width:19px; height:19px; color:var(--primary); }
+  .diary-tabs{ display:flex; gap:6px; background:var(--bg); border-radius:12px; padding:4px; }
+  .diary-tab-btn{
+    border:none; background:transparent; color:var(--text-muted); font-family:inherit; font-size:13.5px;
+    font-weight:600; padding:8px 14px; border-radius:9px; cursor:pointer; transition:.15s;
+  }
+  .diary-tab-btn:hover{ color:var(--text); }
+  .diary-tab-btn.active{ background:var(--primary); color:#fff; }
+
+  .diary-nav{ display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:16px; }
+  .diary-nav-btn{
+    width:34px; height:34px; border-radius:10px; border:1px solid var(--border); background:var(--bg);
+    color:var(--text); font-size:17px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .diary-nav-btn:hover{ background:var(--primary-light); color:var(--primary); border-color:var(--primary); }
+  .diary-nav-date{ font-size:15px; font-weight:700; color:var(--text); min-width:150px; text-align:center; }
+  .diary-today-btn{
+    border:1px solid var(--border); background:transparent; color:var(--text-muted); font-family:inherit;
+    font-size:12.5px; font-weight:600; padding:7px 12px; border-radius:9px; cursor:pointer;
+  }
+  .diary-today-btn:hover{ background:var(--primary-light); color:var(--primary); border-color:var(--primary); }
+
+  /* Daily panel */
+  .diary-daily-grid{ display:grid; grid-template-columns: 1.3fr 1fr; gap:20px; }
+  @media (max-width: 720px){ .diary-daily-grid{ grid-template-columns: 1fr; } }
+  .diary-block-list{ display:flex; flex-direction:column; gap:8px; }
+  .diary-block-row{
+    display:flex; align-items:center; gap:10px; padding:9px 12px; border:1px solid var(--border);
+    border-radius:11px; background:var(--bg);
+  }
+  .diary-block-row.done{ border-color: var(--accent-green); background: var(--accent-green-bg); }
+  .diary-block-row input[type="checkbox"]{ width:18px; height:18px; accent-color: var(--accent-green); cursor:pointer; flex-shrink:0; }
+  .diary-block-row .diary-block-label{ font-size:13.5px; font-weight:600; color:var(--text); flex:1; }
+  .diary-block-row .diary-block-min{
+    width:56px; text-align:center; border:1px solid var(--border); border-radius:8px; background:var(--card);
+    color:var(--text); font-family:inherit; font-size:13px; padding:5px 4px;
+  }
+  .diary-block-row .diary-block-min-label{ font-size:11.5px; color:var(--text-muted); }
+  .diary-block-del{ background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:16px; padding:2px 4px; flex-shrink:0; }
+  .diary-block-del:hover{ color: var(--accent-red); }
+  .diary-add-block-btn{
+    margin-top:4px; border:1.5px dashed var(--border); background:transparent; color:var(--text-muted);
+    font-family:inherit; font-size:13px; font-weight:600; padding:9px; border-radius:11px; cursor:pointer;
+  }
+  .diary-add-block-btn:hover{ border-color:var(--primary); color:var(--primary); }
+  .diary-target-hint{ font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .diary-study-total{ font-size:13px; font-weight:700; color:var(--primary); margin-top:10px; }
+
+  .diary-salah-grid{ display:grid; grid-template-columns: repeat(2, 1fr); gap:8px; margin-bottom:16px; }
+  .diary-salah-btn{
+    display:flex; align-items:center; justify-content:center; gap:6px; border:1px solid var(--border);
+    background:var(--bg); color:var(--text); font-family:inherit; font-size:13px; font-weight:600;
+    padding:10px 8px; border-radius:11px; cursor:pointer; transition:.15s;
+  }
+  .diary-salah-btn svg{ width:14px; height:14px; flex-shrink:0; opacity:0; transition:.15s; }
+  .diary-salah-btn.done{ background:var(--accent-green-bg); border-color:var(--accent-green); color:var(--accent-green); }
+  .diary-salah-btn.done svg{ opacity:1; }
+  .diary-note-label{ font-size:12.5px; font-weight:600; color:var(--text-muted); margin-bottom:6px; display:block; }
+  .diary-note-textarea{
+    width:100%; min-height:96px; border:1px solid var(--border); border-radius:12px; background:var(--bg);
+    color:var(--text); font-family:inherit; font-size:13.5px; padding:11px 13px; resize:vertical;
+  }
+  .diary-note-textarea:focus{ outline:none; border-color:var(--primary); }
+  .diary-note-textarea::placeholder{ color:var(--text-muted); }
+
+  /* Weekly panel */
+  .diary-week-strip{ display:grid; grid-template-columns: repeat(7, 1fr); gap:8px; }
+  @media (max-width: 720px){ .diary-week-strip{ grid-template-columns: repeat(4, 1fr); } }
+  .diary-week-card{
+    border:1px solid var(--border); border-radius:13px; padding:11px 8px; text-align:center; background:var(--bg); cursor:pointer;
+  }
+  .diary-week-card:hover{ border-color:var(--primary); }
+  .diary-week-card.today{ border-color:var(--primary); background:var(--primary-light); }
+  .diary-week-card .dwc-name{ font-size:11.5px; color:var(--text-muted); font-weight:600; }
+  .diary-week-card .dwc-date{ font-size:15px; font-weight:700; color:var(--text); margin:2px 0 8px; }
+  .diary-week-card .dwc-hours{ font-size:13px; font-weight:700; color:var(--primary); }
+  .diary-week-card .dwc-salah{ font-size:11.5px; color:var(--accent-green); font-weight:600; margin-top:2px; }
+  .diary-week-totals{
+    display:flex; gap:22px; flex-wrap:wrap; justify-content:center; margin-top:18px; padding-top:16px;
+    border-top:1px solid var(--border);
+  }
+  .diary-week-totals .dwt-item{ text-align:center; }
+  .diary-week-totals .dwt-val{ font-size:19px; font-weight:800; color:var(--text); }
+  .diary-week-totals .dwt-label{ font-size:11.5px; color:var(--text-muted); margin-top:2px; }
+
+  /* Monthly panel */
+  .diary-month-weekdays{ display:grid; grid-template-columns: repeat(7,1fr); text-align:center; margin-bottom:6px; }
+  .diary-month-weekdays span{ font-size:11.5px; font-weight:700; color:var(--text-muted); padding:6px 0; }
+  .diary-month-grid{ display:grid; grid-template-columns: repeat(7,1fr); gap:6px; }
+  .diary-day-cell{
+    position:relative; aspect-ratio: 1/0.82; border:1px solid var(--border); border-radius:11px;
+    background:var(--bg); cursor:pointer; padding:5px; transition:.15s;
+  }
+  .diary-day-cell:hover{ border-color:var(--primary); }
+  .diary-day-cell.other-month{ opacity:.35; }
+  .diary-day-cell.today{ border-color:var(--primary); border-width:2px; }
+  .diary-day-cell .ddc-num{ font-size:12.5px; font-weight:700; color:var(--text); }
+  .diary-day-cell .ddc-hours{ position:absolute; top:4px; right:6px; font-size:11px; font-weight:800; color:var(--primary); }
+  .diary-day-cell .ddc-salah{ position:absolute; bottom:4px; right:6px; font-size:11px; font-weight:800; color:var(--accent-green); }
+  .diary-month-legend{ display:flex; gap:18px; justify-content:center; margin-top:14px; }
+  .diary-month-legend span{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-muted); }
+  .diary-legend-dot{ width:9px; height:9px; border-radius:50%; display:inline-block; }
+  .diary-legend-dot.study{ background:var(--primary); }
+  .diary-legend-dot.salah{ background:var(--accent-green); }
+
+  /* Diary day modal */
+  .diary-modal-section{ margin-bottom:18px; }
+  .diary-modal-section-title{ font-size:12.5px; font-weight:700; color:var(--text-muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:.03em; }
+  .diary-modal-stats{ display:flex; gap:20px; margin-bottom:18px; }
+  .diary-modal-stats .dms-val{ font-size:20px; font-weight:800; color:var(--text); }
+  .diary-modal-stats .dms-label{ font-size:11.5px; color:var(--text-muted); }
+
   .gv-body::-webkit-scrollbar{ width:8px; }
 
   .gv-body::-webkit-scrollbar-track{ background:transparent; }
@@ -3924,6 +4043,59 @@
 
       </div>
 
+      <!-- ============ DIARY ============ -->
+      <div class="diary-section" id="diarySection">
+        <div class="diary-head">
+          <h3>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            ডায়েরি
+          </h3>
+          <div class="diary-tabs">
+            <button class="diary-tab-btn active" data-diary-tab="daily" onclick="setDiaryTab('daily')">দৈনিক</button>
+            <button class="diary-tab-btn" data-diary-tab="weekly" onclick="setDiaryTab('weekly')">সাপ্তাহিক</button>
+            <button class="diary-tab-btn" data-diary-tab="monthly" onclick="setDiaryTab('monthly')">মাসিক</button>
+          </div>
+        </div>
+
+        <!-- DAILY -->
+        <div class="diary-panel" id="diaryDailyPanel">
+          <div class="diary-nav">
+            <button class="diary-nav-btn" onclick="diaryShiftDay(-1)">‹</button>
+            <div class="diary-nav-date" id="diaryDailyDateLabel">—</div>
+            <button class="diary-nav-btn" onclick="diaryShiftDay(1)">›</button>
+            <button class="diary-today-btn" onclick="diaryGoToday()">আজ</button>
+          </div>
+          <div id="diaryDailyBody"></div>
+        </div>
+
+        <!-- WEEKLY -->
+        <div class="diary-panel" id="diaryWeeklyPanel" style="display:none;">
+          <div class="diary-nav">
+            <button class="diary-nav-btn" onclick="diaryShiftWeek(-1)">‹</button>
+            <div class="diary-nav-date" id="diaryWeeklyRangeLabel">—</div>
+            <button class="diary-nav-btn" onclick="diaryShiftWeek(1)">›</button>
+            <button class="diary-today-btn" onclick="diaryGoThisWeek()">এই সপ্তাহ</button>
+          </div>
+          <div id="diaryWeeklyBody"></div>
+        </div>
+
+        <!-- MONTHLY -->
+        <div class="diary-panel" id="diaryMonthlyPanel" style="display:none;">
+          <div class="diary-nav">
+            <button class="diary-nav-btn" onclick="diaryShiftMonth(-1)">‹</button>
+            <div class="diary-nav-date" id="diaryMonthlyLabel">—</div>
+            <button class="diary-nav-btn" onclick="diaryShiftMonth(1)">›</button>
+            <button class="diary-today-btn" onclick="diaryGoThisMonth()">এই মাস</button>
+          </div>
+          <div class="diary-month-weekdays" id="diaryMonthWeekdays"></div>
+          <div class="diary-month-grid" id="diaryMonthGrid"></div>
+          <div class="diary-month-legend">
+            <span><i class="diary-legend-dot study"></i> পড়াশোনার ঘন্টা</span>
+            <span><i class="diary-legend-dot salah"></i> সালাত সংখ্যা</span>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div class="dash-scroll-area" id="dashScrollArea" style="display:none;">
@@ -4803,7 +4975,37 @@
 
 </div>
 
-
+<!-- Diary Day Detail Modal -->
+<div class="modal-overlay" id="diaryDayModalOverlay">
+  <div class="modal diary-modal">
+    <div class="modal-head">
+      <h3 id="diaryModalDateLabel">—</h3>
+      <button class="modal-close" onclick="closeDiaryDayModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="diary-modal-stats">
+      <div><div class="dms-val" id="diaryModalHours">০</div><div class="dms-label">পড়াশোনা (ঘন্টা)</div></div>
+      <div><div class="dms-val" id="diaryModalSalah">০/৬</div><div class="dms-label">সালাত</div></div>
+    </div>
+    <div class="diary-modal-section">
+      <div class="diary-modal-section-title">স্টাডি ব্লক</div>
+      <div class="diary-block-list" id="diaryModalBlocks"></div>
+      <button class="diary-add-block-btn" onclick="diaryAddBlock(diaryModalDate); openDiaryDayModal(diaryModalDate);">+ ব্লক যোগ করুন</button>
+    </div>
+    <div class="diary-modal-section">
+      <div class="diary-modal-section-title">সালাত</div>
+      <div class="diary-salah-grid" id="diaryModalSalahGrid"></div>
+    </div>
+    <div class="diary-modal-section">
+      <label class="diary-note-label">আজকের ডায়েরি নোট</label>
+      <textarea class="diary-note-textarea" id="diaryModalNote" placeholder="আজকের কথা লিখুন..." oninput="diaryUpdateNote(diaryModalDate, this.value)"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn-save" onclick="saveDiaryModalAndClose()">সংরক্ষণ করুন</button>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast">
 
@@ -4830,6 +5032,8 @@ const SETTINGS_KEY = 'examTrackerSettings_v1';
 const TAG_COLORS_KEY = 'examTrackerTagColors_v1';
 
 const QUOTES_KEY = 'examTrackerCustomQuotes_v1';
+
+const DIARY_KEY = 'examTrackerDiary_v1';
 
 
 
@@ -4878,6 +5082,12 @@ let events = loadCache(STORAGE_KEY, []);
 let gaps = loadCache(GAPS_KEY, []);
 
 let vuls = loadCache(VULS_KEY, []);
+
+let diary = loadCache(DIARY_KEY, { entries: {} });
+
+if(!diary || typeof diary !== 'object') diary = { entries: {} };
+
+if(!diary.entries || typeof diary.entries !== 'object') diary.entries = {};
 
 
 
@@ -4959,6 +5169,8 @@ async function persistState(successMsg){
 
   safeStorage.setItem(QUOTES_KEY, JSON.stringify(customQuotes));
 
+  safeStorage.setItem(DIARY_KEY, JSON.stringify(diary));
+
 
 
   if(!adminPassword){
@@ -4993,7 +5205,7 @@ async function persistState(successMsg){
 
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminPassword },
 
-            body: JSON.stringify({ events, gaps, vuls, siteText, tagColors, customQuotes, quoteIndex: currentQuoteIdx, timerBgUrl: timerBgDataUrl || '' })    });
+            body: JSON.stringify({ events, gaps, vuls, diary, siteText, tagColors, customQuotes, quoteIndex: currentQuoteIdx, timerBgUrl: timerBgDataUrl || '' })    });
 
     if(res.status === 401){
 
@@ -5075,6 +5287,8 @@ async function fetchRemoteState(){
 
     customQuotes = Array.isArray(data.customQuotes) ? data.customQuotes : [];
 
+    diary = (data.diary && typeof data.diary === 'object' && data.diary.entries && typeof data.diary.entries === 'object') ? data.diary : { entries: {} };
+
     currentQuoteIdx = typeof data.quoteIndex === 'number' ? data.quoteIndex : 0;    safeStorage.setItem(STORAGE_KEY, JSON.stringify(events));
 
     safeStorage.setItem(GAPS_KEY, JSON.stringify(gaps));
@@ -5086,6 +5300,10 @@ async function fetchRemoteState(){
     safeStorage.setItem(TAG_COLORS_KEY, JSON.stringify(tagColors));
 
         safeStorage.setItem(QUOTES_KEY, JSON.stringify(customQuotes));
+
+    safeStorage.setItem(DIARY_KEY, JSON.stringify(diary));
+
+    if(typeof diaryRenderCurrentTab === 'function') diaryRenderCurrentTab();
 
     if(typeof data.timerBgUrl === 'string' && !isSaving){
 
@@ -5725,6 +5943,323 @@ function fmtTime(t){
 
   return `${toBn(h12)}:${toBn(String(m).padStart(2,'0'))} ${period}`;
 
+}
+
+
+
+/* ================= DIARY ================= */
+
+const DIARY_SALAH_LIST = [
+  { key: 'fajr', label: 'ফজর' },
+  { key: 'zuhr', label: 'যুহর' },
+  { key: 'asr', label: 'আসর' },
+  { key: 'maghrib', label: 'মাগরিব' },
+  { key: 'isha', label: 'ইশা' },
+  { key: 'tahajjud', label: 'তাহাজ্জুদ' }
+];
+const DIARY_BLOCK_TARGET_MIN = 90;
+const bnWeekdaysFull = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
+
+let diaryTab = 'daily';
+let diaryDailyDate = new Date();
+let diaryWeekAnchor = new Date();
+let diaryMonthAnchor = new Date();
+let diaryModalDate = null;
+
+function diaryKeyOf(d){
+  const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), day = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+function diaryParseKey(k){ return new Date(k + 'T00:00:00'); }
+function diaryIsToday(k){ return k === diaryKeyOf(new Date()); }
+
+function getDiaryEntry(dateStr){
+  if(!diary || typeof diary !== 'object') diary = { entries: {} };
+  if(!diary.entries || typeof diary.entries !== 'object') diary.entries = {};
+  if(!diary.entries[dateStr]){
+    diary.entries[dateStr] = {
+      blocks: [],
+      salah: { fajr:false, zuhr:false, asr:false, maghrib:false, isha:false, tahajjud:false },
+      note: ''
+    };
+  }
+  const e = diary.entries[dateStr];
+  if(!Array.isArray(e.blocks)) e.blocks = [];
+  if(!e.salah || typeof e.salah !== 'object') e.salah = { fajr:false, zuhr:false, asr:false, maghrib:false, isha:false, tahajjud:false };
+  if(typeof e.note !== 'string') e.note = '';
+  return e;
+}
+function diaryEntryMinutes(e){
+  return (e.blocks || []).reduce((sum, b) => sum + (Number(b && b.minutes) || 0), 0);
+}
+function diaryEntrySalahCount(e){
+  return DIARY_SALAH_LIST.reduce((c, p) => c + ((e.salah && e.salah[p.key]) ? 1 : 0), 0);
+}
+function diaryHasEntry(dateStr){
+  const e = diary && diary.entries && diary.entries[dateStr];
+  if(!e) return false;
+  return (e.blocks && e.blocks.length) || diaryEntrySalahCount(e) > 0 || (e.note && e.note.trim());
+}
+function diaryFmtHours(min){
+  const h = min / 60;
+  if(h === 0) return '0';
+  return (Math.round(h * 10) / 10).toString();
+}
+
+let diarySaveTimer = null;
+function diaryQueueSave(){
+  clearTimeout(diarySaveTimer);
+  diarySaveTimer = setTimeout(() => { persistState(); }, 900);
+}
+
+/* ---- tab switching ---- */
+function setDiaryTab(tab){
+  diaryTab = tab;
+  document.querySelectorAll('.diary-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.diaryTab === tab));
+  document.getElementById('diaryDailyPanel').style.display = tab === 'daily' ? '' : 'none';
+  document.getElementById('diaryWeeklyPanel').style.display = tab === 'weekly' ? '' : 'none';
+  document.getElementById('diaryMonthlyPanel').style.display = tab === 'monthly' ? '' : 'none';
+  diaryRenderCurrentTab();
+}
+function diaryRenderCurrentTab(){
+  if(diaryTab === 'daily') renderDiaryDaily();
+  else if(diaryTab === 'weekly') renderDiaryWeekly();
+  else renderDiaryMonthly();
+}
+
+/* ---- DAILY ---- */
+function diaryShiftDay(delta){
+  diaryDailyDate.setDate(diaryDailyDate.getDate() + delta);
+  renderDiaryDaily();
+}
+function diaryGoToday(){
+  diaryDailyDate = new Date();
+  renderDiaryDaily();
+}
+function renderDiaryDaily(){
+  const key = diaryKeyOf(diaryDailyDate);
+  const e = getDiaryEntry(key);
+  document.getElementById('diaryDailyDateLabel').textContent =
+    `${bnWeekdaysFull[diaryDailyDate.getDay()]}, ${toBn(diaryDailyDate.getDate())} ${bnMonths[diaryDailyDate.getMonth()]} ${toBn(diaryDailyDate.getFullYear())}`;
+
+  const body = document.getElementById('diaryDailyBody');
+  body.innerHTML = `
+    <div class="diary-daily-grid">
+      <div>
+        <div class="diary-target-hint">লক্ষ্য: প্রতি ব্লক ৯০ মিনিট, দৈনিক ৬-৮ ব্লক</div>
+        <div class="diary-block-list" id="diaryBlockList_${key}"></div>
+        <button class="diary-add-block-btn" onclick="diaryAddBlock('${key}'); renderDiaryDaily();">+ ব্লক যোগ করুন</button>
+        <div class="diary-study-total" id="diaryStudyTotal_${key}"></div>
+      </div>
+      <div>
+        <div class="diary-target-hint">নামাজ</div>
+        <div class="diary-salah-grid" id="diarySalahGrid_${key}"></div>
+        <label class="diary-note-label">আজকের ডায়েরি নোট</label>
+        <textarea class="diary-note-textarea" id="diaryNote_${key}" placeholder="আজকের কথা লিখুন...">${escapeHtml(e.note || '')}</textarea>
+      </div>
+    </div>
+  `;
+  diaryRenderBlocks(key, `diaryBlockList_${key}`);
+  diaryRenderSalah(key, `diarySalahGrid_${key}`);
+  diaryUpdateStudyTotalLabel(key, `diaryStudyTotal_${key}`);
+  const noteEl = document.getElementById(`diaryNote_${key}`);
+  if(noteEl){
+    noteEl.oninput = function(){ diaryUpdateNote(key, this.value); };
+  }
+}
+function diaryUpdateStudyTotalLabel(key, elId){
+  const e = getDiaryEntry(key);
+  const el = document.getElementById(elId);
+  if(el) el.textContent = `আজকের মোট পড়াশোনা: ${toBn(diaryFmtHours(diaryEntryMinutes(e)))} ঘন্টা`;
+}
+function diaryRenderBlocks(key, containerId){
+  const e = getDiaryEntry(key);
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  container.innerHTML = e.blocks.map((b, i) => `
+    <div class="diary-block-row ${b.done ? 'done' : ''}">
+      <input type="checkbox" ${b.done ? 'checked' : ''} onchange="diaryToggleBlock('${key}', ${i}, this.checked)">
+      <span class="diary-block-label">ব্লক ${toBn(i+1)}</span>
+      <input type="number" class="diary-block-min" min="0" max="240" value="${Number(b.minutes) || 0}" onchange="diaryUpdateBlockMinutes('${key}', ${i}, this.value)">
+      <span class="diary-block-min-label">মিনিট</span>
+      <button class="diary-block-del" title="মুছুন" onclick="diaryRemoveBlock('${key}', ${i})">✕</button>
+    </div>
+  `).join('') || `<div class="diary-target-hint" style="text-align:center; padding:14px 0;">এখনো কোনো ব্লক যোগ হয়নি</div>`;
+}
+function diaryRenderSalah(key, containerId){
+  const e = getDiaryEntry(key);
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  container.innerHTML = DIARY_SALAH_LIST.map(p => `
+    <button class="diary-salah-btn ${e.salah[p.key] ? 'done' : ''}" onclick="diaryToggleSalah('${key}', '${p.key}')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      ${p.label}
+    </button>
+  `).join('');
+}
+
+function diaryAddBlock(key){
+  const e = getDiaryEntry(key);
+  e.blocks.push({ done: false, minutes: 0 });
+  diaryQueueSave();
+}
+function diaryRemoveBlock(key, idx){
+  const e = getDiaryEntry(key);
+  e.blocks.splice(idx, 1);
+  diaryQueueSave();
+  diaryReRenderAfterEdit(key);
+}
+function diaryToggleBlock(key, idx, checked){
+  const e = getDiaryEntry(key);
+  if(!e.blocks[idx]) return;
+  e.blocks[idx].done = checked;
+  if(checked && !Number(e.blocks[idx].minutes)) e.blocks[idx].minutes = DIARY_BLOCK_TARGET_MIN;
+  diaryQueueSave();
+  diaryReRenderAfterEdit(key);
+}
+function diaryUpdateBlockMinutes(key, idx, val){
+  const e = getDiaryEntry(key);
+  if(!e.blocks[idx]) return;
+  let n = Math.max(0, Math.min(240, Number(val) || 0));
+  e.blocks[idx].minutes = n;
+  diaryQueueSave();
+  diaryReRenderAfterEdit(key, true);
+}
+function diaryToggleSalah(key, prayerKey){
+  const e = getDiaryEntry(key);
+  e.salah[prayerKey] = !e.salah[prayerKey];
+  diaryQueueSave();
+  diaryReRenderAfterEdit(key);
+}
+function diaryUpdateNote(key, val){
+  const e = getDiaryEntry(key);
+  e.note = val;
+  diaryQueueSave();
+}
+function diaryReRenderAfterEdit(key, skipBlockRerender){
+  if(diaryModalDate === key){
+    diaryRenderModalContent(key);
+  }
+  if(diaryTab === 'daily' && diaryKeyOf(diaryDailyDate) === key){
+    if(!skipBlockRerender) diaryRenderBlocks(key, `diaryBlockList_${key}`);
+    diaryRenderSalah(key, `diarySalahGrid_${key}`);
+    diaryUpdateStudyTotalLabel(key, `diaryStudyTotal_${key}`);
+  }
+  if(diaryTab === 'weekly') renderDiaryWeekly();
+  if(diaryTab === 'monthly') renderDiaryMonthly();
+}
+
+/* ---- WEEKLY ---- */
+function diaryWeekStart(d){
+  const s = new Date(d);
+  s.setDate(s.getDate() - s.getDay()); // Sunday
+  s.setHours(0,0,0,0);
+  return s;
+}
+function diaryShiftWeek(delta){
+  diaryWeekAnchor.setDate(diaryWeekAnchor.getDate() + delta * 7);
+  renderDiaryWeekly();
+}
+function diaryGoThisWeek(){
+  diaryWeekAnchor = new Date();
+  renderDiaryWeekly();
+}
+function renderDiaryWeekly(){
+  const start = diaryWeekStart(diaryWeekAnchor);
+  const end = new Date(start); end.setDate(end.getDate() + 6);
+  document.getElementById('diaryWeeklyRangeLabel').textContent =
+    `${toBn(start.getDate())} ${bnMonthsShort[start.getMonth()]} – ${toBn(end.getDate())} ${bnMonthsShort[end.getMonth()]}`;
+
+  let totalMin = 0, totalSalah = 0;
+  let html = '';
+  for(let i = 0; i < 7; i++){
+    const d = new Date(start); d.setDate(d.getDate() + i);
+    const key = diaryKeyOf(d);
+    const e = getDiaryEntry(key);
+    const mins = diaryEntryMinutes(e);
+    const sc = diaryEntrySalahCount(e);
+    totalMin += mins; totalSalah += sc;
+    html += `
+      <div class="diary-week-card ${diaryIsToday(key) ? 'today' : ''}" onclick="openDiaryDayModal('${key}')">
+        <div class="dwc-name">${bnWeekdaysShort[i]}</div>
+        <div class="dwc-date">${toBn(d.getDate())}</div>
+        <div class="dwc-hours">${toBn(diaryFmtHours(mins))}ঘ</div>
+        <div class="dwc-salah">${toBn(sc)}/৬</div>
+      </div>
+    `;
+  }
+  document.getElementById('diaryWeeklyBody').innerHTML = `
+    <div class="diary-week-strip">${html}</div>
+    <div class="diary-week-totals">
+      <div class="dwt-item"><div class="dwt-val">${toBn(diaryFmtHours(totalMin))}</div><div class="dwt-label">মোট ঘন্টা</div></div>
+      <div class="dwt-item"><div class="dwt-val">${toBn(totalSalah)}/৪২</div><div class="dwt-label">মোট নামাজ</div></div>
+      <div class="dwt-item"><div class="dwt-val">${toBn(Math.round((totalMin/60/7) * 10) / 10)}</div><div class="dwt-label">দৈনিক গড় ঘন্টা</div></div>
+    </div>
+  `;
+}
+
+/* ---- MONTHLY ---- */
+function diaryShiftMonth(delta){
+  diaryMonthAnchor.setMonth(diaryMonthAnchor.getMonth() + delta);
+  renderDiaryMonthly();
+}
+function diaryGoThisMonth(){
+  diaryMonthAnchor = new Date();
+  renderDiaryMonthly();
+}
+function renderDiaryMonthly(){
+  const y = diaryMonthAnchor.getFullYear(), m = diaryMonthAnchor.getMonth();
+  document.getElementById('diaryMonthlyLabel').textContent = `${bnMonths[m]} ${toBn(y)}`;
+  document.getElementById('diaryMonthWeekdays').innerHTML = bnWeekdaysShort.map(w => `<span>${w}</span>`).join('');
+
+  const firstOfMonth = new Date(y, m, 1);
+  const startOffset = firstOfMonth.getDay(); // 0=Sunday
+  const gridStart = new Date(y, m, 1 - startOffset);
+  let html = '';
+  for(let i = 0; i < 42; i++){
+    const d = new Date(gridStart); d.setDate(d.getDate() + i);
+    if(i >= 35 && d.getMonth() !== m) break; // trim trailing row if unneeded
+    const key = diaryKeyOf(d);
+    const e = getDiaryEntry(key);
+    const mins = diaryEntryMinutes(e);
+    const sc = diaryEntrySalahCount(e);
+    const otherMonth = d.getMonth() !== m;
+    html += `
+      <div class="diary-day-cell ${otherMonth ? 'other-month' : ''} ${diaryIsToday(key) ? 'today' : ''}" onclick="openDiaryDayModal('${key}')">
+        <div class="ddc-num">${toBn(d.getDate())}</div>
+        ${mins > 0 ? `<div class="ddc-hours">${toBn(diaryFmtHours(mins))}</div>` : ''}
+        ${sc > 0 ? `<div class="ddc-salah">${toBn(sc)}</div>` : ''}
+      </div>
+    `;
+  }
+  document.getElementById('diaryMonthGrid').innerHTML = html;
+}
+
+/* ---- DAY DETAIL MODAL ---- */
+function openDiaryDayModal(key){
+  diaryModalDate = key;
+  diaryRenderModalContent(key);
+  document.getElementById('diaryDayModalOverlay').classList.add('open');
+}
+function closeDiaryDayModal(){
+  document.getElementById('diaryDayModalOverlay').classList.remove('open');
+  diaryModalDate = null;
+}
+function saveDiaryModalAndClose(){
+  persistState();
+  closeDiaryDayModal();
+}
+function diaryRenderModalContent(key){
+  const d = diaryParseKey(key);
+  const e = getDiaryEntry(key);
+  document.getElementById('diaryModalDateLabel').textContent =
+    `${bnWeekdaysFull[d.getDay()]}, ${toBn(d.getDate())} ${bnMonths[d.getMonth()]} ${toBn(d.getFullYear())}`;
+  document.getElementById('diaryModalHours').textContent = toBn(diaryFmtHours(diaryEntryMinutes(e)));
+  document.getElementById('diaryModalSalah').textContent = `${toBn(diaryEntrySalahCount(e))}/৬`;
+  diaryRenderBlocks(key, 'diaryModalBlocks');
+  diaryRenderSalah(key, 'diaryModalSalahGrid');
+  const noteEl = document.getElementById('diaryModalNote');
+  noteEl.value = e.note || '';
 }
 
 
@@ -8896,6 +9431,8 @@ function renderAll(){
   if(currentView === 'vul') renderVuls();
 
   if(currentView === 'dashboard') renderDashboard();
+
+  if(typeof diaryRenderCurrentTab === 'function') diaryRenderCurrentTab();
 
 }
 
