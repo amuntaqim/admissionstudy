@@ -895,6 +895,9 @@
 }
 
   /* ===== EXAM DETAIL POPUP ===== */
+  #examPopup, #examPopup * {
+  font-family: 'Ador Noirrit', 'Hind Siliguri', sans-serif;
+}
 #examPopupOverlay {
   position: fixed; inset: 0; z-index: 9000;
   background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
@@ -953,7 +956,7 @@
 .ep-tab {
   flex: 1; padding: 10px 14px; border-radius: var(--radius-sm);
   border: 1.5px solid var(--border); background: var(--bg);
-  font-size: 13.5px; font-weight: 600; color: var(--text-muted);
+  font-size: 13.5px; font-weight: 600; color: var(--text-muted); font-family: 'Ador Noirrit', 'Hind Siliguri', sans-serif;
   cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
   transition: all .15s;
 }
@@ -975,6 +978,8 @@
 }
 .ep-list-item-sub { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
 .ep-empty { font-size: 13px; color: var(--text-faint); text-align: center; padding: 18px 0; }
+  .ep-list-item-link { cursor: pointer; transition: background .15s, border-color .15s; }
+.ep-list-item-link:hover { background: var(--primary-light); border-color: var(--primary); }
 
 .ep-actions {
   display: flex; gap: 8px; padding: 14px 22px;
@@ -4299,7 +4304,7 @@
 
         <label>বিস্তারিত / বিষয়</label>
 
-        <textarea id="fDetails" placeholder="যেমনঃ বিজ্ঞান অনুষদ, কেন্দ্রঃ কার্জন হল"></textarea>
+                <textarea id="fDetails" placeholder="যেমনঃ বিজ্ঞান অনুষদ, কেন্দ্রঃ কার্জন হল&#10;একাধিক লাইন লিখতে পারবেন" rows="3"></textarea>
 
       </div>
 
@@ -9498,10 +9503,11 @@ function openExamPopup(evId) {
   if (examGaps.length === 0) {
     gapPanel.innerHTML = '<div class="ep-empty">এই পরীক্ষার কোনো গ্যাপ নেই</div>';
   } else {
-    gapPanel.innerHTML = examGaps.map(g => `
-      <div class="ep-list-item">
+     gapPanel.innerHTML = examGaps.map(g => `
+      <div class="ep-list-item ep-list-item-link" onclick="closeExamPopup(); switchView('gap'); setTimeout(()=>highlightGapVulItem('${g.id}'), 300);" title="গ্যাপ পৃষ্ঠায় যান">
         <div>${escapeHtml(g.topic || g.text || '')}</div>
         ${g.subject ? `<div class="ep-list-item-sub">${escapeHtml(g.subject)}</div>` : ''}
+        <div class="ep-list-item-sub" style="color:var(--primary);margin-top:4px;font-size:11.5px;">→ গ্যাপ পৃষ্ঠায় দেখুন</div>
       </div>`).join('');
   }
 
@@ -9510,10 +9516,11 @@ function openExamPopup(evId) {
   if (examVuls.length === 0) {
     vulPanel.innerHTML = '<div class="ep-empty">এই পরীক্ষার কোনো ভুল উত্তর নেই</div>';
   } else {
-    vulPanel.innerHTML = examVuls.map(v => `
-      <div class="ep-list-item">
+     vulPanel.innerHTML = examVuls.map(v => `
+      <div class="ep-list-item ep-list-item-link" onclick="closeExamPopup(); switchView('vul'); setTimeout(()=>highlightGapVulItem('${v.id}'), 300);" title="ভুলের খাতায় যান">
         <div>${escapeHtml(v.topic || v.text || '')}</div>
         ${v.subject ? `<div class="ep-list-item-sub">${escapeHtml(v.subject)}</div>` : ''}
+        <div class="ep-list-item-sub" style="color:var(--primary);margin-top:4px;font-size:11.5px;">→ ভুলের খাতায় দেখুন</div>
       </div>`).join('');
   }
 
@@ -9545,6 +9552,24 @@ document.getElementById('examPopupOverlay').addEventListener('click', function(e
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeExamPopup();
 });
+  function highlightGapVulItem(itemId) {
+  // Find the card by looking for the edit/delete button that references this id
+  const allCards = document.querySelectorAll('.note-card');
+  for (const card of allCards) {
+    const editBtn = card.querySelector('button[onclick*="' + itemId + '"]');
+    if (editBtn) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.style.transition = 'box-shadow 0.3s ease, outline 0.3s ease';
+      card.style.outline = '2.5px solid var(--primary)';
+      card.style.boxShadow = '0 0 0 4px rgba(var(--primary-rgb),0.18)';
+      setTimeout(() => {
+        card.style.outline = '';
+        card.style.boxShadow = '';
+      }, 2200);
+      break;
+    }
+  }
+}
 </script>
 </body>
 
