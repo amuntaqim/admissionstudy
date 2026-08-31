@@ -894,7 +894,106 @@
 
 }
 
-  
+  /* ===== EXAM DETAIL POPUP ===== */
+#examPopupOverlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s ease;
+}
+#examPopupOverlay.open { opacity: 1; pointer-events: all; }
+
+#examPopup {
+  background: var(--card); color: var(--text);
+  border-radius: var(--radius); border: 1.5px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  width: min(520px, 94vw); max-height: 85vh;
+  display: flex; flex-direction: column;
+  transform: translateY(18px) scale(.97);
+  transition: transform .22s cubic-bezier(.34,1.3,.64,1);
+}
+#examPopupOverlay.open #examPopup { transform: translateY(0) scale(1); }
+
+.ep-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 20px 22px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.ep-head-info { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 0; }
+.ep-title { font-size: 18px; font-weight: 700; color: var(--text); word-break: break-word; }
+.ep-close {
+  background: var(--bg); border: 1.5px solid var(--border); color: var(--text-muted);
+  border-radius: 10px; width: 34px; height: 34px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 12px;
+  transition: background .15s, color .15s;
+}
+.ep-close:hover { background: var(--primary-light); color: var(--primary); }
+.ep-close svg { width: 18px; height: 18px; }
+
+.ep-body { overflow-y: auto; padding: 18px 22px; flex: 1; display: flex; flex-direction: column; gap: 14px; }
+
+.ep-row { display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--text-muted); }
+.ep-row svg { width: 15px; height: 15px; flex-shrink: 0; stroke: var(--text-muted); }
+.ep-row strong { color: var(--text); font-weight: 600; }
+
+.ep-marks-row {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  background: var(--bg); border-radius: var(--radius-sm); padding: 12px 14px;
+}
+.ep-marks-chip {
+  display: flex; align-items: center; gap: 5px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 5px 11px; font-size: 13px; font-weight: 600; color: var(--text);
+}
+.ep-marks-chip svg { width: 13px; height: 13px; }
+
+.ep-tab-row {
+  display: flex; gap: 8px; flex-shrink: 0;
+}
+.ep-tab {
+  flex: 1; padding: 10px 14px; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border); background: var(--bg);
+  font-size: 13.5px; font-weight: 600; color: var(--text-muted);
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: all .15s;
+}
+.ep-tab:hover { border-color: var(--primary); color: var(--primary); }
+.ep-tab.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+.ep-tab .ep-tab-count {
+  background: var(--primary); color: #fff;
+  border-radius: 20px; font-size: 11px; padding: 1px 7px; font-weight: 700;
+}
+.ep-tab.active .ep-tab-count { background: var(--primary); }
+
+.ep-list-panel { display: none; flex-direction: column; gap: 8px; }
+.ep-list-panel.show { display: flex; }
+
+.ep-list-item {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 13px;
+  font-size: 13.5px; color: var(--text);
+}
+.ep-list-item-sub { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+.ep-empty { font-size: 13px; color: var(--text-faint); text-align: center; padding: 18px 0; }
+
+.ep-actions {
+  display: flex; gap: 8px; padding: 14px 22px;
+  border-top: 1px solid var(--border); flex-shrink: 0;
+}
+.ep-action-btn {
+  flex: 1; padding: 9px 14px; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border); background: var(--bg);
+  font-size: 13px; font-weight: 600; color: var(--text-muted);
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: all .15s;
+}
+.ep-action-btn:hover { border-color: var(--primary); color: var(--primary); }
+.ep-action-btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+.ep-action-btn.primary:hover { background: var(--primary-dark); }
+.ep-action-btn svg { width: 14px; height: 14px; }
+
+/* card click cursor */
+.event-card { cursor: pointer; }
 
   *{box-sizing:border-box; margin:0; padding:0;}
 
@@ -6837,7 +6936,7 @@ function eventCardHTML(ev){
 
   return `
 
-    <div class="event-card ${cd.isPast ? 'past' : ''}">
+        <div class="event-card ${cd.isPast ? 'past' : ''}" onclick="openExamPopup('${ev.id}')">
 
       <div class="ev-top">
 
@@ -9289,7 +9388,164 @@ setInterval(fetchRemoteState, 45000);
 })();
 if (typeof window.updateCatPet === 'function') window.updateCatPet();
 </script>
+<!-- ===== EXAM DETAIL POPUP ===== -->
+<div id="examPopupOverlay">
+  <div id="examPopup">
+    <div class="ep-head">
+      <div class="ep-head-info">
+        <div id="epTitle" class="ep-title"></div>
+        <div id="epBadges" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;"></div>
+      </div>
+      <button class="ep-close" onclick="closeExamPopup()" title="বন্ধ করুন">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="ep-body">
+      <div id="epMeta" style="display:flex;flex-direction:column;gap:8px;"></div>
+      <div id="epMarks" class="ep-marks-row" style="display:none;"></div>
+      <div id="epDetails" class="ep-row" style="display:none;"></div>
+      <div class="ep-tab-row" id="epTabRow" style="display:none;">
+        <button class="ep-tab active" id="epTabGap" onclick="switchExamPopupTab('gap')">
+          📚 গ্যাপ <span class="ep-tab-count" id="epGapCount">০</span>
+        </button>
+        <button class="ep-tab" id="epTabVul" onclick="switchExamPopupTab('vul')">
+          ✏️ ভুল <span class="ep-tab-count" id="epVulCount">০</span>
+        </button>
+      </div>
+      <div class="ep-list-panel show" id="epGapPanel"></div>
+      <div class="ep-list-panel" id="epVulPanel"></div>
+    </div>
+    <div class="ep-actions">
+      <button class="ep-action-btn" onclick="closeExamPopup(); editEvent(currentPopupExamId)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        সম্পাদনা করুন
+      </button>
+      <button class="ep-action-btn primary" onclick="closeExamPopup()">বন্ধ করুন</button>
+    </div>
+  </div>
+</div>
 
+<script>
+/* ===== EXAM DETAIL POPUP LOGIC ===== */
+var currentPopupExamId = null;
+var currentPopupTab = 'gap';
+
+function openExamPopup(evId) {
+  const ev = events.find(e => e.id === evId);
+  if (!ev) return;
+  currentPopupExamId = evId;
+  currentPopupTab = 'gap';
+
+  // Title
+  document.getElementById('epTitle').textContent = ev.name || '';
+
+  // Badges row
+  const badgesEl = document.getElementById('epBadges');
+  let badgesHtml = examTypeBadge(ev.examType || 'regular');
+  if (ev.tag) {
+    badgesHtml += `<span class="ev-tag" style="background:${tagColor(ev.tag)}22;color:${tagColor(ev.tag)};margin-left:0;"><span class="tagdot" style="background:${tagColor(ev.tag)}"></span>${escapeHtml(ev.tag)}</span>`;
+  }
+  const cd = getCountdownInfo(ev.date, ev.time);
+  badgesHtml += `<span class="countdown ${cd.cls}" style="font-size:12px;">${ICON_CLOCK} ${cd.text}</span>`;
+  badgesEl.innerHTML = badgesHtml;
+
+  // Meta rows (date, time, link)
+  let metaHtml = `<div class="ep-row">${ICON_CAL} <strong>${fmtDate(ev.date)}</strong></div>`;
+  if (ev.time) metaHtml += `<div class="ep-row">${ICON_CLOCK} <strong>${fmtTime(ev.time)}</strong></div>`;
+  if (ev.link) metaHtml += `<div class="ep-row">${ICON_LINK} <a href="${escapeAttr(ev.link)}" target="_blank" rel="noopener" style="color:var(--primary);font-weight:600;">বিস্তারিত লিঙ্ক</a></div>`;
+  document.getElementById('epMeta').innerHTML = metaHtml;
+
+  // Marks chips (regular only)
+  const marksEl = document.getElementById('epMarks');
+  if (ev.examType === 'regular') {
+    let chipsHtml = '';
+    if (ev.isAbsent) {
+      chipsHtml += `<span class="ep-marks-chip" style="color:var(--accent-red);">অনুপস্থিত</span>`;
+    } else {
+      if (ev.marksObtained != null && ev.marksTotal != null) {
+        const pct = ev.marksTotal > 0 ? Math.round((ev.marksObtained / ev.marksTotal) * 100) : 0;
+        chipsHtml += `<span class="ep-marks-chip">${ICON_TARGET} ${toBn(ev.marksObtained)}/${toBn(ev.marksTotal)} (${toBn(pct)}%)</span>`;
+      }
+      if (ev.meritBranch) chipsHtml += `<span class="ep-marks-chip">${ICON_TROPHY} ব্রাঞ্চ র‍্যাঙ্ক: ${toBn(ev.meritBranch)}</span>`;
+      if (ev.meritCentral) chipsHtml += `<span class="ep-marks-chip">${ICON_TROPHY} কেন্দ্র র‍্যাঙ্ক: ${toBn(ev.meritCentral)}</span>`;
+    }
+    marksEl.innerHTML = chipsHtml;
+    marksEl.style.display = chipsHtml ? 'flex' : 'none';
+  } else {
+    marksEl.style.display = 'none';
+  }
+
+  // Details text
+  const detailsEl = document.getElementById('epDetails');
+  if (ev.details) {
+    detailsEl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> ${escapeHtml(ev.details)}`;
+    detailsEl.style.display = 'flex';
+  } else {
+    detailsEl.style.display = 'none';
+  }
+
+  // Gap / Vul tabs (regular only)
+  const examGaps = ev.examType === 'regular' ? gaps.filter(g => g.examId === evId) : [];
+  const examVuls = ev.examType === 'regular' ? vuls.filter(v => v.examId === evId) : [];
+  document.getElementById('epGapCount').textContent = toBn(examGaps.length);
+  document.getElementById('epVulCount').textContent = toBn(examVuls.length);
+
+  const tabRow = document.getElementById('epTabRow');
+  tabRow.style.display = ev.examType === 'regular' ? 'flex' : 'none';
+
+  // Render gap list
+  const gapPanel = document.getElementById('epGapPanel');
+  if (examGaps.length === 0) {
+    gapPanel.innerHTML = '<div class="ep-empty">এই পরীক্ষার কোনো গ্যাপ নেই</div>';
+  } else {
+    gapPanel.innerHTML = examGaps.map(g => `
+      <div class="ep-list-item">
+        <div>${escapeHtml(g.topic || g.text || '')}</div>
+        ${g.subject ? `<div class="ep-list-item-sub">${escapeHtml(g.subject)}</div>` : ''}
+      </div>`).join('');
+  }
+
+  // Render vul list
+  const vulPanel = document.getElementById('epVulPanel');
+  if (examVuls.length === 0) {
+    vulPanel.innerHTML = '<div class="ep-empty">এই পরীক্ষার কোনো ভুল উত্তর নেই</div>';
+  } else {
+    vulPanel.innerHTML = examVuls.map(v => `
+      <div class="ep-list-item">
+        <div>${escapeHtml(v.topic || v.text || '')}</div>
+        ${v.subject ? `<div class="ep-list-item-sub">${escapeHtml(v.subject)}</div>` : ''}
+      </div>`).join('');
+  }
+
+  // Reset to gap tab
+  switchExamPopupTab('gap');
+
+  document.getElementById('examPopupOverlay').classList.add('open');
+}
+
+function closeExamPopup() {
+  document.getElementById('examPopupOverlay').classList.remove('open');
+  currentPopupExamId = null;
+}
+
+function switchExamPopupTab(tab) {
+  currentPopupTab = tab;
+  document.getElementById('epTabGap').classList.toggle('active', tab === 'gap');
+  document.getElementById('epTabVul').classList.toggle('active', tab === 'vul');
+  document.getElementById('epGapPanel').classList.toggle('show', tab === 'gap');
+  document.getElementById('epVulPanel').classList.toggle('show', tab === 'vul');
+}
+
+// Close on overlay backdrop click
+document.getElementById('examPopupOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeExamPopup();
+});
+
+// Close on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeExamPopup();
+});
+</script>
 </body>
 
 </html>
