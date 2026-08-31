@@ -3416,260 +3416,311 @@
 .diary-topbar h2 { font-size:22px; font-weight:700; color:var(--text); flex:1; }
 
 .diary-view-tabs {
-  display:flex; gap:6px; background:var(--bg);
-  border-radius:12px; padding:4px; flex-shrink:0;
+  display:flex; gap:4px; background:var(--bg);
+  border-radius:11px; padding:4px; flex-shrink:0;
 }
 .diary-view-tab {
-  padding:7px 14px; border-radius:9px; border:none; background:transparent;
-  font-size:13px; font-weight:600; color:var(--text-muted); cursor:pointer;
+  padding:7px 14px; border-radius:8px; border:none; background:transparent;
+  font-size:13.5px; font-weight:600; color:var(--text-muted); cursor:pointer;
   transition:all .15s;
 }
 .diary-view-tab.active {
-  background:var(--card); color:var(--primary);
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  background:var(--primary); color:#fff;
+  box-shadow:0 4px 10px rgba(var(--primary-rgb),0.28);
 }
 
 .diary-body {
   flex:1; overflow-y:auto; padding:0 20px 20px;
   display:flex; flex-direction:column; gap:16px;
 }
+.diary-body::-webkit-scrollbar { width:8px; }
+.diary-body::-webkit-scrollbar-track { background:transparent; }
+.diary-body::-webkit-scrollbar-thumb { background:var(--border); border-radius:8px; }
 
-/* Stats */
+/* Stats row — same as .stat-mini */
 .diary-stats-row {
-  display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
 }
-.diary-stat {
-  background:var(--card); border:1.5px solid var(--border);
-  border-radius:var(--radius-sm); padding:12px 14px;
-  display:flex; flex-direction:column; gap:3px;
-}
-.diary-stat-value { font-size:20px; font-weight:700; color:var(--primary); }
-.diary-stat-label { font-size:11.5px; color:var(--text-muted); font-weight:600; }
-
-/* Streak */
-.diary-streak-bar {
-  background:var(--card); border:1.5px solid var(--border);
-  border-radius:var(--radius-sm); padding:14px 16px;
+.diary-stat-mini {
+  background:var(--card); border-radius:16px;
+  box-shadow:0 4px 12px rgba(0,0,0,.05);
+  padding:18px 16px; min-height:100px;
   display:flex; align-items:center; gap:14px;
+  border:1px solid rgba(0,0,0,.04);
+  transition:all .2s ease;
 }
-.diary-streak-fire { font-size:32px; line-height:1; }
-.diary-streak-info { flex:1; }
-.diary-streak-count { font-size:24px; font-weight:700; color:var(--accent-orange); }
-.diary-streak-label { font-size:12.5px; color:var(--text-muted); margin-top:2px; }
-.diary-streak-rule { font-size:11px; color:var(--text-faint); margin-top:4px; }
+.diary-stat-mini:hover {
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(0,0,0,.12);
+  border-color:var(--primary);
+}
+.diary-stat-icon {
+  width:44px; height:44px; border-radius:12px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+}
+.diary-stat-icon svg { width:24px; height:24px; }
+.diary-stat-icon.blue  { background:var(--primary-light);     color:var(--primary); }
+.diary-stat-icon.orange{ background:var(--accent-orange-bg);  color:var(--accent-orange); }
+.diary-stat-icon.teal  { background:var(--accent-teal-bg);    color:var(--accent-teal); }
+.diary-stat-icon.green { background:var(--accent-green-bg);   color:var(--accent-green); }
+.diary-stat-icon.red   { background:var(--accent-red-bg);     color:var(--accent-red); }
+.diary-stat-info { flex:1; min-width:0; }
+.diary-stat-value { font-size:22px; font-weight:800; line-height:1.2; color:var(--text); }
+.diary-stat-label { font-size:13px; color:var(--text-muted); margin-top:2px; line-height:1.3; }
+
+/* Streak bar */
+.diary-streak-bar {
+  background:var(--card); border:1px solid rgba(0,0,0,.04);
+  border-radius:16px; padding:18px 16px; min-height:100px;
+  box-shadow:0 4px 12px rgba(0,0,0,.05);
+  display:flex; align-items:center; gap:14px;
+  transition:all .2s ease;
+}
+.diary-streak-bar:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,.12); border-color:var(--primary); }
+.diary-streak-icon {
+  width:44px; height:44px; border-radius:12px; flex-shrink:0;
+  background:var(--accent-orange-bg); color:var(--accent-orange);
+  display:flex; align-items:center; justify-content:center;
+}
+.diary-streak-icon svg { width:24px; height:24px; }
+.diary-streak-info { flex:1; min-width:0; }
+.diary-streak-count { font-size:22px; font-weight:800; color:var(--accent-orange); line-height:1.2; }
+.diary-streak-label { font-size:13px; color:var(--text-muted); margin-top:2px; }
+.diary-streak-rule { font-size:11.5px; color:var(--text-faint); margin-top:4px; }
 
 /* Today header */
 .diary-today-header {
   background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  border-radius:var(--radius-sm); padding:16px 18px; color:#fff;
+  border-radius:14px; padding:16px 20px; color:#fff;
 }
 .diary-today-date { font-size:26px; font-weight:700; }
 .diary-today-day { font-size:14px; opacity:.85; margin-top:3px; }
 
 /* Section titles */
 .diary-section-title {
-  font-size:15px; font-weight:700; color:var(--text); margin-bottom:8px;
-  display:flex; align-items:center; gap:7px;
+  font-size:14px; font-weight:700; color:var(--text-muted);
+  margin-bottom:10px; display:flex; align-items:center; gap:8px;
+  text-transform:uppercase; letter-spacing:.4px;
 }
+.diary-section-title svg { width:15px; height:15px; flex-shrink:0; }
 
 /* Salah */
 .diary-salah-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
 .diary-salah-item {
   background:var(--bg); border:1.5px solid var(--border);
-  border-radius:10px; padding:10px 12px;
-  display:flex; align-items:center; gap:8px;
+  border-radius:11px; padding:11px 13px;
+  display:flex; align-items:center; gap:9px;
   cursor:pointer; transition:all .15s; user-select:none;
 }
-.diary-salah-item.checked {
-  background:var(--accent-green-bg); border-color:var(--accent-green);
-}
+.diary-salah-item.checked { background:var(--accent-green-bg); border-color:var(--accent-green); }
 .diary-salah-check {
   width:18px; height:18px; border-radius:5px; border:2px solid var(--border);
   background:var(--card); display:flex; align-items:center; justify-content:center;
   flex-shrink:0; transition:all .15s;
 }
-.diary-salah-item.checked .diary-salah-check {
-  background:var(--accent-green); border-color:var(--accent-green);
-}
+.diary-salah-item.checked .diary-salah-check { background:var(--accent-green); border-color:var(--accent-green); }
 .diary-salah-check svg { width:11px; height:11px; stroke:#fff; display:none; }
 .diary-salah-item.checked .diary-salah-check svg { display:block; }
-.diary-salah-name { font-size:13px; font-weight:600; color:var(--text); }
+.diary-salah-name { font-size:13.5px; font-weight:600; color:var(--text); }
 .diary-salah-item.checked .diary-salah-name { color:var(--accent-green); }
 
 /* Study blocks */
 .diary-study-blocks { display:flex; flex-direction:column; gap:8px; }
 .diary-study-block {
   background:var(--bg); border:1.5px solid var(--border);
-  border-radius:10px; padding:10px 14px;
+  border-radius:11px; padding:11px 14px;
   display:flex; align-items:center; gap:10px;
+  transition:all .15s;
 }
-.diary-study-block.done {
-  background:var(--accent-teal-bg); border-color:var(--accent-teal);
-}
+.diary-study-block.done { background:var(--accent-teal-bg); border-color:var(--accent-teal); }
 .diary-block-check {
   width:20px; height:20px; border-radius:6px; border:2px solid var(--border);
   background:var(--card); display:flex; align-items:center; justify-content:center;
   flex-shrink:0; cursor:pointer; transition:all .15s;
 }
-.diary-study-block.done .diary-block-check {
-  background:var(--accent-teal); border-color:var(--accent-teal);
-}
+.diary-study-block.done .diary-block-check { background:var(--accent-teal); border-color:var(--accent-teal); }
 .diary-block-check svg { width:12px; height:12px; stroke:#fff; display:none; }
 .diary-study-block.done .diary-block-check svg { display:block; }
 .diary-block-info { flex:1; min-width:0; }
-.diary-block-label { font-size:13.5px; font-weight:600; color:var(--text); }
-.diary-study-block.done .diary-block-label {
-  color:var(--accent-teal); text-decoration:line-through;
-}
+.diary-block-label { font-size:14px; font-weight:600; color:var(--text); }
+.diary-study-block.done .diary-block-label { color:var(--accent-teal); text-decoration:line-through; }
 .diary-block-time { font-size:12px; color:var(--text-muted); margin-top:2px; }
 .diary-block-del {
   background:none; border:none; color:var(--text-faint);
-  cursor:pointer; padding:4px; border-radius:6px;
-  display:flex; align-items:center; transition:color .15s;
+  cursor:pointer; padding:5px; border-radius:7px;
+  display:flex; align-items:center; transition:color .15s, background .15s;
 }
-.diary-block-del:hover { color:var(--accent-red); }
+.diary-block-del:hover { color:var(--accent-red); background:var(--accent-red-bg); }
 .diary-block-del svg { width:14px; height:14px; }
 
-.diary-add-block-row { display:flex; gap:8px; flex-wrap:wrap; }
+.diary-add-block-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
 .diary-add-block-row input {
-  flex:1; min-width:120px; padding:9px 12px; border-radius:10px;
+  flex:1; min-width:120px; padding:11px 13px; border-radius:11px;
   border:1.5px solid var(--border); background:var(--bg);
-  font-size:13px; color:var(--text);
+  font-size:14px; color:var(--text);
+  transition:border-color .15s, background .15s;
 }
 .diary-add-block-row input::placeholder { color:var(--text-faint); }
 .diary-add-block-row input:focus { outline:none; border-color:var(--primary); background:var(--card); }
 .diary-add-block-btn {
-  padding:9px 16px; border-radius:10px; border:none;
+  padding:11px 18px; border-radius:11px; border:none;
   background:var(--primary); color:#fff; cursor:pointer;
-  font-size:13px; font-weight:600;
+  font-size:14px; font-weight:600;
   transition:background .15s; white-space:nowrap;
 }
 .diary-add-block-btn:hover { background:var(--primary-dark); }
 
 /* Note */
 .diary-note-area {
-  width:100%; padding:11px 13px; border-radius:10px;
+  width:100%; padding:12px 14px; border-radius:11px;
   border:1.5px solid var(--border); background:var(--bg);
-  font-size:13.5px; color:var(--text);
-  resize:vertical; min-height:80px; transition:border-color .15s;
+  font-size:14px; color:var(--text);
+  resize:vertical; min-height:90px;
+  transition:border-color .15s, background .15s;
+  box-sizing:border-box;
 }
 .diary-note-area::placeholder { color:var(--text-faint); }
 .diary-note-area:focus { outline:none; border-color:var(--primary); background:var(--card); }
 .diary-save-btn {
-  padding:10px 22px; border-radius:10px; border:none;
+  padding:11px 24px; border-radius:11px; border:none;
   background:var(--primary); color:#fff; cursor:pointer;
-  font-size:14px; font-weight:700; align-self:flex-start;
+  font-size:14px; font-weight:700;
+  box-shadow:0 4px 12px rgba(var(--primary-rgb),.28);
   transition:background .15s;
 }
 .diary-save-btn:hover { background:var(--primary-dark); }
 
-/* Monthly calendar */
-.diary-cal-nav {
-  display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;
+/* Edit day modal */
+.diary-edit-modal {
+  position:fixed; inset:0; z-index:9100;
+  background:rgba(0,0,0,.5); backdrop-filter:blur(4px);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .2s;
 }
-.diary-cal-nav button {
-  background:transparent; border:none; cursor:pointer;
-  color:var(--text-muted); padding:5px; border-radius:8px; transition:background .15s;
+.diary-edit-modal.open { opacity:1; pointer-events:all; }
+.diary-edit-box {
+  background:var(--card); border-radius:var(--radius);
+  width:min(500px,94vw); max-height:85vh; overflow-y:auto;
+  padding:24px; display:flex; flex-direction:column; gap:16px;
+  transform:translateY(16px) scale(.97);
+  transition:transform .22s cubic-bezier(.34,1.3,.64,1);
+  box-shadow:var(--shadow-lg);
 }
-.diary-cal-nav button:hover { background:var(--bg); }
-.diary-cal-nav button svg { width:18px; height:18px; stroke:currentColor; display:block; }
-.diary-cal-month-label { font-size:15px; font-weight:700; color:var(--text); }
+.diary-edit-modal.open .diary-edit-box { transform:translateY(0) scale(1); }
+.diary-edit-head {
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+}
+.diary-edit-head h3 { font-size:18px; font-weight:700; color:var(--text); }
+.diary-edit-close {
+  width:34px; height:34px; border:none; background:var(--bg);
+  border-radius:10px; cursor:pointer; display:flex; align-items:center;
+  justify-content:center; color:var(--text-muted); transition:all .15s;
+}
+.diary-edit-close:hover { background:var(--primary-light); color:var(--primary); }
+.diary-edit-close svg { width:16px; height:16px; }
 
+/* Monthly calendar */
+.diary-cal-wrap {
+  background:var(--card); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:22px;
+}
+.diary-cal-nav {
+  display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;
+}
+.diary-cal-nav-btn {
+  width:32px; height:32px; background:var(--bg); border:none;
+  border-radius:8px; cursor:pointer; color:var(--text-muted);
+  display:flex; align-items:center; justify-content:center; transition:all .15s;
+}
+.diary-cal-nav-btn:hover { background:var(--primary-light); color:var(--primary); }
+.diary-cal-nav-btn svg { width:16px; height:16px; display:block; }
+.diary-cal-month-label { font-size:16px; font-weight:700; color:var(--text); }
 .diary-cal-weekdays {
-  display:grid; grid-template-columns:repeat(7,1fr); gap:3px; margin-bottom:3px;
+  display:grid; grid-template-columns:repeat(7,1fr); margin-bottom:6px;
 }
 .diary-cal-weekdays span {
-  text-align:center; font-size:11px; font-weight:600;
-  color:var(--text-muted); padding:4px 0;
+  text-align:center; font-size:12.5px; color:var(--text-faint);
+  font-weight:600; padding-bottom:6px;
 }
-.diary-cal-days { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
+.diary-cal-days { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
 .diary-cal-cell {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:8px; padding:5px 4px 4px; min-height:52px;
-  cursor:pointer; transition:background .15s, border-color .15s;
-  display:flex; flex-direction:column; align-items:center;
-  gap:2px; position:relative;
+  aspect-ratio:1/1; background:var(--bg);
+  border:1px solid var(--border); border-radius:10px;
+  cursor:pointer; transition:all .15s;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:flex-start;
+  padding:6px 4px 4px; position:relative; overflow:hidden;
 }
-.diary-cal-cell:hover { background:var(--bg-soft); border-color:var(--primary); }
+.diary-cal-cell:hover:not(.other-month) { background:var(--primary-light); border-color:var(--primary); }
 .diary-cal-cell.today { border-color:var(--primary); background:var(--primary-light); }
-.diary-cal-cell.other-month { background:var(--bg); opacity:.4; cursor:default; pointer-events:none; }
+.diary-cal-cell.other-month { opacity:.35; cursor:default; pointer-events:none; background:transparent; border-color:transparent; }
 .diary-cal-cell.selected { background:var(--primary) !important; border-color:var(--primary) !important; }
-.diary-cal-cell.selected .diary-cell-day,
-.diary-cal-cell.selected .diary-cell-hours,
-.diary-cal-cell.selected .diary-cell-salah { color:#fff !important; }
-.diary-cell-day { font-size:13px; font-weight:700; color:var(--text); }
-.diary-cell-hours { font-size:9.5px; color:var(--accent-teal); font-weight:600; }
-.diary-cell-salah { font-size:9px; color:var(--accent-green); }
-.diary-cell-streak { position:absolute; top:2px; right:3px; font-size:9px; line-height:1; }
+.diary-cal-cell.selected * { color:#fff !important; }
+.diary-cell-day { font-size:13px; font-weight:700; color:var(--text); line-height:1; }
+.diary-cal-cell.today .diary-cell-day { color:var(--primary); }
+.diary-cal-cell.selected .diary-cell-day { color:#fff; }
+.diary-cell-hours { font-size:9.5px; color:var(--accent-teal); font-weight:700; margin-top:3px; }
+.diary-cell-salah { font-size:9px; color:var(--accent-green); font-weight:600; }
+.diary-cell-streak { position:absolute; top:3px; right:4px; width:7px; height:7px; border-radius:50%; background:var(--accent-orange); }
 
-/* Day detail */
+/* Day detail card below calendar */
 .diary-day-detail {
   background:var(--card); border:1.5px solid var(--border);
-  border-radius:var(--radius-sm); padding:14px 16px;
-  display:flex; flex-direction:column; gap:8px;
+  border-radius:14px; padding:16px 18px;
+  display:flex; flex-direction:column; gap:10px;
 }
-.diary-day-detail h4 { font-size:15px; font-weight:700; color:var(--text); }
-.diary-day-detail-row { font-size:13px; color:var(--text-muted); line-height:1.5; }
+.diary-day-detail-head {
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.diary-day-detail-head h4 { font-size:15px; font-weight:700; color:var(--text); }
+.diary-day-edit-btn {
+  padding:6px 14px; border-radius:8px; border:1.5px solid var(--border);
+  background:var(--bg); color:var(--text-muted); font-size:12.5px; font-weight:600;
+  cursor:pointer; display:flex; align-items:center; gap:5px; transition:all .15s;
+}
+.diary-day-edit-btn:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-light); }
+.diary-day-edit-btn svg { width:13px; height:13px; }
+.diary-day-detail-row { font-size:13.5px; color:var(--text-muted); line-height:1.6; }
 .diary-day-detail-row strong { color:var(--text); }
 
 /* Graph */
 .diary-graph-wrap {
-  background:var(--card); border:1.5px solid var(--border);
-  border-radius:var(--radius-sm); padding:14px 16px; overflow:hidden;
+  background:var(--card); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:22px; overflow:hidden;
 }
-.diary-graph-filter { display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap; }
+.diary-graph-filter { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
 .diary-graph-filter-btn {
-  padding:5px 13px; border-radius:8px; border:1.5px solid var(--border);
+  padding:7px 16px; border-radius:9px; border:none;
   background:var(--bg); color:var(--text-muted);
-  font-size:12.5px; font-weight:600; cursor:pointer; transition:all .15s;
+  font-size:13.5px; font-weight:600; cursor:pointer; transition:all .15s;
 }
 .diary-graph-filter-btn.active {
-  background:var(--primary-light); border-color:var(--primary); color:var(--primary);
+  background:var(--primary); color:#fff;
+  box-shadow:0 4px 10px rgba(var(--primary-rgb),.28);
 }
 .diary-graph-svg { width:100%; overflow:visible; display:block; }
 .diary-graph-bar { fill:var(--primary); opacity:.82; transition:opacity .15s; cursor:pointer; }
 .diary-graph-bar:hover { opacity:1; }
 
-/* Dark mode explicit overrides (variables handle most, these fix edges) */
-[data-theme="dark"] .diary-add-block-row input,
-[data-theme="dark"] .diary-note-area {
-  background:var(--bg) !important;
-  color:var(--text) !important;
-  border-color:var(--border) !important;
-}
-[data-theme="dark"] .diary-add-block-row input:focus,
-[data-theme="dark"] .diary-note-area:focus {
-  background:var(--card) !important;
-  border-color:var(--primary) !important;
-}
-[data-theme="dark"] .diary-view-tab.active { box-shadow:0 2px 8px rgba(0,0,0,.3); }
-[data-theme="dark"] .diary-cal-cell { background:var(--card); border-color:var(--border); }
-[data-theme="dark"] .diary-cal-cell.other-month { background:var(--bg-soft); }
-[data-theme="dark"] .diary-cal-cell.today { background:var(--primary-light); }
-[data-theme="dark"] .diary-salah-item { background:var(--bg-soft); }
-[data-theme="dark"] .diary-study-block { background:var(--bg-soft); }
-[data-theme="dark"] .diary-block-check { background:var(--card); }
-
 /* Responsive */
 @media(max-width:860px){
-  .diary-topbar { padding:14px 16px 10px; gap:8px; }
-  .diary-body { padding:0 16px 16px; gap:12px; }
-  .diary-view-tab { padding:6px 11px; font-size:12px; }
+  .diary-topbar { padding:14px 16px 10px; }
+  .diary-body { padding:0 16px 16px; }
 }
-@media(max-width:600px){
-  .diary-stats-row { grid-template-columns:1fr 1fr; }
+@media(max-width:640px){
+  .diary-stats-row { grid-template-columns:1fr 1fr; gap:10px; }
+  .diary-stat-mini { min-height:unset; flex-direction:column; align-items:flex-start; gap:8px; padding:14px 12px; }
+  .diary-stat-value { font-size:20px; }
+  .diary-stat-label { font-size:11px; }
   .diary-salah-grid { grid-template-columns:repeat(2,1fr); }
   .diary-today-date { font-size:21px; }
-  .diary-stat-value { font-size:17px; }
-  .diary-streak-count { font-size:20px; }
-  .diary-add-block-row { flex-direction:column; }
-  .diary-add-block-row input { min-width:unset; width:100%; }
-  .diary-cal-cell { min-height:42px; border-radius:6px; }
-  .diary-cell-day { font-size:11px; }
+  .diary-cal-cell { border-radius:7px; }
+  .diary-cell-day { font-size:12px; }
+  .diary-cell-hours { font-size:8.5px; }
 }
-@media(max-width:380px){
-  .diary-salah-grid { grid-template-columns:1fr 1fr; }
+@media(max-width:400px){
   .diary-stats-row { grid-template-columns:1fr; }
+  .diary-salah-grid { grid-template-columns:1fr 1fr; }
 }
 </style>
 
@@ -9803,6 +9854,20 @@ function renderDiaryView(){
   else renderDiaryGraph(body);
 }
 
+/* ---- ICONS (inline SVG, no emoji) ---- */
+const DIARY_ICON_CLOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>';
+const DIARY_ICON_FIRE  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c0 6-6 8-6 14a6 6 0 0 0 12 0c0-6-6-8-6-14z"/><path d="M12 12c0 3-2 4-2 7a2 2 0 0 0 4 0c0-3-2-4-2-7z"/></svg>';
+const DIARY_ICON_BOOK  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
+const DIARY_ICON_STAR  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+const DIARY_ICON_PRAY  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><path d="M9 12h6M12 9v6"/></svg>';
+const DIARY_ICON_EDIT  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+const DIARY_ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+const DIARY_ICON_TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6h16Z"/></svg>';
+const DIARY_ICON_PLUS  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>';
+const DIARY_ICON_PREV  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>';
+const DIARY_ICON_NEXT  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
+const DIARY_ICON_NOTE  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+
 /* ---- DAILY VIEW ---- */
 function renderDiaryDaily(body){
   const key = todayKey();
@@ -9810,132 +9875,106 @@ function renderDiaryDaily(body){
   const today = new Date();
   const streak = getCurrentStreak();
 
-  const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+  // Stats row (3 cards: yesterday, today, streak)
+  const yday = new Date(today); yday.setDate(yday.getDate()-1);
+  const ydayKey = dateToKey(yday);
+  const ydayHrs = (getDayStudyMinutes(ydayKey)/60).toFixed(1);
+  const todayHrs = (getDayStudyMinutes(key)/60).toFixed(1);
 
-  // Stats
-  const statsHtml = `
-    <div class="diary-stats-row">
-      <div class="diary-stat">
-        <div class="diary-stat-value">${getTodayStudyHours()}h</div>
+  const statsHtml = `<div class="diary-stats-row">
+    <div class="diary-stat-mini">
+      <div class="diary-stat-icon teal">${DIARY_ICON_CLOCK}</div>
+      <div class="diary-stat-info">
+        <div class="diary-stat-value">${ydayHrs}h</div>
+        <div class="diary-stat-label">গতকালের পড়া</div>
+      </div>
+    </div>
+    <div class="diary-stat-mini">
+      <div class="diary-stat-icon blue">${DIARY_ICON_BOOK}</div>
+      <div class="diary-stat-info">
+        <div class="diary-stat-value">${todayHrs}h</div>
         <div class="diary-stat-label">আজকের পড়া</div>
       </div>
-      <div class="diary-stat">
-        <div class="diary-stat-value">${getWeekStudyHours()}h</div>
-        <div class="diary-stat-label">এই সপ্তাহ</div>
+    </div>
+    <div class="diary-stat-mini">
+      <div class="diary-stat-icon orange">${DIARY_ICON_FIRE}</div>
+      <div class="diary-stat-info">
+        <div class="diary-stat-value">${toBn(streak)} দিন</div>
+        <div class="diary-stat-label">টানা স্ট্রিক</div>
       </div>
-      <div class="diary-stat">
-        <div class="diary-stat-value">${getMonthStudyHours()}h</div>
-        <div class="diary-stat-label">এই মাস</div>
-      </div>
-    </div>`;
+    </div>
+  </div>`;
 
-  // Streak
-  const streakHtml = `
-    <div class="diary-streak-bar">
-      <div class="diary-streak-fire">🔥</div>
-      <div class="diary-streak-info">
-        <div class="diary-streak-count">${toBn(streak)} দিন</div>
-        <div class="diary-streak-label">টানা স্ট্রিক</div>
-        <div class="diary-streak-rule">স্ট্রিকের শর্ত: ন্যূনতম ${toBn(STREAK_MIN_SALAH)} ওয়াক্ত নামাজ + ${toBn(STREAK_MIN_STUDY_HOURS)} ঘণ্টা পড়া</div>
-      </div>
-    </div>`;
+  // Streak rule
+  const streakHtml = `<div class="diary-streak-bar">
+    <div class="diary-streak-icon">${DIARY_ICON_STAR}</div>
+    <div class="diary-streak-info">
+      <div class="diary-streak-count">${toBn(streak)} দিনের স্ট্রিক</div>
+      <div class="diary-streak-label">শর্ত: ন্যূনতম ${toBn(STREAK_MIN_SALAH)} ওয়াক্ত নামাজ + ${toBn(STREAK_MIN_STUDY_HOURS)} ঘণ্টা পড়া</div>
+      <div class="diary-streak-rule">${isStreakDay(key) ? '✓ আজকের স্ট্রিক অর্জিত হয়েছে' : 'আজকের স্ট্রিক এখনো অর্জিত হয়নি'}</div>
+    </div>
+  </div>`;
 
   // Today header
-  const todayHdr = `
-    <div class="diary-today-header">
-      <div class="diary-today-date">${toBn(today.getDate())} ${bnMonths[today.getMonth()]}, ${toBn(today.getFullYear())}</div>
-      <div class="diary-today-day">${bnWeekdaysShort[today.getDay()]}বার — আজকের ডায়েরি</div>
-    </div>`;
+  const todayHdr = `<div class="diary-today-header">
+    <div class="diary-today-date">${toBn(today.getDate())} ${bnMonths[today.getMonth()]}, ${toBn(today.getFullYear())}</div>
+    <div class="diary-today-day">${bnWeekdaysShort[today.getDay()]}বার — আজকের ডায়েরি</div>
+  </div>`;
 
   // Salah
+  const salahCount = getDaySalahCount(key);
   const salahItems = SALAH_LIST.map(s => {
     const checked = !!(day.salah && day.salah[s.key]);
     return `<div class="diary-salah-item ${checked?'checked':''}" onclick="toggleSalah('${key}','${s.key}')">
-      <div class="diary-salah-check">${checkSvg}</div>
+      <div class="diary-salah-check">${DIARY_ICON_CHECK}</div>
       <span class="diary-salah-name">${s.label}</span>
     </div>`;
   }).join('');
 
-  const salahCount = getDaySalahCount(key);
-  const salahHtml = `
-    <div>
-      <div class="diary-section-title">🕌 নামাজ <span style="font-size:12px;color:var(--text-muted);font-weight:500;">(${toBn(salahCount)}/৬)</span></div>
-      <div class="diary-salah-grid">${salahItems}</div>
-    </div>`;
+  const salahHtml = `<div>
+    <div class="diary-section-title">${DIARY_ICON_PRAY} নামাজ
+      <span style="font-size:12px;color:var(--text-faint);font-weight:500;text-transform:none;letter-spacing:0;">(${toBn(salahCount)}/৬)</span>
+    </div>
+    <div class="diary-salah-grid">${salahItems}</div>
+  </div>`;
 
   // Study blocks
   const blocks = day.blocks || [];
-  const blockItems = blocks.map(b => `
-    <div class="diary-study-block ${b.done?'done':''}" id="blk_${b.id}">
-      <div class="diary-block-check" onclick="toggleBlock('${key}','${b.id}')">${checkSvg}</div>
+  const doneMin = getDayStudyMinutes(key);
+  const blockItems = blocks.length === 0
+    ? `<div style="font-size:13px;color:var(--text-faint);padding:8px 2px;">এখনো কোনো স্টাডি ব্লক নেই</div>`
+    : blocks.map(b => `
+    <div class="diary-study-block ${b.done?'done':''}">
+      <div class="diary-block-check" onclick="toggleBlock('${key}','${b.id}')">${DIARY_ICON_CHECK}</div>
       <div class="diary-block-info">
         <div class="diary-block-label">${escapeHtml(b.label)}</div>
         <div class="diary-block-time">${toBn(b.minutes)} মিনিট</div>
       </div>
-      <button class="diary-block-del" onclick="deleteBlock('${key}','${b.id}')" title="মুছুন">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6h16Z"/></svg>
-      </button>
+      <button class="diary-block-del" onclick="deleteBlock('${key}','${b.id}')" title="মুছুন">${DIARY_ICON_TRASH}</button>
     </div>`).join('');
 
-  const studyHtml = `
-    <div>
-      <div class="diary-section-title">📚 স্টাডি ব্লক <span style="font-size:12px;color:var(--text-muted);font-weight:500;">(${toBn(getDayStudyMinutes(key))} মিনিট সম্পন্ন)</span></div>
-      <div class="diary-study-blocks">${blockItems}</div>
-      <div class="diary-add-block-row" style="margin-top:8px;">
-        <input type="text" id="newBlockLabel" placeholder="টপিক / বিষয়ের নাম">
-        <input type="number" id="newBlockMins" placeholder="মিনিট" min="1" max="600" style="max-width:90px;">
-        <button class="diary-add-block-btn" onclick="addStudyBlock('${key}')">+ যোগ করুন</button>
-      </div>
-    </div>`;
+  const studyHtml = `<div>
+    <div class="diary-section-title">${DIARY_ICON_BOOK} স্টাডি ব্লক
+      <span style="font-size:12px;color:var(--text-faint);font-weight:500;text-transform:none;letter-spacing:0;">(${toBn(doneMin)} মিনিট সম্পন্ন)</span>
+    </div>
+    <div class="diary-study-blocks">${blockItems}</div>
+    <div class="diary-add-block-row">
+      <input type="text" id="newBlockLabel" placeholder="টপিক / বিষয়ের নাম">
+      <input type="number" id="newBlockMins" placeholder="মিনিট" min="1" max="600" style="max-width:90px;">
+      <button class="diary-add-block-btn" onclick="addStudyBlock('${key}')">${DIARY_ICON_PLUS} যোগ করুন</button>
+    </div>
+  </div>`;
 
   // Note
-  const noteHtml = `
-    <div>
-      <div class="diary-section-title">✍️ আজকের নোট</div>
-      <textarea class="diary-note-area" id="diaryNoteArea" placeholder="আজ কী পড়লে, কী শিখলে...">${escapeHtml(day.note || '')}</textarea>
-      <button class="diary-save-btn" style="margin-top:8px;" onclick="saveDiaryNote('${key}')">নোট সংরক্ষণ করুন</button>
-    </div>`;
+  const noteHtml = `<div>
+    <div class="diary-section-title">${DIARY_ICON_NOTE} আজকের নোট</div>
+    <textarea class="diary-note-area" id="diaryNoteArea" placeholder="আজ কী পড়লে, কী শিখলে...">${escapeHtml(day.note||'')}</textarea>
+    <div style="margin-top:8px;">
+      <button class="diary-save-btn" onclick="saveDiaryNote('${key}')">নোট সংরক্ষণ করুন</button>
+    </div>
+  </div>`;
 
   body.innerHTML = statsHtml + streakHtml + todayHdr + salahHtml + studyHtml + noteHtml;
-}
-
-/* ---- ACTIONS ---- */
-function toggleSalah(key, salahKey){
-  const d = getDayData(key);
-  if(!d.salah) d.salah = {};
-  d.salah[salahKey] = !d.salah[salahKey];
-  saveDiary();
-}
-
-function toggleBlock(key, blockId){
-  const d = getDayData(key);
-  const b = (d.blocks||[]).find(x => x.id === blockId);
-  if(b) b.done = !b.done;
-  saveDiary();
-}
-
-function deleteBlock(key, blockId){
-  const d = getDayData(key);
-  d.blocks = (d.blocks||[]).filter(x => x.id !== blockId);
-  saveDiary();
-}
-
-function addStudyBlock(key){
-  const label = document.getElementById('newBlockLabel').value.trim();
-  const mins = parseInt(document.getElementById('newBlockMins').value) || 0;
-  if(!label){ showToast('টপিকের নাম দিন'); return; }
-  if(mins <= 0){ showToast('মিনিট দিন'); return; }
-  const d = getDayData(key);
-  if(!d.blocks) d.blocks = [];
-  d.blocks.push({ id:'blk_'+Date.now(), label, minutes:mins, done:false });
-  saveDiary();
-}
-
-function saveDiaryNote(key){
-  const d = getDayData(key);
-  d.note = document.getElementById('diaryNoteArea').value;
-  saveDiary();
-  showToast('✅ নোট সংরক্ষিত হয়েছে');
 }
 
 /* ---- MONTHLY VIEW ---- */
@@ -9946,26 +9985,16 @@ function renderDiaryMonthly(body){
   const daysInPrev = new Date(y,m,0).getDate();
   const todayK = todayKey();
 
-  let calHtml = `<div class="diary-cal-nav">
-    <button onclick="diaryCalDate.setMonth(diaryCalDate.getMonth()-1); renderDiaryView()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-    </button>
-    <span class="diary-cal-month-label">${bnMonths[m]} ${toBn(y)}</span>
-    <button onclick="diaryCalDate.setMonth(diaryCalDate.getMonth()+1); renderDiaryView()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-    </button>
-  </div>
-  <div class="diary-cal-weekdays">${bnWeekdaysShort.map(w=>`<span>${w}</span>`).join('')}</div>
-  <div class="diary-cal-days">`;
+  let days = '';
 
   // prev month padding
   for(let i = firstDay-1; i >= 0; i--){
-    calHtml += `<div class="diary-cal-cell other-month"><span class="diary-cell-day">${toBn(daysInPrev-i)}</span></div>`;
+    days += `<div class="diary-cal-cell other-month"><span class="diary-cell-day">${toBn(daysInPrev-i)}</span></div>`;
   }
 
-  for(let d=1; d<=daysInMonth; d++){
+  for(let d = 1; d <= daysInMonth; d++){
     const k = y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    const hrs = getDayStudyMinutes(k);
+    const mins = getDayStudyMinutes(k);
     const salah = getDaySalahCount(k);
     const isToday = k === todayK;
     const isSel = k === diarySelectedDate;
@@ -9973,46 +10002,146 @@ function renderDiaryMonthly(body){
     let cls = 'diary-cal-cell';
     if(isToday) cls += ' today';
     if(isSel) cls += ' selected';
-    calHtml += `<div class="${cls}" onclick="diarySelectDate('${k}')">
-      ${streak ? '<span class="diary-cell-streak">🔥</span>' : ''}
+    days += `<div class="${cls}" onclick="diarySelectDate('${k}')">
+      ${streak ? '<span class="diary-cell-streak" title="স্ট্রিক দিন"></span>' : ''}
       <span class="diary-cell-day">${toBn(d)}</span>
-      ${hrs > 0 ? `<span class="diary-cell-hours">${(hrs/60).toFixed(1)}h</span>` : ''}
-      ${salah > 0 ? `<span class="diary-cell-salah">${toBn(salah)}🕌</span>` : ''}
+      ${mins > 0 ? `<span class="diary-cell-hours">${(mins/60).toFixed(1)}h</span>` : ''}
+      ${salah > 0 ? `<span class="diary-cell-salah">${toBn(salah)}/৬</span>` : ''}
     </div>`;
   }
 
   // trailing
   const total = firstDay + daysInMonth;
   const rem = (7 - (total%7)) % 7;
-  for(let d=1; d<=rem; d++){
-    calHtml += `<div class="diary-cal-cell other-month"><span class="diary-cell-day">${toBn(d)}</span></div>`;
+  for(let d = 1; d <= rem; d++){
+    days += `<div class="diary-cal-cell other-month"><span class="diary-cell-day">${toBn(d)}</span></div>`;
   }
-  calHtml += '</div>';
 
-  // Day detail
   let detailHtml = '';
   if(diarySelectedDate){
     const sd = diaryData[diarySelectedDate] || {};
-    const sdHrs = getDayStudyMinutes(diarySelectedDate);
+    const sdMins = getDayStudyMinutes(diarySelectedDate);
     const sdSalah = getDaySalahCount(diarySelectedDate);
     const sdParts = diarySelectedDate.split('-');
     const sdLabel = `${toBn(parseInt(sdParts[2]))} ${bnMonths[parseInt(sdParts[1])-1]}, ${toBn(parseInt(sdParts[0]))}`;
     const offeredSalah = SALAH_LIST.filter(s => sd.salah && sd.salah[s.key]).map(s=>s.label).join(', ') || '—';
     detailHtml = `<div class="diary-day-detail">
-      <h4>📅 ${sdLabel}</h4>
-      <div class="diary-day-detail-row">📚 মোট পড়া: <strong>${(sdHrs/60).toFixed(1)} ঘণ্টা</strong></div>
-      <div class="diary-day-detail-row">🕌 নামাজ (${toBn(sdSalah)}/৬): <strong>${offeredSalah}</strong></div>
-      ${sd.note ? `<div class="diary-day-detail-row" style="white-space:pre-line;">✍️ নোট: ${escapeHtml(sd.note)}</div>` : ''}
-      ${isStreakDay(diarySelectedDate) ? '<div class="diary-day-detail-row">🔥 স্ট্রিক দিন!</div>' : ''}
+      <div class="diary-day-detail-head">
+        <h4>${sdLabel}</h4>
+        <button class="diary-day-edit-btn" onclick="openDiaryEditModal('${diarySelectedDate}')">${DIARY_ICON_EDIT} সম্পাদনা</button>
+      </div>
+      <div class="diary-day-detail-row">${DIARY_ICON_BOOK} মোট পড়া: <strong>${(sdMins/60).toFixed(1)} ঘণ্টা</strong></div>
+      <div class="diary-day-detail-row">${DIARY_ICON_PRAY} নামাজ (${toBn(sdSalah)}/৬): <strong>${offeredSalah}</strong></div>
+      ${sd.note ? `<div class="diary-day-detail-row" style="white-space:pre-line;border-top:1px solid var(--border);padding-top:8px;margin-top:2px;">${DIARY_ICON_NOTE} ${escapeHtml(sd.note)}</div>` : ''}
+      ${isStreakDay(diarySelectedDate) ? `<div class="diary-day-detail-row" style="color:var(--accent-orange);font-weight:600;">${DIARY_ICON_STAR} স্ট্রিক দিন অর্জিত</div>` : ''}
     </div>`;
   }
 
-  body.innerHTML = `<div class="diary-graph-wrap" style="padding:14px;">${calHtml}</div>${detailHtml}`;
+  body.innerHTML = `<div class="diary-cal-wrap">
+    <div class="diary-cal-nav">
+      <button class="diary-cal-nav-btn" onclick="diaryCalDate.setMonth(diaryCalDate.getMonth()-1); renderDiaryView()">${DIARY_ICON_PREV}</button>
+      <span class="diary-cal-month-label">${bnMonths[m]} ${toBn(y)}</span>
+      <button class="diary-cal-nav-btn" onclick="diaryCalDate.setMonth(diaryCalDate.getMonth()+1); renderDiaryView()">${DIARY_ICON_NEXT}</button>
+    </div>
+    <div class="diary-cal-weekdays">${bnWeekdaysShort.map(w=>`<span>${w}</span>`).join('')}</div>
+    <div class="diary-cal-days">${days}</div>
+  </div>
+  ${detailHtml}`;
 }
 
 function diarySelectDate(key){
   diarySelectedDate = diarySelectedDate === key ? null : key;
   renderDiaryView();
+}
+
+/* ---- EDIT ANY DAY MODAL ---- */
+function openDiaryEditModal(key){
+  const d = getDayData(key);
+  const parts = key.split('-');
+  const label = `${toBn(parseInt(parts[2]))} ${bnMonths[parseInt(parts[1])-1]}, ${toBn(parseInt(parts[0]))}`;
+
+  const salahItems = SALAH_LIST.map(s => {
+    const checked = !!(d.salah && d.salah[s.key]);
+    return `<div class="diary-salah-item ${checked?'checked':''}" onclick="toggleSalah('${key}','${s.key}'); this.classList.toggle('checked')">
+      <div class="diary-salah-check">${DIARY_ICON_CHECK}</div>
+      <span class="diary-salah-name">${s.label}</span>
+    </div>`;
+  }).join('');
+
+  const blocks = d.blocks || [];
+  const blockItems = blocks.map(b => `
+    <div class="diary-study-block ${b.done?'done':''}" id="eblk_${b.id}">
+      <div class="diary-block-check" onclick="toggleBlock('${key}','${b.id}'); document.getElementById('eblk_${b.id}').classList.toggle('done')">${DIARY_ICON_CHECK}</div>
+      <div class="diary-block-info">
+        <div class="diary-block-label">${escapeHtml(b.label)}</div>
+        <div class="diary-block-time">${toBn(b.minutes)} মিনিট</div>
+      </div>
+      <button class="diary-block-del" onclick="deleteBlock('${key}','${b.id}'); renderDiaryEditModal('${key}')" title="মুছুন">${DIARY_ICON_TRASH}</button>
+    </div>`).join('');
+
+  let modal = document.getElementById('diaryEditModal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'diaryEditModal';
+    modal.className = 'diary-edit-modal';
+    document.body.appendChild(modal);
+    modal.addEventListener('click', e => { if(e.target === modal) closeDiaryEditModal(); });
+  }
+
+  modal.innerHTML = `<div class="diary-edit-box">
+    <div class="diary-edit-head">
+      <h3>${label}</h3>
+      <button class="diary-edit-close" onclick="closeDiaryEditModal()">${'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>'}</button>
+    </div>
+    <div>
+      <div class="diary-section-title">${DIARY_ICON_PRAY} নামাজ</div>
+      <div class="diary-salah-grid">${salahItems}</div>
+    </div>
+    <div>
+      <div class="diary-section-title">${DIARY_ICON_BOOK} স্টাডি ব্লক</div>
+      <div class="diary-study-blocks" id="editBlockList">${blockItems || '<div style="font-size:13px;color:var(--text-faint);">কোনো ব্লক নেই</div>'}</div>
+      <div class="diary-add-block-row">
+        <input type="text" id="editBlockLabel" placeholder="টপিক / বিষয়ের নাম">
+        <input type="number" id="editBlockMins" placeholder="মিনিট" min="1" max="600" style="max-width:90px;">
+        <button class="diary-add-block-btn" onclick="addStudyBlockEdit('${key}')">${DIARY_ICON_PLUS} যোগ</button>
+      </div>
+    </div>
+    <div>
+      <div class="diary-section-title">${DIARY_ICON_NOTE} নোট</div>
+      <textarea class="diary-note-area" id="editNoteArea" placeholder="এই দিনের নোট...">${escapeHtml(d.note||'')}</textarea>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button class="diary-save-btn" onclick="saveDiaryEditModal('${key}')">সংরক্ষণ করুন</button>
+      <button style="flex:1;padding:11px;border-radius:11px;border:none;background:var(--bg);color:var(--text-muted);font-size:14px;font-weight:600;cursor:pointer;" onclick="closeDiaryEditModal()">বাতিল</button>
+    </div>
+  </div>`;
+
+  requestAnimationFrame(() => modal.classList.add('open'));
+}
+
+function closeDiaryEditModal(){
+  const modal = document.getElementById('diaryEditModal');
+  if(modal){ modal.classList.remove('open'); }
+}
+
+function addStudyBlockEdit(key){
+  const label = document.getElementById('editBlockLabel').value.trim();
+  const mins = parseInt(document.getElementById('editBlockMins').value)||0;
+  if(!label){ showToast('টপিকের নাম দিন'); return; }
+  if(mins <= 0){ showToast('মিনিট দিন'); return; }
+  const d = getDayData(key);
+  if(!d.blocks) d.blocks = [];
+  d.blocks.push({ id:'blk_'+Date.now(), label, minutes:mins, done:false });
+  saveDiary();
+  openDiaryEditModal(key); // re-render modal
+}
+
+function saveDiaryEditModal(key){
+  const d = getDayData(key);
+  d.note = document.getElementById('editNoteArea').value;
+  saveDiary();
+  closeDiaryEditModal();
+  showToast('সংরক্ষিত হয়েছে');
 }
 
 /* ---- GRAPH VIEW ---- */
@@ -10023,7 +10152,6 @@ function renderDiaryGraph(body){
     <button class="diary-graph-filter-btn ${diaryGraphFilter==='3months'?'active':''}" onclick="setDiaryGraphFilter('3months')">৩ মাস</button>
   </div>`;
 
-  // Build data
   const points = [];
   const now = new Date(); now.setHours(0,0,0,0);
 
@@ -10031,64 +10159,64 @@ function renderDiaryGraph(body){
     for(let i=6;i>=0;i--){
       const d = new Date(now); d.setDate(d.getDate()-i);
       const k = dateToKey(d);
-      points.push({ label: toBn(d.getDate())+'/'+toBn(d.getMonth()+1), hours: getDayStudyMinutes(k)/60 });
+      points.push({ label:`${toBn(d.getDate())}/${toBn(d.getMonth()+1)}`, hours:getDayStudyMinutes(k)/60 });
     }
   } else if(diaryGraphFilter === 'month'){
-    const y = now.getFullYear(), m = now.getMonth();
-    const days = new Date(y,m+1,0).getDate();
+    const y=now.getFullYear(), m=now.getMonth();
+    const days=new Date(y,m+1,0).getDate();
     for(let d=1;d<=days;d++){
-      const k = y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-      points.push({ label: toBn(d)+'', hours: getDayStudyMinutes(k)/60 });
+      const k=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+      points.push({ label:toBn(d)+'', hours:getDayStudyMinutes(k)/60 });
     }
   } else {
-    // 3 months — group by week
     for(let i=11;i>=0;i--){
-      const weekStart = new Date(now); weekStart.setDate(weekStart.getDate() - i*7);
-      let total = 0;
-      for(let j=0;j<7;j++){
-        const dd = new Date(weekStart); dd.setDate(dd.getDate()+j);
-        total += getDayStudyMinutes(dateToKey(dd));
-      }
-      points.push({ label: toBn(weekStart.getDate())+'/'+toBn(weekStart.getMonth()+1), hours: total/60 });
+      const ws=new Date(now); ws.setDate(ws.getDate()-i*7);
+      let total=0;
+      for(let j=0;j<7;j++){ const dd=new Date(ws); dd.setDate(dd.getDate()+j); total+=getDayStudyMinutes(dateToKey(dd)); }
+      points.push({ label:`${toBn(ws.getDate())}/${toBn(ws.getMonth()+1)}`, hours:total/60 });
     }
   }
 
-  const maxH = Math.max(...points.map(p=>p.hours), 1);
-  const svgW = 100, svgH = 120;
-  const barW = (svgW / points.length) * 0.65;
-  const gap = (svgW / points.length) * 0.35;
-  const padTop = 10, padBot = 22;
-  const chartH = svgH - padTop - padBot;
+  const maxH = Math.max(...points.map(p=>p.hours), 0.5);
+  // SVG viewBox: left pad 28 for y-axis, bottom pad 22 for x labels
+  const vbW=400, vbH=160, padL=28, padR=8, padT=10, padB=24;
+  const chartW=vbW-padL-padR, chartH=vbH-padT-padB;
+  const barW=Math.max(4, (chartW/points.length)*0.6);
+  const slotW=chartW/points.length;
 
-  let bars = '', labels = '', yLines = '';
-  // Y axis lines
+  // Y axis grid lines + labels
+  let yLines='';
   for(let i=0;i<=4;i++){
-    const y = padTop + chartH - (chartH * i/4);
-    const val = (maxH * i/4).toFixed(1);
-    yLines += `<line x1="0" y1="${y}" x2="${svgW}" y2="${y}" stroke="var(--border)" stroke-width="0.3"/>
-      <text x="-1" y="${y+1}" font-size="3.5" fill="var(--text-faint)" text-anchor="end">${val}h</text>`;
+    const yy=padT+chartH-(chartH*i/4);
+    const val=(maxH*i/4).toFixed(1);
+    yLines+=`<line x1="${padL}" y1="${yy}" x2="${padL+chartW}" y2="${yy}" stroke="var(--border)" stroke-width="0.5"/>
+    <text x="${padL-4}" y="${yy+3.5}" font-size="7" fill="var(--text-faint)" text-anchor="end">${val}h</text>`;
   }
 
-  points.forEach((p, i) => {
-    const x = (svgW / points.length) * i + gap/2;
-    const barH = Math.max(0.5, (p.hours / maxH) * chartH);
-    const y = padTop + chartH - barH;
-    bars += `<rect class="diary-graph-bar" x="${x}" y="${y}" width="${barW}" height="${barH}" rx="2">
-      <title>${p.label}: ${p.hours.toFixed(1)}h</title>
-    </rect>`;
-    if(points.length <= 14){
-      labels += `<text x="${x + barW/2}" y="${svgH - padBot + 7}" font-size="3.5" fill="var(--text-muted)" text-anchor="middle">${p.label}</text>`;
-    } else if(i % 2 === 0){
-      labels += `<text x="${x + barW/2}" y="${svgH - padBot + 7}" font-size="3" fill="var(--text-muted)" text-anchor="middle">${p.label}</text>`;
+  // Bars + x labels
+  let bars='', xlabels='';
+  points.forEach((p,i)=>{
+    const x=padL+slotW*i+(slotW-barW)/2;
+    const bh=Math.max(1,(p.hours/maxH)*chartH);
+    const yy=padT+chartH-bh;
+    bars+=`<rect class="diary-graph-bar" x="${x}" y="${yy}" width="${barW}" height="${bh}" rx="3">
+      <title>${p.label}: ${p.hours.toFixed(1)}h</title></rect>`;
+    // x labels — show every label for week, every other for month, every one for 3months
+    const showLabel = points.length<=7 || (points.length<=31 && i%2===0) || points.length<=12;
+    if(showLabel){
+      xlabels+=`<text x="${padL+slotW*i+slotW/2}" y="${padT+chartH+15}" font-size="7" fill="var(--text-muted)" text-anchor="middle">${p.label}</text>`;
     }
   });
 
-  const svgHtml = `<svg class="diary-graph-svg" viewBox="-8 0 ${svgW+8} ${svgH}" xmlns="http://www.w3.org/2000/svg">
-    ${yLines}${bars}${labels}
+  // X axis line
+  const xAxis=`<line x1="${padL}" y1="${padT+chartH}" x2="${padL+chartW}" y2="${padT+chartH}" stroke="var(--border)" stroke-width="0.8"/>`;
+
+  const svgHtml=`<svg class="diary-graph-svg" viewBox="0 0 ${vbW} ${vbH}" xmlns="http://www.w3.org/2000/svg">
+    ${yLines}${xAxis}${bars}${xlabels}
   </svg>`;
 
-  body.innerHTML = `<div class="diary-graph-wrap">
-    <div class="diary-section-title" style="margin-bottom:4px;">📊 স্টাডি গ্রাফ</div>
+  body.innerHTML=`<div class="diary-graph-wrap">
+    <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px;">${DIARY_ICON_BOOK} স্টাডি গ্রাফ</div>
     ${filterBtns}
     ${svgHtml}
   </div>`;
