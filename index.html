@@ -1456,7 +1456,7 @@
 
   body[data-view="vul"] .stats, body[data-view="admission"] .stats,
 
-  body[data-view="timer"] .stats, body[data-view="diary"] .stats{ display:none; }
+  body[data-view="timer"] .stats{ display:none; }
 
 
 
@@ -1940,9 +1940,7 @@
 
   body[data-view="vul"] .content-grid,
 
-  body[data-view="timer"] .content-grid,
-
-  body[data-view="diary"] .content-grid{
+  body[data-view="timer"] .content-grid{
 
     grid-template-columns: 1fr;
 
@@ -1956,9 +1954,7 @@
 
   body[data-view="vul"] .calendar-card,
 
-  body[data-view="timer"] .calendar-card,
-
-  body[data-view="diary"] .calendar-card{ display: none; }
+  body[data-view="timer"] .calendar-card{ display: none; }
 
   body[data-view="dashboard"] .calendar-card,
 
@@ -3437,22 +3433,30 @@
   flex:1; overflow-y:auto; padding:0 20px 20px;
   display:flex; flex-direction:column; gap:16px;
 }
-.diary-body > * { flex-shrink:0; }
 
-/* Stats — same card component/size as the dashboard's .stat-card */
+/* Stats */
 .diary-stats-row {
-  display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
 }
-.diary-stats-row .stat-card { cursor:default; }
-.diary-stats-row .stat-card:hover { transform:none; box-shadow:var(--shadow); }
+.diary-stat {
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:var(--radius-sm); padding:12px 14px;
+  display:flex; flex-direction:column; gap:3px;
+}
+.diary-stat-value { font-size:20px; font-weight:700; color:var(--primary); }
+.diary-stat-label { font-size:11.5px; color:var(--text-muted); font-weight:600; }
 
-/* Streak rule note (small print under the streak card) */
-.diary-streak-rule {
-  display:flex; align-items:center; gap:6px;
-  font-size:12px; color:var(--text-faint); font-family:inherit;
-  padding:0 2px;
+/* Streak */
+.diary-streak-bar {
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:var(--radius-sm); padding:14px 16px;
+  display:flex; align-items:center; gap:14px;
 }
-.diary-streak-rule svg { width:14px; height:14px; flex-shrink:0; }
+.diary-streak-fire { font-size:32px; line-height:1; }
+.diary-streak-info { flex:1; }
+.diary-streak-count { font-size:24px; font-weight:700; color:var(--accent-orange); }
+.diary-streak-label { font-size:12.5px; color:var(--text-muted); margin-top:2px; }
+.diary-streak-rule { font-size:11px; color:var(--text-faint); margin-top:4px; }
 
 /* Today header */
 .diary-today-header {
@@ -3571,25 +3575,20 @@
 .diary-cal-nav button svg { width:18px; height:18px; stroke:currentColor; display:block; }
 .diary-cal-month-label { font-size:15px; font-weight:700; color:var(--text); }
 
-.diary-cal-wrap { display:flex; justify-content:center; }
 .diary-cal-weekdays {
-  display:grid; grid-template-columns:repeat(7, minmax(0,64px)); justify-content:center;
-  gap:6px; margin-bottom:6px; width:100%;
+  display:grid; grid-template-columns:repeat(7,1fr); gap:3px; margin-bottom:3px;
 }
 .diary-cal-weekdays span {
-  text-align:center; font-size:11.5px; font-weight:700;
-  color:var(--text-muted); padding:2px 0;
+  text-align:center; font-size:11px; font-weight:600;
+  color:var(--text-muted); padding:4px 0;
 }
-.diary-cal-days {
-  display:grid; grid-template-columns:repeat(7, minmax(0,64px)); justify-content:center;
-  gap:6px; width:100%;
-}
+.diary-cal-days { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
 .diary-cal-cell {
-  background:var(--card); border:1.5px solid var(--border);
-  border-radius:10px; aspect-ratio:1/1; width:100%;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:8px; padding:5px 4px 4px; min-height:52px;
   cursor:pointer; transition:background .15s, border-color .15s;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:2px; position:relative; padding:3px;
+  display:flex; flex-direction:column; align-items:center;
+  gap:2px; position:relative;
 }
 .diary-cal-cell:hover { background:var(--bg-soft); border-color:var(--primary); }
 .diary-cal-cell.today { border-color:var(--primary); background:var(--primary-light); }
@@ -3597,14 +3596,11 @@
 .diary-cal-cell.selected { background:var(--primary) !important; border-color:var(--primary) !important; }
 .diary-cal-cell.selected .diary-cell-day,
 .diary-cal-cell.selected .diary-cell-hours,
-.diary-cal-cell.selected .diary-cell-salah,
-.diary-cal-cell.selected .diary-cell-streak { color:#fff !important; }
-.diary-cell-day { font-size:13px; font-weight:700; color:var(--text); line-height:1; }
-.diary-cell-hours { font-size:10px; color:var(--accent-teal); font-weight:700; line-height:1; }
-.diary-cell-salah { display:flex; align-items:center; gap:2px; font-size:9.5px; color:var(--accent-green); font-weight:600; line-height:1; }
-.diary-cell-salah svg { width:9px; height:9px; }
-.diary-cell-streak { position:absolute; top:3px; right:3px; width:11px; height:11px; color:var(--accent-orange); display:flex; }
-.diary-cell-streak svg { width:100%; height:100%; }
+.diary-cal-cell.selected .diary-cell-salah { color:#fff !important; }
+.diary-cell-day { font-size:13px; font-weight:700; color:var(--text); }
+.diary-cell-hours { font-size:9.5px; color:var(--accent-teal); font-weight:600; }
+.diary-cell-salah { font-size:9px; color:var(--accent-green); }
+.diary-cell-streak { position:absolute; top:2px; right:3px; font-size:9px; line-height:1; }
 
 /* Day detail */
 .diary-day-detail {
@@ -3664,13 +3660,12 @@
   .diary-stats-row { grid-template-columns:1fr 1fr; }
   .diary-salah-grid { grid-template-columns:repeat(2,1fr); }
   .diary-today-date { font-size:21px; }
+  .diary-stat-value { font-size:17px; }
+  .diary-streak-count { font-size:20px; }
   .diary-add-block-row { flex-direction:column; }
   .diary-add-block-row input { min-width:unset; width:100%; }
-  .diary-cal-weekdays, .diary-cal-days { grid-template-columns:repeat(7, minmax(0,40px)); gap:4px; }
-  .diary-cal-cell { border-radius:7px; padding:2px; }
+  .diary-cal-cell { min-height:42px; border-radius:6px; }
   .diary-cell-day { font-size:11px; }
-  .diary-cell-hours { font-size:8.5px; }
-  .diary-cell-salah { font-size:8px; }
 }
 @media(max-width:380px){
   .diary-salah-grid { grid-template-columns:1fr 1fr; }
@@ -4305,7 +4300,7 @@
     <!-- DIARY PANEL -->
     <div class="gv-panel diary-panel" id="diaryPanel">
       <div class="diary-topbar">
-        <h2 style="display:flex;align-items:center;gap:8px;"><span style="display:flex;width:22px;height:22px;color:var(--primary);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span> ডায়েরি</h2>
+        <h2>📔 ডায়েরি</h2>
         <div class="diary-view-tabs">
           <button class="diary-view-tab active" onclick="switchDiaryView('daily')" id="diaryTabDaily">আজকের</button>
           <button class="diary-view-tab" onclick="switchDiaryView('monthly')" id="diaryTabMonthly">মাসিক</button>
@@ -7124,10 +7119,6 @@ const ICON_TARGET = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
 const ICON_TROPHY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>';
 
 const ICON_ABSENT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>';
-const ICON_FLAME = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 17a2.5 2.5 0 0 0 2.5-2.5c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7.5 7.5 0 1 1-15 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>';
-const ICON_MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-const ICON_CHART = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="5"/><rect x="12" y="8" width="3" height="9"/><rect x="17" y="5" width="3" height="12"/></svg>';
-const ICON_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>';
 
 
 
@@ -9773,12 +9764,6 @@ function getTodayStudyHours(){
   return (mins / 60).toFixed(1);
 }
 
-function getPrevDayStudyHours(){
-  const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()-1);
-  const mins = getDayStudyMinutes(dateToKey(d));
-  return (mins / 60).toFixed(1);
-}
-
 function getWeekStudyHours(){
   let total = 0;
   const d = new Date(); d.setHours(0,0,0,0);
@@ -9827,31 +9812,32 @@ function renderDiaryDaily(body){
 
   const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
 
-  // Stats — same card component/size as the dashboard's stat cards
+  // Stats
   const statsHtml = `
     <div class="diary-stats-row">
-      <div class="stat-card">
-        <div class="stat-top"><div class="stat-icon orange">${ICON_MOON}</div></div>
-        <div class="stat-value">${getPrevDayStudyHours()}h</div>
-        <div class="stat-label">গতকালের পড়া</div>
+      <div class="diary-stat">
+        <div class="diary-stat-value">${getTodayStudyHours()}h</div>
+        <div class="diary-stat-label">আজকের পড়া</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-top"><div class="stat-icon teal">${ICON_BOOK}</div></div>
-        <div class="stat-value">${getTodayStudyHours()}h</div>
-        <div class="stat-label">আজকের পড়া</div>
+      <div class="diary-stat">
+        <div class="diary-stat-value">${getWeekStudyHours()}h</div>
+        <div class="diary-stat-label">এই সপ্তাহ</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-top"><div class="stat-icon purple">${ICON_FLAME}</div></div>
-        <div class="stat-value">${toBn(streak)}</div>
-        <div class="stat-label">টানা স্ট্রিক (দিন)</div>
+      <div class="diary-stat">
+        <div class="diary-stat-value">${getMonthStudyHours()}h</div>
+        <div class="diary-stat-label">এই মাস</div>
       </div>
     </div>`;
 
-  // Streak rule (compact note, no emoji)
+  // Streak
   const streakHtml = `
-    <div class="diary-streak-rule">
-      <span style="display:flex;">${ICON_INFO}</span>
-      স্ট্রিকের শর্ত: ন্যূনতম ${toBn(STREAK_MIN_SALAH)} ওয়াক্ত নামাজ + ${toBn(STREAK_MIN_STUDY_HOURS)} ঘণ্টা পড়া
+    <div class="diary-streak-bar">
+      <div class="diary-streak-fire">🔥</div>
+      <div class="diary-streak-info">
+        <div class="diary-streak-count">${toBn(streak)} দিন</div>
+        <div class="diary-streak-label">টানা স্ট্রিক</div>
+        <div class="diary-streak-rule">স্ট্রিকের শর্ত: ন্যূনতম ${toBn(STREAK_MIN_SALAH)} ওয়াক্ত নামাজ + ${toBn(STREAK_MIN_STUDY_HOURS)} ঘণ্টা পড়া</div>
+      </div>
     </div>`;
 
   // Today header
@@ -9873,7 +9859,7 @@ function renderDiaryDaily(body){
   const salahCount = getDaySalahCount(key);
   const salahHtml = `
     <div>
-      <div class="diary-section-title"><span style="display:flex;width:16px;height:16px;">${ICON_MOON}</span> নামাজ <span style="font-size:12px;color:var(--text-muted);font-weight:500;">(${toBn(salahCount)}/৬)</span></div>
+      <div class="diary-section-title">🕌 নামাজ <span style="font-size:12px;color:var(--text-muted);font-weight:500;">(${toBn(salahCount)}/৬)</span></div>
       <div class="diary-salah-grid">${salahItems}</div>
     </div>`;
 
@@ -9893,7 +9879,7 @@ function renderDiaryDaily(body){
 
   const studyHtml = `
     <div>
-      <div class="diary-section-title"><span style="display:flex;width:16px;height:16px;">${ICON_BOOK}</span> স্টাডি ব্লক <span style="font-size:12px;color:var(--text-muted);font-weight:500;">(${toBn(getDayStudyMinutes(key))} মিনিট সম্পন্ন)</span></div>
+      <div class="diary-section-title">📚 স্টাডি ব্লক <span style="font-size:12px;color:var(--text-muted);font-weight:500;">(${toBn(getDayStudyMinutes(key))} মিনিট সম্পন্ন)</span></div>
       <div class="diary-study-blocks">${blockItems}</div>
       <div class="diary-add-block-row" style="margin-top:8px;">
         <input type="text" id="newBlockLabel" placeholder="টপিক / বিষয়ের নাম">
@@ -9905,7 +9891,7 @@ function renderDiaryDaily(body){
   // Note
   const noteHtml = `
     <div>
-      <div class="diary-section-title"><span style="display:flex;width:16px;height:16px;">${ICON_EDIT}</span> আজকের নোট</div>
+      <div class="diary-section-title">✍️ আজকের নোট</div>
       <textarea class="diary-note-area" id="diaryNoteArea" placeholder="আজ কী পড়লে, কী শিখলে...">${escapeHtml(day.note || '')}</textarea>
       <button class="diary-save-btn" style="margin-top:8px;" onclick="saveDiaryNote('${key}')">নোট সংরক্ষণ করুন</button>
     </div>`;
@@ -9949,7 +9935,7 @@ function saveDiaryNote(key){
   const d = getDayData(key);
   d.note = document.getElementById('diaryNoteArea').value;
   saveDiary();
-  showToast('নোট সংরক্ষিত হয়েছে');
+  showToast('✅ নোট সংরক্ষিত হয়েছে');
 }
 
 /* ---- MONTHLY VIEW ---- */
@@ -9970,7 +9956,7 @@ function renderDiaryMonthly(body){
     </button>
   </div>
   <div class="diary-cal-weekdays">${bnWeekdaysShort.map(w=>`<span>${w}</span>`).join('')}</div>
-  <div class="diary-cal-days" id="diaryCalDaysGrid">`;
+  <div class="diary-cal-days">`;
 
   // prev month padding
   for(let i = firstDay-1; i >= 0; i--){
@@ -9988,10 +9974,10 @@ function renderDiaryMonthly(body){
     if(isToday) cls += ' today';
     if(isSel) cls += ' selected';
     calHtml += `<div class="${cls}" onclick="diarySelectDate('${k}')">
-      ${streak ? `<span class="diary-cell-streak">${ICON_FLAME}</span>` : ''}
+      ${streak ? '<span class="diary-cell-streak">🔥</span>' : ''}
       <span class="diary-cell-day">${toBn(d)}</span>
       ${hrs > 0 ? `<span class="diary-cell-hours">${(hrs/60).toFixed(1)}h</span>` : ''}
-      ${salah > 0 ? `<span class="diary-cell-salah">${ICON_MOON}${toBn(salah)}</span>` : ''}
+      ${salah > 0 ? `<span class="diary-cell-salah">${toBn(salah)}🕌</span>` : ''}
     </div>`;
   }
 
@@ -10013,15 +9999,15 @@ function renderDiaryMonthly(body){
     const sdLabel = `${toBn(parseInt(sdParts[2]))} ${bnMonths[parseInt(sdParts[1])-1]}, ${toBn(parseInt(sdParts[0]))}`;
     const offeredSalah = SALAH_LIST.filter(s => sd.salah && sd.salah[s.key]).map(s=>s.label).join(', ') || '—';
     detailHtml = `<div class="diary-day-detail">
-      <h4 style="display:flex;align-items:center;gap:7px;"><span style="display:flex;width:16px;height:16px;">${ICON_CAL}</span> ${sdLabel}</h4>
-      <div class="diary-day-detail-row" style="display:flex;align-items:center;gap:7px;"><span style="display:flex;width:14px;height:14px;flex-shrink:0;">${ICON_BOOK}</span> মোট পড়া: <strong>${(sdHrs/60).toFixed(1)} ঘণ্টা</strong></div>
-      <div class="diary-day-detail-row" style="display:flex;align-items:center;gap:7px;"><span style="display:flex;width:14px;height:14px;flex-shrink:0;">${ICON_MOON}</span> নামাজ (${toBn(sdSalah)}/৬): <strong>${offeredSalah}</strong></div>
-      ${sd.note ? `<div class="diary-day-detail-row" style="display:flex;align-items:flex-start;gap:7px;white-space:pre-line;"><span style="display:flex;width:14px;height:14px;flex-shrink:0;margin-top:2px;">${ICON_EDIT}</span> নোট: ${escapeHtml(sd.note)}</div>` : ''}
-      ${isStreakDay(diarySelectedDate) ? `<div class="diary-day-detail-row" style="display:flex;align-items:center;gap:7px;color:var(--accent-orange);font-weight:600;"><span style="display:flex;width:14px;height:14px;flex-shrink:0;">${ICON_FLAME}</span> স্ট্রিক দিন!</div>` : ''}
+      <h4>📅 ${sdLabel}</h4>
+      <div class="diary-day-detail-row">📚 মোট পড়া: <strong>${(sdHrs/60).toFixed(1)} ঘণ্টা</strong></div>
+      <div class="diary-day-detail-row">🕌 নামাজ (${toBn(sdSalah)}/৬): <strong>${offeredSalah}</strong></div>
+      ${sd.note ? `<div class="diary-day-detail-row" style="white-space:pre-line;">✍️ নোট: ${escapeHtml(sd.note)}</div>` : ''}
+      ${isStreakDay(diarySelectedDate) ? '<div class="diary-day-detail-row">🔥 স্ট্রিক দিন!</div>' : ''}
     </div>`;
   }
 
-  body.innerHTML = `<div class="diary-cal-wrap"><div style="width:100%;max-width:520px;">${calHtml}</div></div>${detailHtml}`;
+  body.innerHTML = `<div class="diary-graph-wrap" style="padding:14px;">${calHtml}</div>${detailHtml}`;
 }
 
 function diarySelectDate(key){
@@ -10071,7 +10057,7 @@ function renderDiaryGraph(body){
   const svgW = 100, svgH = 120;
   const barW = (svgW / points.length) * 0.65;
   const gap = (svgW / points.length) * 0.35;
-  const padTop = 10, padBot = 26;
+  const padTop = 10, padBot = 22;
   const chartH = svgH - padTop - padBot;
 
   let bars = '', labels = '', yLines = '';
@@ -10080,7 +10066,7 @@ function renderDiaryGraph(body){
     const y = padTop + chartH - (chartH * i/4);
     const val = (maxH * i/4).toFixed(1);
     yLines += `<line x1="0" y1="${y}" x2="${svgW}" y2="${y}" stroke="var(--border)" stroke-width="0.3"/>
-      <text x="-1" y="${y+1}" font-size="4" fill="var(--text-faint)" text-anchor="end">${val}h</text>`;
+      <text x="-1" y="${y+1}" font-size="3.5" fill="var(--text-faint)" text-anchor="end">${val}h</text>`;
   }
 
   points.forEach((p, i) => {
@@ -10091,9 +10077,9 @@ function renderDiaryGraph(body){
       <title>${p.label}: ${p.hours.toFixed(1)}h</title>
     </rect>`;
     if(points.length <= 14){
-      labels += `<text x="${x + barW/2}" y="${svgH - padBot + 9}" font-size="4" font-weight="600" fill="var(--text-muted)" text-anchor="middle">${p.label}</text>`;
+      labels += `<text x="${x + barW/2}" y="${svgH - padBot + 7}" font-size="3.5" fill="var(--text-muted)" text-anchor="middle">${p.label}</text>`;
     } else if(i % 2 === 0){
-      labels += `<text x="${x + barW/2}" y="${svgH - padBot + 9}" font-size="3.4" font-weight="600" fill="var(--text-muted)" text-anchor="middle">${p.label}</text>`;
+      labels += `<text x="${x + barW/2}" y="${svgH - padBot + 7}" font-size="3" fill="var(--text-muted)" text-anchor="middle">${p.label}</text>`;
     }
   });
 
@@ -10102,7 +10088,7 @@ function renderDiaryGraph(body){
   </svg>`;
 
   body.innerHTML = `<div class="diary-graph-wrap">
-    <div class="diary-section-title" style="margin-bottom:4px;"><span style="display:flex;width:16px;height:16px;">${ICON_CHART}</span> স্টাডি গ্রাফ</div>
+    <div class="diary-section-title" style="margin-bottom:4px;">📊 স্টাডি গ্রাফ</div>
     ${filterBtns}
     ${svgHtml}
   </div>`;
