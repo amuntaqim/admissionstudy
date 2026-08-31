@@ -6865,7 +6865,7 @@ function eventCardHTML(ev){
 
   const linkHtml = ev.link
 
-    ? `<a class="circular-link" href="${escapeAttr(ev.link)}" target="_blank" rel="noopener noreferrer">${ICON_LINK} বিস্তারিত </a>`
+    ? `<a class="circular-link" href="${escapeAttr(ev.link)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${ICON_LINK} বিস্তারিত </a>`
 
     : '';
 
@@ -6949,9 +6949,9 @@ function eventCardHTML(ev){
 
         <div class="ev-actions">
 
-          <button title="সম্পাদনা করুন" onclick="editEvent('${ev.id}')">${ICON_EDIT}</button>
-
-          <button class="del" title="মুছে ফেলুন" onclick="deleteEvent('${ev.id}')">${ICON_TRASH}</button>
+                   <button title="সম্পাদনা করুন" onclick="event.stopPropagation(); editEvent('${ev.id}')">${ICON_EDIT}</button>
+                   
+          <button class="del" title="মুছে ফেলুন" onclick="event.stopPropagation(); deleteEvent('${ev.id}')">${ICON_TRASH}</button>
 
         </div>
 
